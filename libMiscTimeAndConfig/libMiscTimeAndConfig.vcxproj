@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{7DECFA8A-BC81-4DEF-9953-453B3E347FB9}</ProjectGuid>
+    <ProjectGuid>{9E89C9BD-92D5-46A6-B7AB-B59A0DDFB391}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>libMiscTimeAndConfig</RootNamespace>
   </PropertyGroup>
