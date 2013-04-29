@@ -36,6 +36,9 @@
 								<option id="gnu.cpp.compiler.option.include.paths.291085218" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${OPENCV_DIR}\include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;D:\temp\TESTREPOS\M1\Framework\libMiscTimeAndConfig\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libMiscTimeAndConfig/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${OPENCV_DIR}/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;c:\Program Files\Microsoft SDKs\Windows\v7.0A\Include\&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.638873137" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
@@ -82,6 +85,9 @@
 								<option id="gnu.cpp.compiler.mingw.lib.release.option.debugging.level.400027260" name="Debug Level" superClass="gnu.cpp.compiler.mingw.lib.release.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.2122291733" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${OPENCV_DIR}\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libMiscTimeAndConfig/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${OPENCV_DIR}/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;c:\Program Files\Microsoft SDKs\Windows\v7.0A\Include\&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.128756263" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
@@ -98,25 +104,90 @@
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
 		</cconfiguration>
+		<cconfiguration id="org.eclipse.cdt.msvc.exe.debug.1548117224">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="org.eclipse.cdt.msvc.exe.debug.1548117224" moduleId="org.eclipse.cdt.core.settings" name="VCDebug">
+				<externalSettings>
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/libMiscTimeAndConfig"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/libMiscTimeAndConfig/VC Debug"/>
+						<entry flags="RESOLVED" kind="libraryFile" name="libMiscTimeAndConfig" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="org.eclipse.cdt.core.VCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactExtension="lib" artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.staticLib" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.staticLib" description="" id="org.eclipse.cdt.msvc.exe.debug.1548117224" name="VCDebug" parent="org.eclipse.cdt.msvc.exe.debug">
+					<folderInfo id="org.eclipse.cdt.msvc.exe.debug.1548117224." name="/" resourcePath="">
+						<toolChain id="org.eclipse.cdt.msvc.toolchain.exe.debug.1736460142" name="Microsoft Visual C++" superClass="org.eclipse.cdt.msvc.toolchain.exe.debug">
+							<targetPlatform id="org.eclipse.cdt.msvc.targetPlatform.exe.debug.1535718483" superClass="org.eclipse.cdt.msvc.targetPlatform.exe.debug"/>
+							<builder buildPath="${workspace_loc:/libMiscTimeAndConfig}/VC Debug" id="org.eclipse.cdt.msvc.builder.458086337" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" superClass="org.eclipse.cdt.msvc.builder"/>
+							<tool id="org.eclipse.cdt.msvc.cl.c.exe.debug.476930066" name="C Compiler (cl)" superClass="org.eclipse.cdt.msvc.cl.c.exe.debug">
+								<option id="org.eclipse.cdt.msvc.cl.option.optimization.13946568" name="Optimization" superClass="org.eclipse.cdt.msvc.cl.option.optimization" value="org.eclipse.cdt.msvc.cl.option.optimization.default" valueType="enumerated"/>
+								<option id="org.eclipse.cdt.msvc.cl.option.debugFormat.1278428535" name="Debug Information Format" superClass="org.eclipse.cdt.msvc.cl.option.debugFormat" value="org.eclipse.cdt.msvc.cl.option.debugFormat.complete" valueType="enumerated"/>
+								<inputType id="org.eclipse.cdt.msvc.cl.inputType.c.161372088" superClass="org.eclipse.cdt.msvc.cl.inputType.c"/>
+							</tool>
+							<tool id="org.eclipse.cdt.msvc.cl.exe.debug.1897606260" name="C++ Compiler (cl)" superClass="org.eclipse.cdt.msvc.cl.exe.debug">
+								<option id="org.eclipse.cdt.msvc.cl.option.optimization.5618075" name="Optimization" superClass="org.eclipse.cdt.msvc.cl.option.optimization" value="org.eclipse.cdt.msvc.cl.option.optimization.default" valueType="enumerated"/>
+								<option id="org.eclipse.cdt.msvc.cl.option.debugFormat.455570121" name="Debug Information Format" superClass="org.eclipse.cdt.msvc.cl.option.debugFormat" value="org.eclipse.cdt.msvc.cl.option.debugFormat.complete" valueType="enumerated"/>
+								<option id="org.eclipse.cdt.msvc.cl.option.includes.1686875332" name="Include Path (/I)" superClass="org.eclipse.cdt.msvc.cl.option.includes" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libMiscTimeAndConfig/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${OPENCV_DIR}/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;c:\Program Files\Microsoft SDKs\Windows\v7.0A\Include&quot;"/>
+								</option>
+								<inputType id="org.eclipse.cdt.msvc.cl.inputType.1767732690" superClass="org.eclipse.cdt.msvc.cl.inputType"/>
+							</tool>
+							<tool id="org.eclipse.cdt.msvc.rc.exe.debug.2019120267" name="Resource Compiler (rc)" superClass="org.eclipse.cdt.msvc.rc.exe.debug">
+								<inputType id="org.eclipse.cdt.msvc.rc.inputType.1743923482" superClass="org.eclipse.cdt.msvc.rc.inputType"/>
+							</tool>
+							<tool id="org.eclipse.cdt.msvc.link.exe.debug.1457188788" name="Linker (link)" superClass="org.eclipse.cdt.msvc.link.exe.debug">
+								<option id="org.eclipse.cdt.msvc.link.option.debug.1419706941" name="Generate Debug Info (/debug)" superClass="org.eclipse.cdt.msvc.link.option.debug" value="true" valueType="boolean"/>
+								<inputType id="org.eclipse.cdt.msvc.link.inputType.253119597" superClass="org.eclipse.cdt.msvc.link.inputType"/>
+							</tool>
+							<tool id="org.eclipse.cdt.msvc.lib.726065098" name="Library Manager (lib)" superClass="org.eclipse.cdt.msvc.lib"/>
+						</toolChain>
+					</folderInfo>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
 	</storageModule>
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
 		<project id="MiscTimeAndConfig.cdt.managedbuild.target.gnu.mingw.lib.1519194866" name="Static Library" projectType="cdt.managedbuild.target.gnu.mingw.lib"/>
 	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Release">
+			<resource resourceType="PROJECT" workspacePath="/libMiscTimeAndConfig"/>
+		</configuration>
+		<configuration configurationName="VC Debug">
+			<resource resourceType="PROJECT" workspacePath="/libMiscTimeAndConfig"/>
+		</configuration>
+		<configuration configurationName="Debug">
+			<resource resourceType="PROJECT" workspacePath="/libMiscTimeAndConfig"/>
+		</configuration>
+	</storageModule>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.lib.debug.803825618;cdt.managedbuild.config.gnu.mingw.lib.debug.803825618.;cdt.managedbuild.tool.gnu.c.compiler.mingw.lib.debug.2144803627;cdt.managedbuild.tool.gnu.c.compiler.input.1649258328">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
+		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.msvc.exe.debug.1548117224;org.eclipse.cdt.msvc.exe.debug.1548117224.;org.eclipse.cdt.msvc.cl.c.exe.debug.476930066;org.eclipse.cdt.msvc.cl.inputType.c.161372088">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.lib.release.383170293;cdt.managedbuild.config.gnu.mingw.lib.release.383170293.;cdt.managedbuild.tool.gnu.c.compiler.mingw.lib.release.2057290329;cdt.managedbuild.tool.gnu.c.compiler.input.1392957158">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
+		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.msvc.exe.debug.1548117224;org.eclipse.cdt.msvc.exe.debug.1548117224.;org.eclipse.cdt.msvc.cl.exe.debug.1897606260;org.eclipse.cdt.msvc.cl.inputType.1767732690">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.lib.release.383170293;cdt.managedbuild.config.gnu.mingw.lib.release.383170293.;cdt.managedbuild.tool.gnu.cpp.compiler.mingw.lib.release.1953031296;cdt.managedbuild.tool.gnu.cpp.compiler.input.128756263">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
 		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.lib.release.383170293;cdt.managedbuild.config.gnu.mingw.lib.release.383170293.;cdt.managedbuild.tool.gnu.c.compiler.mingw.lib.release.2057290329;cdt.managedbuild.tool.gnu.c.compiler.input.1392957158">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
+		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.lib.debug.803825618;cdt.managedbuild.config.gnu.mingw.lib.debug.803825618.;cdt.managedbuild.tool.gnu.cpp.compiler.mingw.lib.debug.177989720;cdt.managedbuild.tool.gnu.cpp.compiler.input.638873137">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
 		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.lib.debug.803825618;cdt.managedbuild.config.gnu.mingw.lib.debug.803825618.;cdt.managedbuild.tool.gnu.c.compiler.mingw.lib.debug.2144803627;cdt.managedbuild.tool.gnu.c.compiler.input.1649258328">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
+		</scannerConfigBuildInfo>
 	</storageModule>
-	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
-	<storageModule moduleId="refreshScope"/>
 </cproject>
