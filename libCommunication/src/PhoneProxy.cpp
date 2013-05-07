@@ -185,7 +185,7 @@ void PhoneProxy::ProcessIncomingJSON(int sock,char *buffer, char *filename)
 		len = posSizeValueEnd-posSizeValue;
 		strncpy(tmpS, posSizeValue, len );
 		*(tmpS+len) = 0;
-		int jpegSize = atoi(tmpS);
+		int jpegSize = _atoi64(tmpS);
 
 		// Save for external use...
 		lastReceivedTimeStamp = timestamp;

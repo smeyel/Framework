@@ -15,6 +15,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\PhoneProxy.h" />
+    <ClInclude Include="include\picojson.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9E89C9BD-92D5-46A6-B7AB-B59A0DDFB391}</ProjectGuid>
