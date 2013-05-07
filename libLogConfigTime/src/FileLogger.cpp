@@ -2,7 +2,7 @@
 
 using namespace LogConfigTime;
 
-FileLogger::FileLogger(char *filename)
+FileLogger::FileLogger(const char *filename)
 {
 	F = fopen(filename,"at");
 }

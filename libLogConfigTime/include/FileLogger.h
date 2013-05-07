@@ -10,7 +10,7 @@ namespace LogConfigTime
 	{
 		FILE *F;
 	public:
-		FileLogger(char *filename);
+		FileLogger(const char *filename);
 		void close();
 		virtual void Log(int aLogLevel, const char *tag, const char *format, ...);
 	};
