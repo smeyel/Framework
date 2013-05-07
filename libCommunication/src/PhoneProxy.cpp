@@ -1,4 +1,4 @@
-#include "M2Host.h"
+#include "PhoneProxy.h"
 
 static void error_exit(char *errorMessage) {
 
