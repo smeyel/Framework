@@ -13,6 +13,9 @@
   <ItemGroup>
     <ClCompile Include="src\PhoneProxy.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\PhoneProxy.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9E89C9BD-92D5-46A6-B7AB-B59A0DDFB391}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

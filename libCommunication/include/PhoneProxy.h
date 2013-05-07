@@ -1,22 +1,7 @@
 #ifndef __PHONEPROXY_H
 #define __PHONEPROXY_H
 
-#include <iostream>
-#include <fstream>
-
-#include <stdio.h>
-#include <conio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
-
 #include <winsock2.h>
-#include <ws2tcpip.h>
-
-#include <winsock.h>
-#include <io.h>
-
-#include <windows.h>
 
 using namespace std;
 

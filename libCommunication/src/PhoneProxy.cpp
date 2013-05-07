@@ -1,3 +1,9 @@
+#include <iostream>
+#include <fstream>
+#include <stdio.h>
+#include <winsock2.h>
+#include <io.h>
+
 #include "PhoneProxy.h"
 
 static void error_exit(char *errorMessage) {
