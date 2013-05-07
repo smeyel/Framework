@@ -1,22 +1,4 @@
-#include <iostream>
-#include <fstream>
-using namespace std;
-
-#include <stdio.h>
-#include <conio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
-
-#include <winsock2.h>
-#include <ws2tcpip.h>
-
-#include <winsock.h>
-#include <io.h>
-
-#include "../include/PhoneProxy.h"
-
-#define RCVBUFSIZE 8192
+#include "M2Host.h"
 
 static void error_exit(char *errorMessage) {
 
@@ -24,41 +6,58 @@ static void error_exit(char *errorMessage) {
     exit(EXIT_FAILURE);
 }
 
+// ----------------------------------------------------------------------------
 
-void PhoneProxy::RequestPhoto(_int64 desiredTimeStamp)
+void PhoneProxy::RequestPhoto(long long desiredTimeStamp)
 {
     char buffer[100];
     int len;
-
-	char buf[50];
-	_i64toa(desiredTimeStamp,buf,10);
-	sprintf(buffer,"{ \"type\": \"takepicture\", \"desiredtimestamp\": \"%s\" }",buf);
+	sprintf(buffer,"{ \"type\": \"takepicture\", \"desiredtimestamp\": \"%lld\" }#",desiredTimeStamp);
     len = strlen(buffer);
 
     if (send(sock, buffer, len, 0) != len)
         error_exit("send() has sent a different number of bytes than excepted !!!!");
-	int iResult = shutdown(sock, SD_SEND);
+	/*int iResult = shutdown(sock, SD_SEND);
 	if (iResult == SOCKET_ERROR) {
         printf("shutdown failed with error: %d\n", WSAGetLastError());
 		Disconnect();
         return;
-    }
+    }*/
+	return;
 }
 
 void PhoneProxy::RequestPing()
 {
-	char *cmd = "{ \"type\": \"ping\", \"desiredtimestamp\": \"0\"  }";
+	char *cmd = "{ \"type\": \"ping\", \"desiredtimestamp\": \"0\" }#";
     int len;
     len = strlen(cmd);
 
     if (send(sock, cmd, len, 0) != len)
         error_exit("send() has sent a different number of bytes than expected !!!!");
-	int iResult = shutdown(sock, SD_SEND);
+	/*int iResult = shutdown(sock, SD_SEND);
 	if (iResult == SOCKET_ERROR) {
         printf("shutdown failed with error: %d\n", WSAGetLastError());
 		Disconnect();
         return;
-    }
+    }*/
+	return;
+}
+
+void PhoneProxy::RequestLog()
+{
+	char *cmd = "{ \"type\": \"sendlog\", \"desiredtimestamp\": \"0\" }#";
+    int len;
+    len = strlen(cmd);
+
+    if (send(sock, cmd, len, 0) != len)
+        error_exit("send() has sent a different number of bytes than expected !!!!");
+	/*int iResult = shutdown(sock, SD_SEND);
+	if (iResult == SOCKET_ERROR) {
+        printf("shutdown failed with error: %d\n", WSAGetLastError());
+		Disconnect();
+        return;
+    }*/
+	return;
 }
 
 void PhoneProxy::Receive(char *filename)
@@ -94,9 +93,8 @@ void PhoneProxy::ReceiveDebug()
 {
 	// Receive response
 	char buffer[RCVBUFSIZE] = "";
-	cout << "DEBUG RECEIVING:" << endl;
 	int received = recv(sock, buffer, RCVBUFSIZE, 0);
-	cout << "DEBUG RECEIVED:" << endl << buffer << endl << "END RECEIVE" << endl;
+	cout << "DEBUG RECEIVE:" << endl << buffer << endl << "END RECEIVE" << endl;
 	return;
 }
 
@@ -145,6 +143,7 @@ void PhoneProxy::Connect(char *ip, int port)
 
 void PhoneProxy::Disconnect()
 {
+	shutdown(sock, SD_SEND);
 	closesocket(sock);
 	WSACleanup();
 	sock = -1;
@@ -158,6 +157,7 @@ void PhoneProxy::ProcessIncomingJSON(int sock,char *buffer, char *filename)
 	char *posJPEG = strstr(buffer,"JPEG");
 	char *posTimeStamp = strstr(buffer,"timestamp");
 	char *posPong = strstr(buffer,"pong");
+	char *posLog = strstr(buffer, "measurementlog");
 
 	if (posPong)
 	{
@@ -171,11 +171,7 @@ void PhoneProxy::ProcessIncomingJSON(int sock,char *buffer, char *filename)
 		int len = posTimeStampValueEnd-posTimeStampValue;
 		strncpy(tmpS, posTimeStampValue, len );
 		*(tmpS+len) = 0;
-		_int64 timestamp = _atoi64(tmpS);
-		if (errno == ERANGE)
-		{
-			*log << "ERROR: Timestamp out of \"32 bit long\" range: " << tmpS << endl;
-		}
+		int timestamp = atoi(tmpS);
 
 		char *posSize = strstr(buffer,"size");
 		char *posSizeValue = posSize + 7;
@@ -186,8 +182,6 @@ void PhoneProxy::ProcessIncomingJSON(int sock,char *buffer, char *filename)
 		int jpegSize = atoi(tmpS);
 
 		cout << "Receiving JPEG. Timestamp=" << timestamp << ", size=" << jpegSize << endl;
-		lastReceivedTimeStamp = timestamp;
-		*log << "JPEG size: " << jpegSize << endl;
 	
 		char receiveBuffer[RCVBUFSIZE];
 		int received;
@@ -211,7 +205,7 @@ void PhoneProxy::ProcessIncomingJSON(int sock,char *buffer, char *filename)
 			if (outFile.is_open()) 
 			{
 				outFile.write(receiveBuffer, received); 
-				//cout << " (Total: " << jpegBytes << " B)" << endl;
+				cout << " (Total: " << jpegBytes << " B)" << endl;
 			}
 			else
 			{
@@ -223,6 +217,14 @@ void PhoneProxy::ProcessIncomingJSON(int sock,char *buffer, char *filename)
 		outFile.close();
 
 		cout << "JPEG received successfully. Sent size=" << jpegSize << ", received size=" << jpegBytes << endl;
+	} else if(posLog)
+	{
+		ofstream file;
+		file.open(filename);
+		file << (buffer+1); //+1 because of 1 caracter at the beginning
+		file.close();
+		//cout << "Received message:"<< buffer << endl;
 	}
+
 }
 
