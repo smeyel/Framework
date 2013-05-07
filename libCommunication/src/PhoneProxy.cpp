@@ -187,6 +187,9 @@ void PhoneProxy::ProcessIncomingJSON(int sock,char *buffer, char *filename)
 		*(tmpS+len) = 0;
 		int jpegSize = atoi(tmpS);
 
+		// Save for external use...
+		lastReceivedTimeStamp = timestamp;
+
 		cout << "Receiving JPEG. Timestamp=" << timestamp << ", size=" << jpegSize << endl;
 	
 		char receiveBuffer[RCVBUFSIZE];

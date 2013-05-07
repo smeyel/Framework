@@ -13,6 +13,12 @@ private:
 	SOCKET sock;
 
 public:
+	long long lastReceivedTimeStamp;	// Used to query the timestamp of the last reception
+	PhoneProxy()
+	{
+		lastReceivedTimeStamp=0;
+	}
+
 	void Connect(char *ip, int port);
 	void Disconnect();
 
