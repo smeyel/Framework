@@ -50,6 +50,15 @@ void PhoneProxy::RequestLog()
 
 void PhoneProxy::Receive(char *filename)
 {
+	ofstream targetStream;
+	targetStream.open(filename,ofstream::binary);
+	Receive(&targetStream);
+	targetStream.flush();
+	targetStream.close();
+}
+
+void PhoneProxy::Receive(ostream *targetStream)
+{
 	// Receive response
 	int totalBytes = 0;
 	char buffer[RCVBUFSIZE] = "";
@@ -73,7 +82,7 @@ void PhoneProxy::Receive(char *filename)
 				break;
 		}
 	}
-	ProcessIncomingJSON(sock,buffer+1,filename);
+	ProcessIncomingJSON(sock,buffer+1,targetStream);
 }
 
 void PhoneProxy::ReceiveDebug()
@@ -134,25 +143,9 @@ void PhoneProxy::Disconnect()
 	sock = -1;
 }
 
-void PhoneProxy::receiveIntoFile(char *filename, SOCKET sock, long bytenum)
+// targetStream may be NULL, given number of bytes will be read anyway.
+void PhoneProxy::receiveIntoStream(ostream *targetStream, SOCKET sock, long bytenum)
 {
-	if (bytenum==0)
-	{
-		return;
-	}
-
-	ofstream outFile;
-	if (filename!=NULL)
-	{
-		if (outFile != NULL) 
-		{
-			outFile.open(filename , ofstream::binary);
-		} else 
-		{
-			cout << "Can't open file!" << endl;
-		}
-	}
-
 	char receiveBuffer[RCVBUFSIZE];
 	long receivedTotalBytes = 0;
 	int received;
@@ -160,29 +153,15 @@ void PhoneProxy::receiveIntoFile(char *filename, SOCKET sock, long bytenum)
 	{
 		received = recv(sock, receiveBuffer, RCVBUFSIZE, 0);
 		receivedTotalBytes += received;
-		if (filename!=NULL)
+		if (targetStream!=NULL)
 		{
-			if (outFile.is_open()) 
-			{
-				outFile.write(receiveBuffer, received); 
-				//cout << " (Total: " << jpegBytes << " B)" << endl;
-			}
-			else
-			{
-				cout << "Error in recv() function, received bytes = " << received << endl;
-			}
+			(*targetStream).write(receiveBuffer, received); 
 		}
-	}
-
-	if (filename!=NULL)
-	{
-		outFile.flush();
-		outFile.close();
 	}
 }
 
 
-void PhoneProxy::ProcessIncomingJSON(int sock,char *buffer, char *filename)
+void PhoneProxy::ProcessIncomingJSON(int sock,char *buffer, ostream *targetStream)
 {
 	//cout << "JSON received:" << endl << buffer << endl << "End of JSON" << endl;
 
@@ -219,7 +198,7 @@ void PhoneProxy::ProcessIncomingJSON(int sock,char *buffer, char *filename)
 
 		//cout << "Receiving JPEG. Timestamp=" << timestamp << ", size=" << jpegSize << endl;
 	
-		receiveIntoFile(filename,sock,jpegSize);
+		receiveIntoStream(targetStream,sock,jpegSize);
 		//cout << "JPEG received successfully. Sent size=" << jpegSize << ", timestamp=" << timestamp << endl;
 	} else if(posLog)
 	{
@@ -243,7 +222,7 @@ void PhoneProxy::ProcessIncomingJSON(int sock,char *buffer, char *filename)
 		lastReceivedTimeStamp = timestamp;
 
 		//cout << "Receiving LOG. Timestamp=" << timestamp << ", size=" << logSize << endl;
-		receiveIntoFile(filename,sock,logSize);
+		receiveIntoStream(targetStream,sock,logSize);
 
 		//cout << "LOG received successfully. Sent size=" << logSize << ", received size=" << jpegBytes << endl;
 	}

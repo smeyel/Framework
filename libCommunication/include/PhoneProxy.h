@@ -12,7 +12,7 @@ class PhoneProxy
 private:
 	SOCKET sock;
 
-	void receiveIntoFile(char *filename, SOCKET sock, long bytenum);
+	void receiveIntoStream(ostream *targetStream, SOCKET sock, long bytenum);
 
 public:
 	long long lastReceivedTimeStamp;	// Used to query the timestamp of the last reception
@@ -26,12 +26,13 @@ public:
 
 	void RequestPhoto(long long desiredTimeStamp);
 	void RequestPing();
-	void Receive(char *filename);	// For PONG, filename has no effect.
+	void Receive(char *filename);
+	void Receive(ostream *targetStream);
 	void ReceiveDebug();
 	void RequestLog();
 
 private:
-	void ProcessIncomingJSON(int sock,char *buffer, char *filename);
+	void ProcessIncomingJSON(int sock,char *buffer, ostream *targetStream);
 };
 
 static void error_exit(char *errorMessage);
