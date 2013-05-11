@@ -4,6 +4,7 @@
 
 PingMessage::PingMessage(char *json)
 {
+	typecode = Ping;
 	parse(json);
 }
 

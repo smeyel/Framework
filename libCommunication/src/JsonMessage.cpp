@@ -10,6 +10,16 @@
 #include <sstream>
 #include "picojson.h"
 
+JsonMessage::JsonMessage()
+{
+	typecode = Default;
+}
+
+JsonMessageTypeEnum JsonMessage::getMessageType()
+{
+	return typecode;
+}
+
 JsonMessage *JsonMessage::parse(char *json)
 {
 	// Search for type info

@@ -3,6 +3,12 @@
 #include "TakePictureMessage.h"
 #include "Logger.h"
 
+TakePictureMessage::TakePictureMessage(char *json)
+{
+	typecode = TakePicture;
+	parse(json);
+}
+
 bool TakePictureMessage::parse(char *json)
 {
 	// find desiredtimestamp
