@@ -12,6 +12,8 @@ class PhoneProxy
 private:
 	SOCKET sock;
 
+	void receiveIntoFile(char *filename, SOCKET sock, long bytenum);
+
 public:
 	long long lastReceivedTimeStamp;	// Used to query the timestamp of the last reception
 	PhoneProxy()
