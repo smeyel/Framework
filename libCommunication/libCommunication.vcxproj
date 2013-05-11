@@ -14,6 +14,7 @@
     <ClCompile Include="src\JsonMessage.cpp" />
     <ClCompile Include="src\PhoneProxy.cpp" />
     <ClCompile Include="src\PingMessage.cpp" />
+    <ClCompile Include="src\SendlogMessage.cpp" />
     <ClCompile Include="src\TakePictureMessage.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -21,6 +22,7 @@
     <ClInclude Include="include\PhoneProxy.h" />
     <ClInclude Include="include\picojson.h" />
     <ClInclude Include="include\PingMessage.h" />
+    <ClInclude Include="include\SendlogMessage.h" />
     <ClInclude Include="include\TakePictureMessage.h" />
   </ItemGroup>
   <ItemGroup>

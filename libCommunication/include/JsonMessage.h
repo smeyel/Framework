@@ -9,7 +9,8 @@ typedef enum _messagetype
 {
 	Default,
 	Ping,
-	TakePicture
+	TakePicture,
+	Sendlog
 } JsonMessageTypeEnum;
 
 class JsonMessage

@@ -24,6 +24,9 @@
     <ClInclude Include="include\TakePictureMessage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\SendlogMessage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\PhoneProxy.cpp">
@@ -36,6 +39,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\TakePictureMessage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SendlogMessage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -177,7 +177,7 @@ void PhoneProxy::ProcessIncomingJSON(int sock,char *buffer, char *filename)
 		int len = posTimeStampValueEnd-posTimeStampValue;
 		strncpy(tmpS, posTimeStampValue, len );
 		*(tmpS+len) = 0;
-		int timestamp = atoi(tmpS);
+		long long timestamp = _atoi64(tmpS);
 
 		char *posSize = strstr(buffer,"size");
 		char *posSizeValue = posSize + 7;

@@ -67,6 +67,12 @@ namespace LogConfigTime
 		/** Writes the measurement results on the given output stream.
 		*/
 		void showresults(std::ostream *stream);
+
+		/** Returns a timestamp in microseconds.
+		*	Not used by time measurement, because that uses full precision.
+		*	This can be used to get inter-device timestamps.
+		*/
+		long long getTimeStamp();
 	};
 }
 

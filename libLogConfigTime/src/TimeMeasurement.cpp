@@ -76,7 +76,12 @@ double TimeMeasurement::getavgms(int measurementid)
 
 double TimeMeasurement::getmaxfps(int measurementid)
 {
-	return 1000.0/getavgms(measurementid);
+	double avgms = getavgms(measurementid);
+	if (avgms>0.0)
+	{
+		return 1000.0/avgms;
+	}
+	return 0.0;	// Avoid division by zero
 }
 
 void TimeMeasurement::showresults()
@@ -96,5 +101,9 @@ void TimeMeasurement::showresults(std::ostream *stream)
 			*stream << names[i] << ": " << avg << " ms" << endl;
 		}
 	}
+}
 
+long long TimeMeasurement::getTimeStamp()
+{
+	return cv::getTickCount() * 1000000L / tickFrequency;
 }

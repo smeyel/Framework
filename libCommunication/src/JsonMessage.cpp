@@ -2,6 +2,7 @@
 #include <string.h>
 #include "JsonMessage.h"
 #include "PingMessage.h"
+#include "SendlogMessage.h"
 #include "TakePictureMessage.h"
 
 #include "Logger.h"
@@ -41,6 +42,10 @@ JsonMessage *JsonMessage::parse(char *json)
 	else if (!strcmp(typeString,"takepicture"))
 	{
 		return new TakePictureMessage(json);
+	}
+	else if (!strcmp(typeString,"sendlog"))
+	{
+		return new SendlogMessage(json);
 	}
 
 #ifdef DEBUG_JSON_IF_UNKNOWN
