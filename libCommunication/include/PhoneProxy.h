@@ -23,6 +23,7 @@ public:
 	void Disconnect();
 
 	void RequestPhoto(long long desiredTimeStamp);
+	void RequestPosition();
 	void RequestPing();
 	void Receive(char *filename);	// For PONG, filename has no effect.
 	void ReceiveDebug();

@@ -32,6 +32,24 @@ void PhoneProxy::RequestPhoto(long long desiredTimeStamp)
 	return;
 }
 
+void PhoneProxy::RequestPosition()
+{
+    char buffer[100];
+    int len;
+	sprintf(buffer,"{ \"type\": \"requestposition\", \"desiredtimestamp\": \"0\" }#");
+    len = strlen(buffer);
+
+    if (send(sock, buffer, len, 0) != len)
+        error_exit("send() has sent a different number of bytes than excepted !!!!");
+	/*int iResult = shutdown(sock, SD_SEND);
+	if (iResult == SOCKET_ERROR) {
+        printf("shutdown failed with error: %d\n", WSAGetLastError());
+		Disconnect();
+        return;
+    }*/
+	return;
+}
+
 void PhoneProxy::RequestPing()
 {
 	char *cmd = "{ \"type\": \"ping\", \"desiredtimestamp\": \"0\" }#";
