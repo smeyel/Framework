@@ -29,5 +29,5 @@ bool TakePictureMessage::parse(char *json)
 
 void TakePictureMessage::log()
 {
-	LogConfigTime::Logger::getInstance()->Log(LogConfigTime::Logger::LOGLEVEL_INFO,"Message","TakePictureMessage( desiredtimestamp=%Ld )",desiredtimestamp);
+	LogConfigTime::Logger::getInstance()->Log(LogConfigTime::Logger::LOGLEVEL_INFO,"Message","TakePictureMessage( desiredtimestamp=%lld )",desiredtimestamp);
 }

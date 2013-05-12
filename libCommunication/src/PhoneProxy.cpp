@@ -23,12 +23,6 @@ void PhoneProxy::RequestPhoto(long long desiredTimeStamp)
 
     if (send(sock, buffer, len, 0) != len)
         error_exit("send() has sent a different number of bytes than excepted !!!!");
-	/*int iResult = shutdown(sock, SD_SEND);
-	if (iResult == SOCKET_ERROR) {
-        printf("shutdown failed with error: %d\n", WSAGetLastError());
-		Disconnect();
-        return;
-    }*/
 	return;
 }
 
@@ -58,12 +52,6 @@ void PhoneProxy::RequestPing()
 
     if (send(sock, cmd, len, 0) != len)
         error_exit("send() has sent a different number of bytes than expected !!!!");
-	/*int iResult = shutdown(sock, SD_SEND);
-	if (iResult == SOCKET_ERROR) {
-        printf("shutdown failed with error: %d\n", WSAGetLastError());
-		Disconnect();
-        return;
-    }*/
 	return;
 }
 
@@ -75,16 +63,19 @@ void PhoneProxy::RequestLog()
 
     if (send(sock, cmd, len, 0) != len)
         error_exit("send() has sent a different number of bytes than expected !!!!");
-	/*int iResult = shutdown(sock, SD_SEND);
-	if (iResult == SOCKET_ERROR) {
-        printf("shutdown failed with error: %d\n", WSAGetLastError());
-		Disconnect();
-        return;
-    }*/
 	return;
 }
 
 void PhoneProxy::Receive(char *filename)
+{
+	ofstream targetStream;
+	targetStream.open(filename,ofstream::binary);
+	Receive(&targetStream);
+	targetStream.flush();
+	targetStream.close();
+}
+
+void PhoneProxy::Receive(ostream *targetStream)
 {
 	// Receive response
 	int totalBytes = 0;
@@ -95,7 +86,6 @@ void PhoneProxy::Receive(char *filename)
 	char c;
 	char *bufPtr = buffer;
 	*bufPtr = 0;
-	//while ((received = recv(sock, buffer, RCVBUFSIZE, 0)) > 0);
 	while ((received = recv(sock, &c, 1, 0)) > 0) 
 	{
 		if (c != '#')	// Not at end of JSON
@@ -110,7 +100,7 @@ void PhoneProxy::Receive(char *filename)
 				break;
 		}
 	}
-	ProcessIncomingJSON(sock,buffer+1,filename);
+	ProcessIncomingJSON(sock,buffer+1,targetStream);
 }
 
 void PhoneProxy::ReceiveDebug()
@@ -122,8 +112,6 @@ void PhoneProxy::ReceiveDebug()
 	return;
 }
 
-
-
 void PhoneProxy::Connect(char *ip, int port)
 {
 	struct sockaddr_in server;
@@ -131,15 +119,15 @@ void PhoneProxy::Connect(char *ip, int port)
     unsigned long addr;
 	int iResult;
 
-	cout << "Connecting..." << endl;
+	//cout << "Connecting..." << endl;
 
     WORD wVersionRequested;
     WSADATA wsaData;
     wVersionRequested = MAKEWORD (1, 1);
     if (WSAStartup (wVersionRequested, &wsaData) != 0)
         error_exit( "Initialisation of Winsock failed");
-    else
-        printf("Winsock Initialised\n");
+    //else
+        //printf("Winsock Initialised\n");
 
     sock = socket( AF_INET, SOCK_STREAM, 0 );
 
@@ -173,9 +161,27 @@ void PhoneProxy::Disconnect()
 	sock = -1;
 }
 
-void PhoneProxy::ProcessIncomingJSON(int sock,char *buffer, char *filename)
+// targetStream may be NULL, given number of bytes will be read anyway.
+void PhoneProxy::receiveIntoStream(ostream *targetStream, SOCKET sock, long bytenum)
 {
-	cout << "JSON received:" << endl << buffer << endl << "End of JSON" << endl;
+	char receiveBuffer[RCVBUFSIZE];
+	long receivedTotalBytes = 0;
+	int received;
+	while (receivedTotalBytes < bytenum)
+	{
+		received = recv(sock, receiveBuffer, RCVBUFSIZE, 0);
+		receivedTotalBytes += received;
+		if (targetStream!=NULL)
+		{
+			(*targetStream).write(receiveBuffer, received); 
+		}
+	}
+}
+
+
+void PhoneProxy::ProcessIncomingJSON(int sock,char *buffer, ostream *targetStream)
+{
+	//cout << "JSON received:" << endl << buffer << endl << "End of JSON" << endl;
 
 	// Parse JSON
 	char *posJPEG = strstr(buffer,"JPEG");
@@ -185,7 +191,7 @@ void PhoneProxy::ProcessIncomingJSON(int sock,char *buffer, char *filename)
 
 	if (posPong)
 	{
-		cout << "PONG received, nothing left to do..." << endl;
+		//cout << "PONG received, nothing left to do..." << endl;
 	}
 	else if (posJPEG)
 	{
@@ -208,49 +214,35 @@ void PhoneProxy::ProcessIncomingJSON(int sock,char *buffer, char *filename)
 		// Save for external use...
 		lastReceivedTimeStamp = timestamp;
 
-		cout << "Receiving JPEG. Timestamp=" << timestamp << ", size=" << jpegSize << endl;
+		//cout << "Receiving JPEG. Timestamp=" << timestamp << ", size=" << jpegSize << endl;
 	
-		char receiveBuffer[RCVBUFSIZE];
-		int received;
-		int jpegBytes = 0;
-
-		ofstream outFile;
-		if (outFile != NULL) 
-		{
-			outFile.open(filename , ofstream::binary);
-			cout << "File opened!" << endl;
-		} else 
-		{
-			cout << "Can't open file!" << endl;
-		}
-
-		//while ((received = recv(sock, receiveBuffer, RCVBUFSIZE, 0)) > 0)
-		while (jpegBytes != jpegSize)
-		{
-			received = recv(sock, receiveBuffer, RCVBUFSIZE, 0);
-			jpegBytes += received;
-			if (outFile.is_open()) 
-			{
-				outFile.write(receiveBuffer, received); 
-				cout << " (Total: " << jpegBytes << " B)" << endl;
-			}
-			else
-			{
-				cout << "Error in recv() function, received bytes = " << received << endl;
-			}
-		}
-
-		outFile.flush();
-		outFile.close();
-
-		cout << "JPEG received successfully. Sent size=" << jpegSize << ", received size=" << jpegBytes << endl;
+		receiveIntoStream(targetStream,sock,jpegSize);
+		//cout << "JPEG received successfully. Sent size=" << jpegSize << ", timestamp=" << timestamp << endl;
 	} else if(posLog)
 	{
-		ofstream file;
-		file.open(filename);
-		file << (buffer+1); //+1 because of 1 caracter at the beginning
-		file.close();
-		//cout << "Received message:"<< buffer << endl;
+		char tmpS[100];
+		char *posTimeStampValue = posTimeStamp + 12;
+		char *posTimeStampValueEnd = strstr(posTimeStampValue,"\"");
+		int len = posTimeStampValueEnd-posTimeStampValue;
+		strncpy(tmpS, posTimeStampValue, len );
+		*(tmpS+len) = 0;
+		long long timestamp = _atoi64(tmpS);
+
+		char *posSize = strstr(buffer,"size");
+		char *posSizeValue = posSize + 7;
+		char *posSizeValueEnd = strstr(posSizeValue,"\"");
+		len = posSizeValueEnd-posSizeValue;
+		strncpy(tmpS, posSizeValue, len );
+		*(tmpS+len) = 0;
+		int logSize = _atoi64(tmpS);
+
+		// Save for external use...
+		lastReceivedTimeStamp = timestamp;
+
+		//cout << "Receiving LOG. Timestamp=" << timestamp << ", size=" << logSize << endl;
+		receiveIntoStream(targetStream,sock,logSize);
+
+		//cout << "LOG received successfully. Sent size=" << logSize << ", received size=" << jpegBytes << endl;
 	}
 
 }
