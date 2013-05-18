@@ -3,6 +3,9 @@
 
 #include <winsock2.h>
 
+#include <opencv2/opencv.hpp>
+#include <opencv2/core/core.hpp>
+
 using namespace std;
 
 #define RCVBUFSIZE 8192//32768//16384//8192
@@ -28,6 +31,7 @@ public:
 	void RequestPing();
 	void Receive(char *filename);
 	void Receive(ostream *targetStream);
+	void ReceiveJpeg(cv::Mat *targetMat);
 	void ReceiveDebug();
 	void RequestLog();
 

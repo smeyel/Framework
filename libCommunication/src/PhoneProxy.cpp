@@ -4,7 +4,12 @@
 #include <winsock2.h>
 #include <io.h>
 
+#include <opencv2/opencv.hpp>
+#include <opencv2/core/core.hpp>
+
 #include "PhoneProxy.h"
+
+using namespace std;
 
 static void error_exit(char *errorMessage) {
 
@@ -56,6 +61,30 @@ void PhoneProxy::Receive(char *filename)
 	targetStream.flush();
 	targetStream.close();
 }
+
+void PhoneProxy::ReceiveJpeg(cv::Mat *targetMat)
+{
+	stringstream ss;
+	Receive(&ss);
+
+	// Decoding JPEG
+	ss.seekp(0, ios::end);
+	stringstream::pos_type jpegSize = ss.tellp();
+	ss.seekg(0, ios::beg);
+	//cout << "JPEG size:" << jpegSize << endl;
+
+	vector<uchar> jpeg;
+	for(int i=0; i<jpegSize; i++)
+	{
+		char ch;
+		ss.read(&ch,1);
+		jpeg.push_back(ch);
+	}
+	
+	cv::imdecode(cv::Mat(jpeg),CV_LOAD_IMAGE_COLOR,targetMat); 
+}
+
+
 
 void PhoneProxy::Receive(ostream *targetStream)
 {
