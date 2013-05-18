@@ -9,6 +9,9 @@
 
 #include "PhoneProxy.h"
 
+#define MAXJSONSIZE 4096
+#define MAXTYPENAMELENGTH 128
+
 using namespace std;
 
 static void error_exit(char *errorMessage) {
@@ -83,8 +86,6 @@ void PhoneProxy::ReceiveJpeg(cv::Mat *targetMat)
 	
 	cv::imdecode(cv::Mat(jpeg),CV_LOAD_IMAGE_COLOR,targetMat); 
 }
-
-
 
 void PhoneProxy::Receive(ostream *targetStream)
 {
@@ -255,6 +256,56 @@ void PhoneProxy::ProcessIncomingJSON(int sock,char *buffer, ostream *targetStrea
 
 		//cout << "LOG received successfully. Sent size=" << logSize << ", received size=" << jpegBytes << endl;
 	}
+}
+
+void PhoneProxy::Send(JsonMessage msg)
+{
+
 
 }
 
+JsonMessage *PhoneProxy::ReceiveNew()
+{
+	// Receive response
+	int totalBytes = 0;
+	char buffer[MAXJSONSIZE] = "";
+	int received = 0;
+
+	// Read JSON part (1 byte at once)
+	char c;
+	char *bufPtr = buffer;
+	*bufPtr = 0;
+	while ((received = recv(sock, &c, 1, 0)) > 0) 
+	{
+		if (received<1)
+		{
+			// Error: JSON not finished, but input ended...
+			cout << "ERROR: JSON not finished properly..." << endl;
+			return NULL;
+		}
+
+		if (c != '#' && c != 0)	// Not at end of JSON
+		{
+			*bufPtr = c;
+			bufPtr++;
+			*bufPtr = 0;
+		}
+		else
+		{
+			if (bufPtr-buffer>2)	// Do not stop for UTF-8 initial 2 bytes
+				break;
+		}
+	}
+
+	char *jsonBuffer = buffer;
+
+	//cout << "ProcessIncomingJson: " << endl << jsonBuffer << endl << "End of JSON" << endl;
+
+	// Instantiate appropriate JsonMessage
+	JsonMessage *jsonMsg = JsonMessage::parse(jsonBuffer);
+
+	// Ask the message to read its auxiliary data from the socket, if any.
+	jsonMsg->readAuxIfNeeded(sock);
+
+	return jsonMsg;
+}

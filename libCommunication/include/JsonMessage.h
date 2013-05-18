@@ -1,6 +1,9 @@
 #ifndef __JSONMESSAGE_H
 #define __JSONMESSAGE_H
 
+#include <iostream>
+#include <winsock2.h>
+
 #define MAXTYPENAMELENGTH 100
 
 #define DEBUG_JSON_IF_UNKNOWN
@@ -10,7 +13,8 @@ typedef enum _messagetype
 	Default,
 	Ping,
 	TakePicture,
-	Sendlog
+	Sendlog,
+	Jpeg
 } JsonMessageTypeEnum;
 
 class JsonMessage
@@ -18,16 +22,22 @@ class JsonMessage
 protected:
 	JsonMessageTypeEnum typecode;
 
+	static void receiveIntoStream(std::ostream *targetStream, SOCKET sock, long bytenum);
+
 public:
 	JsonMessage();
-	JsonMessageTypeEnum getType();
+	//JsonMessageTypeEnum getType();
 
 	const static int typePingMessage = 0;
 
 	static JsonMessage *parse(char *json);
 	JsonMessageTypeEnum getMessageType();
 
+	virtual void readAuxIfNeeded(int socket) { }
+
 	static void DebugJson(char *json);
+
+	static void readFieldInto(char *json, char *fieldname, char *resultBuffer);
 
 	virtual void log();
 };

@@ -6,6 +6,8 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/core/core.hpp>
 
+#include "JsonMessage.h"
+
 using namespace std;
 
 #define RCVBUFSIZE 8192//32768//16384//8192
@@ -34,6 +36,10 @@ public:
 	void ReceiveJpeg(cv::Mat *targetMat);
 	void ReceiveDebug();
 	void RequestLog();
+
+	// New interface
+	void Send(JsonMessage msg);
+	JsonMessage *ReceiveNew();
 
 private:
 	void ProcessIncomingJSON(int sock,char *buffer, ostream *targetStream);

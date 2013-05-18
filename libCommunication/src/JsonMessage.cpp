@@ -1,6 +1,11 @@
 #include <stdio.h>
 #include <string.h>
+
+#include <iostream>
+#include <winsock2.h>
+
 #include "JsonMessage.h"
+#include "JpegMessage.h"
 #include "PingMessage.h"
 #include "SendlogMessage.h"
 #include "TakePictureMessage.h"
@@ -10,6 +15,9 @@
 // Used for debugging JSON messages
 #include <sstream>
 #include "picojson.h"
+
+#define RCVBUFSIZE 4096
+#define MAXJSONFIELDNAMELENGTH 128
 
 JsonMessage::JsonMessage()
 {
@@ -23,16 +31,8 @@ JsonMessageTypeEnum JsonMessage::getMessageType()
 
 JsonMessage *JsonMessage::parse(char *json)
 {
-	// Search for type info
-	char *typePtr = strstr(json,"\"type\":");
-	if (!typePtr) return NULL;
-	char *beginPtr = strstr(typePtr+6,"\"") + 1;
-	if (!beginPtr) return NULL;
-	char *endPtr = strstr(beginPtr,"\"");
-	if (!endPtr) return NULL;
 	char typeString[MAXTYPENAMELENGTH];
-	memset(typeString,0,MAXTYPENAMELENGTH);
-	strncpy(typeString,beginPtr,endPtr-beginPtr);
+	JsonMessage::readFieldInto(json,"type",typeString);
 		
 	// Let the corresponding class parse it
 	if (!strcmp(typeString,"ping"))
@@ -46,6 +46,10 @@ JsonMessage *JsonMessage::parse(char *json)
 	else if (!strcmp(typeString,"sendlog"))
 	{
 		return new SendlogMessage(json);
+	}
+	else if (!strcmp(typeString,"JPEG"))
+	{
+		return new JpegMessage(json);
 	}
 
 #ifdef DEBUG_JSON_IF_UNKNOWN
@@ -104,4 +108,40 @@ void JsonMessage::DebugJson(char *json)
 void JsonMessage::log()
 {
 	LogConfigTime::Logger::getInstance()->Log(LogConfigTime::Logger::LOGLEVEL_INFO,"Message","JsonMessage()\n");
+}
+
+// targetStream may be NULL, given number of bytes will be read anyway.
+void JsonMessage::receiveIntoStream(std::ostream *targetStream, SOCKET sock, long bytenum)
+{
+	char receiveBuffer[RCVBUFSIZE];
+	long receivedTotalBytes = 0;
+	int received;
+	while (receivedTotalBytes < bytenum)
+	{
+		received = recv(sock, receiveBuffer, RCVBUFSIZE, 0);
+		receivedTotalBytes += received;
+		if (targetStream!=NULL)
+		{
+			(*targetStream).write(receiveBuffer, received); 
+		}
+	}
+}
+
+void JsonMessage::readFieldInto(char *json, char *fieldname, char *resultBuffer)
+{
+	char buff[MAXJSONFIELDNAMELENGTH];
+
+	*resultBuffer=0;	// Default result
+	sprintf(buff,"\"%s\":",fieldname);
+	char *basepos = strstr(json,buff);
+	if (!basepos) return;
+	int len = strlen(buff);
+	char *beginPtr = strstr(basepos+len,"\"") + 1;
+	if (!beginPtr) return;
+	char *endPtr = strstr(beginPtr,"\"");
+	if (!endPtr) return;
+
+	memcpy(resultBuffer,beginPtr,endPtr-beginPtr);
+	*(resultBuffer+(endPtr-beginPtr)) = 0;
+	return;
 }
