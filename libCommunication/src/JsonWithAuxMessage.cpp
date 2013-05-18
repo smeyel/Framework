@@ -8,19 +8,18 @@ using namespace std;
 
 JsonWithAuxMessage::JsonWithAuxMessage()
 {
-	data = NULL;
 	size = 0;
 }
 
 void JsonWithAuxMessage::writeAuxStream(std::ostream *targetStream)
 {
-	if (!data) return;
-	targetStream->write((const char*)data->data(),data->size());
+	targetStream->write((const char*)(data.data()),data.size());
 }
 
 void JsonWithAuxMessage::writeAux(int socket)
 {
-	if (send(socket, (const char *)data->data(), data->size(), 0) != data->size())
+	int n = send(socket, (const char *)(data.data()), data.size(), 0);
+	if (n != size)
 		LogConfigTime::Logger::getInstance()->Log(LogConfigTime::Logger::LOGLEVEL_ERROR,"libCommunication","JsonWithAuxMessage::writeAux: Error on writing answer to socket.\n");
 	return;
 }
@@ -38,11 +37,10 @@ void JsonWithAuxMessage::readAuxIfNeeded(int socket)
 	ss.seekg(0, ios::beg);
 	//cout << "JPEG size:" << jpegSize << endl;
 
-	data = new vector<unsigned char>();
 	for(int i=0; i<jpegSize; i++)
 	{
 		char ch;
 		ss.read(&ch,1);
-		data->push_back(ch);
+		data.push_back(ch);
 	}
 }

@@ -14,6 +14,7 @@
     <ClCompile Include="src\JpegMessage.cpp" />
     <ClCompile Include="src\JsonMessage.cpp" />
     <ClCompile Include="src\JsonWithAuxMessage.cpp" />
+    <ClCompile Include="src\MatImageMessage.cpp" />
     <ClCompile Include="src\MeasurementLogMessage.cpp" />
     <ClCompile Include="src\PhoneProxy.cpp" />
     <ClCompile Include="src\PhoneServer.cpp" />
@@ -26,6 +27,7 @@
     <ClInclude Include="include\JpegMessage.h" />
     <ClInclude Include="include\JsonMessage.h" />
     <ClInclude Include="include\JsonWithAuxMessage.h" />
+    <ClInclude Include="include\MatImageMessage.h" />
     <ClInclude Include="include\MeasurementLogMessage.h" />
     <ClInclude Include="include\PhoneProxy.h" />
     <ClInclude Include="include\PhoneServer.h" />

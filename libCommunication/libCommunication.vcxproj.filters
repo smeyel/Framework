@@ -42,6 +42,9 @@
     <ClInclude Include="include\JsonWithAuxMessage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\MatImageMessage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\PhoneProxy.cpp">
@@ -72,6 +75,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\JsonWithAuxMessage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MatImageMessage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

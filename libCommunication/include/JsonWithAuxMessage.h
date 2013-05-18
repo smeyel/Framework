@@ -9,16 +9,9 @@ class JsonWithAuxMessage : public JsonMessage
 {
 public:
 	int size;	// TODO: redundant, use data->size() instead if data!=NULL!
-	std::vector<unsigned char> *data;
+	std::vector<unsigned char> data;
 
 	JsonWithAuxMessage();
-	~JsonWithAuxMessage()
-	{
-		if (data)
-		{
-			delete data;
-		}
-	}
 
 	virtual void writeAuxStream(std::ostream *targetStream);
 	virtual void writeAux(int socket);

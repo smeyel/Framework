@@ -44,18 +44,22 @@ void JpegMessage::writeJson(char *buffer)
 
 void JpegMessage::Decode(cv::Mat *targetMat)
 {
-	cv::imdecode(cv::Mat(*data),CV_LOAD_IMAGE_COLOR,targetMat); 
+	if (size==0)
+	{
+		cout << "JpegMessage::Decode: Error, size==0" << endl;
+		return;
+	}
+	cv::imdecode(cv::Mat(data),CV_LOAD_IMAGE_COLOR,targetMat); 
 }
 
 void JpegMessage::Encode(cv::Mat *srcMat)
 {
-	data = new vector<uchar>();
 	vector<int> param = vector<int>(2);
 	param[0]=CV_IMWRITE_JPEG_QUALITY;
 	param[1]=95;//default(95) 0-100
 
-	imencode(".jpg",*srcMat,*data,param);
-	size = data->size();
+	imencode(".jpg",*srcMat,data,param);
+	size = data.size();
 }
 
 void JpegMessage::log()

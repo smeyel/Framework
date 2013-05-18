@@ -9,6 +9,8 @@
 
 class JpegMessage : public JsonWithAuxMessage
 {
+private:
+	std::vector<uchar> jpegCompressorTempVect;
 public:
 	long long timestamp;
 
