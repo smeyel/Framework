@@ -11,6 +11,7 @@
 #include "SendlogMessage.h"
 #include "TakePictureMessage.h"
 #include "MeasurementLogMessage.h"
+#include "SendPositionMessage.h"
 
 #include "Logger.h"
 
@@ -56,6 +57,10 @@ JsonMessage *JsonMessage::parse(char *json)
 	else if (!strcmp(typeString,"measurementlog"))
 	{
 		return new MeasurementLogMessage(json);
+	}
+	else if (!strcmp(typeString,"requestposition"))
+	{
+		return new SendPositionMessage(json);
 	}
 
 #ifdef DEBUG_JSON_IF_UNKNOWN

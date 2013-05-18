@@ -15,7 +15,8 @@ typedef enum _messagetype
 	TakePicture,
 	Sendlog,
 	Jpeg,
-	MeasurementLog
+	MeasurementLog,
+	SendPosition
 } JsonMessageTypeEnum;
 
 class JsonMessage
