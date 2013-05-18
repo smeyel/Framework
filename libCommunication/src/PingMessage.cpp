@@ -8,10 +8,21 @@ PingMessage::PingMessage(char *json)
 	parse(json);
 }
 
+PingMessage::PingMessage()
+{
+	typecode = Ping;
+}
+
 bool PingMessage::parse(char *json)
 {
 	return true;
 }
+
+void PingMessage::writeJson(char *buffer)
+{
+	sprintf(buffer,"{ \"type\": \"ping\", \"desiredtimestamp\": \"0\" }#");
+}
+
 
 void PingMessage::log()
 {

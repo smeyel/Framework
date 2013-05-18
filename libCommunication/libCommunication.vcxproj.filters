@@ -30,6 +30,9 @@
     <ClInclude Include="include\JpegMessage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\MeasurementLogMessage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\PhoneProxy.cpp">
@@ -48,6 +51,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\JpegMessage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MeasurementLogMessage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -9,6 +9,10 @@
 
 #include "PhoneProxy.h"
 
+#include "TakePictureMessage.h"
+#include "SendlogMessage.h"
+#include "PingMessage.h"
+
 #define MAXJSONSIZE 4096
 #define MAXTYPENAMELENGTH 128
 
@@ -24,36 +28,21 @@ static void error_exit(char *errorMessage) {
 
 void PhoneProxy::RequestPhoto(long long desiredTimeStamp)
 {
-    char buffer[100];
-    int len;
-	sprintf(buffer,"{ \"type\": \"takepicture\", \"desiredtimestamp\": \"%lld\" }#",desiredTimeStamp);
-    len = strlen(buffer);
-
-    if (send(sock, buffer, len, 0) != len)
-        error_exit("send() has sent a different number of bytes than excepted !!!!");
-	return;
+	TakePictureMessage msg;
+	msg.desiredtimestamp = desiredTimeStamp;
+	Send(&msg);
 }
 
 void PhoneProxy::RequestPing()
 {
-	char *cmd = "{ \"type\": \"ping\", \"desiredtimestamp\": \"0\" }#";
-    int len;
-    len = strlen(cmd);
-
-    if (send(sock, cmd, len, 0) != len)
-        error_exit("send() has sent a different number of bytes than expected !!!!");
-	return;
+	PingMessage msg;
+	Send(&msg);
 }
 
 void PhoneProxy::RequestLog()
 {
-	char *cmd = "{ \"type\": \"sendlog\", \"desiredtimestamp\": \"0\" }#";
-    int len;
-    len = strlen(cmd);
-
-    if (send(sock, cmd, len, 0) != len)
-        error_exit("send() has sent a different number of bytes than expected !!!!");
-	return;
+	SendlogMessage msg;
+	Send(&msg);
 }
 
 void PhoneProxy::Receive(char *filename)
@@ -258,10 +247,14 @@ void PhoneProxy::ProcessIncomingJSON(int sock,char *buffer, ostream *targetStrea
 	}
 }
 
-void PhoneProxy::Send(JsonMessage msg)
+void PhoneProxy::Send(JsonMessage *msg)
 {
-
-
+    char buffer[MAXJSONSIZE];
+	msg->writeJson(buffer);
+    int len = strlen(buffer);
+    if (send(sock, buffer, len, 0) != len)
+        error_exit("send() has sent a different number of bytes than excepted !!!!");
+	return;
 }
 
 JsonMessage *PhoneProxy::ReceiveNew()

@@ -9,6 +9,13 @@ TakePictureMessage::TakePictureMessage(char *json)
 	parse(json);
 }
 
+TakePictureMessage::TakePictureMessage()
+{
+	typecode = TakePicture;
+	desiredtimestamp = 0;
+}
+
+
 bool TakePictureMessage::parse(char *json)
 {
 	// find desiredtimestamp
@@ -25,6 +32,11 @@ bool TakePictureMessage::parse(char *json)
 	desiredtimestamp = _atoi64(timestampString);
 		
 	return true;
+}
+
+void TakePictureMessage::writeJson(char *buffer)
+{
+	sprintf(buffer,"{ \"type\": \"takepicture\", \"desiredtimestamp\": \"%lld\" }#",desiredtimestamp);
 }
 
 void TakePictureMessage::log()

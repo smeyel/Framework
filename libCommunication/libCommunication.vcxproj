@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="src\JpegMessage.cpp" />
     <ClCompile Include="src\JsonMessage.cpp" />
+    <ClCompile Include="src\MeasurementLogMessage.cpp" />
     <ClCompile Include="src\PhoneProxy.cpp" />
     <ClCompile Include="src\PingMessage.cpp" />
     <ClCompile Include="src\SendlogMessage.cpp" />
@@ -21,6 +22,7 @@
   <ItemGroup>
     <ClInclude Include="include\JpegMessage.h" />
     <ClInclude Include="include\JsonMessage.h" />
+    <ClInclude Include="include\MeasurementLogMessage.h" />
     <ClInclude Include="include\PhoneProxy.h" />
     <ClInclude Include="include\picojson.h" />
     <ClInclude Include="include\PingMessage.h" />

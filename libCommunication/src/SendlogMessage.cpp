@@ -8,10 +8,21 @@ SendlogMessage::SendlogMessage(char *json)
 	parse(json);
 }
 
+SendlogMessage::SendlogMessage()
+{
+	typecode = Sendlog;
+}
+
 bool SendlogMessage::parse(char *json)
 {
 	return true;
 }
+
+void SendlogMessage::writeJson(char *buffer)
+{
+	sprintf(buffer,"{ \"type\": \"sendlog\", \"desiredtimestamp\": \"0\" }#");
+}
+
 
 void SendlogMessage::log()
 {

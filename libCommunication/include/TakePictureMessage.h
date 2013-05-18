@@ -8,9 +8,12 @@ class TakePictureMessage : public JsonMessage
 public:
 	long long desiredtimestamp;
 
+	TakePictureMessage();
 	TakePictureMessage(char *json);
 	bool parse(char *json);
 	virtual void log();
+
+	virtual void writeJson(char *buffer);
 };
 
 #endif

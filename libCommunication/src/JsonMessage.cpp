@@ -2,6 +2,7 @@
 #include <string.h>
 
 #include <iostream>
+#include <fstream>
 #include <winsock2.h>
 
 #include "JsonMessage.h"
@@ -9,6 +10,7 @@
 #include "PingMessage.h"
 #include "SendlogMessage.h"
 #include "TakePictureMessage.h"
+#include "MeasurementLogMessage.h"
 
 #include "Logger.h"
 
@@ -51,12 +53,25 @@ JsonMessage *JsonMessage::parse(char *json)
 	{
 		return new JpegMessage(json);
 	}
+	else if (!strcmp(typeString,"measurementlog"))
+	{
+		return new MeasurementLogMessage(json);
+	}
 
 #ifdef DEBUG_JSON_IF_UNKNOWN
 	DebugJson(json);
 #endif
 
 	return NULL;
+}
+
+void JsonMessage::writeAuxFile(char *filename)
+{
+	std::ofstream targetStream;
+	targetStream.open(filename,std::ofstream::binary);
+	this->writeAuxStream(&targetStream);
+	targetStream.flush();
+	targetStream.close();
 }
 
 void JsonMessage::DebugJson(char *json)

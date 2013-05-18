@@ -14,7 +14,8 @@ typedef enum _messagetype
 	Ping,
 	TakePicture,
 	Sendlog,
-	Jpeg
+	Jpeg,
+	MeasurementLog
 } JsonMessageTypeEnum;
 
 class JsonMessage
@@ -34,6 +35,10 @@ public:
 	JsonMessageTypeEnum getMessageType();
 
 	virtual void readAuxIfNeeded(int socket) { }
+
+	virtual void writeJson(char *buffer) { }
+	void writeAuxFile(char *filename);	// No need to override, uses writeAuxStream.
+	virtual void writeAuxStream(std::ostream *targetStream) { }
 
 	static void DebugJson(char *json);
 

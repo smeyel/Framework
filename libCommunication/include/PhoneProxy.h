@@ -17,7 +17,7 @@ class PhoneProxy
 private:
 	SOCKET sock;
 
-	void receiveIntoStream(ostream *targetStream, SOCKET sock, long bytenum);
+	void receiveIntoStream(ostream *targetStream, SOCKET sock, long bytenum);	// Deprecated, handled by JsonMessage...
 
 public:
 	long long lastReceivedTimeStamp;	// Used to query the timestamp of the last reception
@@ -29,20 +29,22 @@ public:
 	void Connect(char *ip, int port);
 	void Disconnect();
 
+	// Wrappers for Send()
 	void RequestPhoto(long long desiredTimeStamp);
 	void RequestPing();
-	void Receive(char *filename);
-	void Receive(ostream *targetStream);
-	void ReceiveJpeg(cv::Mat *targetMat);
-	void ReceiveDebug();
 	void RequestLog();
+	
+	void Receive(char *filename);	// Deprecated, use ReceiveNew()
+	void Receive(ostream *targetStream);	// Deprecated, use ReceiveNew()
+	void ReceiveJpeg(cv::Mat *targetMat);	// Deprecated, use ReceiveNew()
+	void ReceiveDebug();	// Deprecated, use ReceiveNew()
 
 	// New interface
-	void Send(JsonMessage msg);
+	void Send(JsonMessage *msg);
 	JsonMessage *ReceiveNew();
 
 private:
-	void ProcessIncomingJSON(int sock,char *buffer, ostream *targetStream);
+	void ProcessIncomingJSON(int sock,char *buffer, ostream *targetStream);	// Deprecated, handled by JsonMessage...
 };
 
 static void error_exit(char *errorMessage);

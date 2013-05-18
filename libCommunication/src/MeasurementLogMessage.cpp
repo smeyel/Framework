@@ -6,29 +6,29 @@
 
 #include <sstream>
 //#include "picojson.h"
-#include "JpegMessage.h"
+#include "MeasurementLogMessage.h"
 #include "Logger.h"
 
 using namespace std;
 
-JpegMessage::JpegMessage(char *json)
+MeasurementLogMessage::MeasurementLogMessage(char *json)
 {
-	typecode = Jpeg;
+	typecode = MeasurementLog;
 	data = NULL;
 	size = 0;
 	timestamp = 0;
 	parse(json);
 }
 
-JpegMessage::JpegMessage()
+MeasurementLogMessage::MeasurementLogMessage()
 {
-	typecode = Jpeg;
+	typecode = MeasurementLog;
 	data = NULL;
 	size = 0;
 	timestamp = 0;
 }
 
-bool JpegMessage::parse(char *json)
+bool MeasurementLogMessage::parse(char *json)
 {
 	char timestampString[128];
 	JsonMessage::readFieldInto(json,"timestamp",timestampString);
@@ -41,30 +41,30 @@ bool JpegMessage::parse(char *json)
 	return true;
 }
 
-void JpegMessage::writeJson(char *buffer)
+void MeasurementLogMessage::writeJson(char *buffer)
 {
-	sprintf(buffer,"{ \"type\": \"JPEG\", \"timestamp\": \"%lld\", \"size\": \"%d\" }#",timestamp,size);
+	sprintf(buffer,"{ \"type\": \"measurementlog\", \"timestamp\": \"%lld\", \"size\": \"%d\" }#",timestamp,size);
 }
 
-void JpegMessage::writeAuxStream(std::ostream *targetStream)
+void MeasurementLogMessage::writeAuxStream(std::ostream *targetStream)
 {
 	if (!data) return;
 	targetStream->write((const char*)data->data(),data->size());
 }
 
 
-void JpegMessage::readAuxIfNeeded(int socket)
+void MeasurementLogMessage::readAuxIfNeeded(int socket)
 {
 	stringstream ss;
 	JsonMessage::receiveIntoStream(&ss,socket,size);
 
 	ss.seekp(0, ios::end);
-	stringstream::pos_type jpegSize = ss.tellp();
+	stringstream::pos_type logSize = ss.tellp();
 	ss.seekg(0, ios::beg);
 	//cout << "JPEG size:" << jpegSize << endl;
 
 	data = new vector<uchar>();
-	for(int i=0; i<jpegSize; i++)
+	for(int i=0; i<logSize; i++)
 	{
 		char ch;
 		ss.read(&ch,1);
@@ -72,12 +72,7 @@ void JpegMessage::readAuxIfNeeded(int socket)
 	}
 }
 
-void JpegMessage::Decode(cv::Mat *targetMat)
+void MeasurementLogMessage::log()
 {
-	cv::imdecode(cv::Mat(*data),CV_LOAD_IMAGE_COLOR,targetMat); 
-}
-
-void JpegMessage::log()
-{
-	LogConfigTime::Logger::getInstance()->Log(LogConfigTime::Logger::LOGLEVEL_INFO,"Message","JpegMessage( timestamp=%lld jpegsize=%d )",timestamp,size);
+	LogConfigTime::Logger::getInstance()->Log(LogConfigTime::Logger::LOGLEVEL_INFO,"Message","MeasurementLogMessage( timestamp=%lld size=%d )",timestamp,size);
 }
