@@ -128,7 +128,7 @@ void PhoneProxy::Connect(char *ip, int port)
 	int iResult;
 
 	//cout << "Connecting..." << endl;
-
+#ifdef WIN32
     WORD wVersionRequested;
     WSADATA wsaData;
     wVersionRequested = MAKEWORD (1, 1);
@@ -136,6 +136,10 @@ void PhoneProxy::Connect(char *ip, int port)
         error_exit( "Initialisation of Winsock failed");
     //else
         //printf("Winsock Initialised\n");
+#else
+#error TODO: Socket initialization is not implemented for this platform.
+#endif
+
 
     sock = socket( AF_INET, SOCK_STREAM, 0 );
 
@@ -164,8 +168,13 @@ void PhoneProxy::Connect(char *ip, int port)
 void PhoneProxy::Disconnect()
 {
 	shutdown(sock, SD_SEND);
+#ifdef WIN32
 	closesocket(sock);
 	WSACleanup();
+#else
+#error TODO: Socket disconnect is not implemented for this platform.
+#endif
+
 	sock = -1;
 }
 
@@ -261,6 +270,7 @@ void PhoneProxy::Send(JsonMessage *msg)
     int len = strlen(buffer);
     if (send(sock, buffer, len, 0) != len)
         error_exit("send() has sent a different number of bytes than excepted !!!!");
+	msg->writeAux(sock);
 	return;
 }
 
@@ -300,6 +310,11 @@ JsonMessage *PhoneProxy::ReceiveNew()
 	char *jsonBuffer = buffer;
 
 	//cout << "ProcessIncomingJson: " << endl << jsonBuffer << endl << "End of JSON" << endl;
+	if (*buffer==0)
+	{
+		// Empty message, possibly the connection was closed from the remote side.
+		return NULL;
+	}
 
 	// Instantiate appropriate JsonMessage
 	JsonMessage *jsonMsg = JsonMessage::parse(jsonBuffer);

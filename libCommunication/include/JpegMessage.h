@@ -5,32 +5,21 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/core/core.hpp>
 
-#include "JsonMessage.h"
+#include "JsonWithAuxMessage.h"
 
-class JpegMessage : public JsonMessage
+class JpegMessage : public JsonWithAuxMessage
 {
 public:
 	long long timestamp;
-	int size;
-	std::vector<uchar> *data;
 
 	JpegMessage(char *json);
 	JpegMessage();
-	~JpegMessage()
-	{
-		if (data)
-		{
-			delete data;
-		}
-	}
 
 	bool parse(char *json);
 	virtual void writeJson(char *buffer);
-	virtual void writeAuxStream(std::ostream *targetStream);
-
-	virtual void readAuxIfNeeded(int socket);
 
 	void Decode(cv::Mat *targetMat);
+	void Encode(cv::Mat *srcMat);
 
 	virtual void log();
 };

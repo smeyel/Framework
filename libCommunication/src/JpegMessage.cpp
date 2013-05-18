@@ -11,20 +11,16 @@
 
 using namespace std;
 
-JpegMessage::JpegMessage(char *json)
+JpegMessage::JpegMessage(char *json) : JsonWithAuxMessage()
 {
 	typecode = Jpeg;
-	data = NULL;
-	size = 0;
 	timestamp = 0;
 	parse(json);
 }
 
-JpegMessage::JpegMessage()
+JpegMessage::JpegMessage() : JsonWithAuxMessage()
 {
 	typecode = Jpeg;
-	data = NULL;
-	size = 0;
 	timestamp = 0;
 }
 
@@ -46,35 +42,20 @@ void JpegMessage::writeJson(char *buffer)
 	sprintf(buffer,"{ \"type\": \"JPEG\", \"timestamp\": \"%lld\", \"size\": \"%d\" }#",timestamp,size);
 }
 
-void JpegMessage::writeAuxStream(std::ostream *targetStream)
-{
-	if (!data) return;
-	targetStream->write((const char*)data->data(),data->size());
-}
-
-
-void JpegMessage::readAuxIfNeeded(int socket)
-{
-	stringstream ss;
-	JsonMessage::receiveIntoStream(&ss,socket,size);
-
-	ss.seekp(0, ios::end);
-	stringstream::pos_type jpegSize = ss.tellp();
-	ss.seekg(0, ios::beg);
-	//cout << "JPEG size:" << jpegSize << endl;
-
-	data = new vector<uchar>();
-	for(int i=0; i<jpegSize; i++)
-	{
-		char ch;
-		ss.read(&ch,1);
-		data->push_back(ch);
-	}
-}
-
 void JpegMessage::Decode(cv::Mat *targetMat)
 {
 	cv::imdecode(cv::Mat(*data),CV_LOAD_IMAGE_COLOR,targetMat); 
+}
+
+void JpegMessage::Encode(cv::Mat *srcMat)
+{
+	data = new vector<uchar>();
+	vector<int> param = vector<int>(2);
+	param[0]=CV_IMWRITE_JPEG_QUALITY;
+	param[1]=95;//default(95) 0-100
+
+	imencode(".jpg",*srcMat,*data,param);
+	size = data->size();
 }
 
 void JpegMessage::log()

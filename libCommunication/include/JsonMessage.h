@@ -40,6 +40,7 @@ public:
 	virtual void writeJson(char *buffer) { }
 	void writeAuxFile(char *filename);	// No need to override, uses writeAuxStream.
 	virtual void writeAuxStream(std::ostream *targetStream) { }
+	virtual void writeAux(int socket) { }
 
 	static void DebugJson(char *json);
 
