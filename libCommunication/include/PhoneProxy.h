@@ -31,6 +31,7 @@ public:
 
 	// Wrappers for Send()
 	void RequestPhoto(long long desiredTimeStamp);
+	void RequestPosition();
 	void RequestPing();
 	void RequestLog();
 	
