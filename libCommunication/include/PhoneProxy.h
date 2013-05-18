@@ -8,8 +8,10 @@
 #include <opencv2/core/core.hpp>
 
 #include "JsonMessage.h"
+#include "TimeMeasurement.h"
 
 using namespace std;
+using namespace LogConfigTime;
 
 #define RCVBUFSIZE 8192//32768//16384//8192
 
@@ -18,13 +20,38 @@ class PhoneProxy
 private:
 	SOCKET sock;
 
+	class TimeMeasurementCodeDefs
+	{
+	public:
+		const static int ReceiveNew		= 1;
+		const static int ReceiveNew_WaitAndReceiveJson	= 2;
+		const static int ReceiveNew_ParseJson	= 3;
+		const static int ReceiveNew_ReceiveAux	= 4;
+
+		static void setnames(TimeMeasurement *measurement)
+		{
+			measurement->setMeasurementName("PhoneProxy internal time measurements");
+
+			measurement->setname(ReceiveNew,"ReceiveNew");
+			measurement->setname(ReceiveNew_WaitAndReceiveJson,"ReceiveNew_WaitAndReceiveJson");
+			measurement->setname(ReceiveNew_ParseJson,"ReceiveNew_ParseJson");
+			measurement->setname(ReceiveNew_ReceiveAux,"ReceiveNew_ReceiveAux");
+		}
+	};
+
 	void receiveIntoStream(ostream *targetStream, SOCKET sock, long bytenum);	// Deprecated, handled by JsonMessage...
 
 public:
+	// Time measurement
+	TimeMeasurement timeMeasurement;
+
 	long long lastReceivedTimeStamp;	// Used to query the timestamp of the last reception
 	PhoneProxy()
 	{
 		lastReceivedTimeStamp=0;
+		// Prepare time measurement
+		timeMeasurement.init();
+		TimeMeasurementCodeDefs::setnames(&timeMeasurement);
 	}
 
 	void Connect(char *ip, int port);

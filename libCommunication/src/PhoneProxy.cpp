@@ -276,6 +276,7 @@ void PhoneProxy::Send(JsonMessage *msg)
 
 JsonMessage *PhoneProxy::ReceiveNew()
 {
+	timeMeasurement.start(PhoneProxy::TimeMeasurementCodeDefs::ReceiveNew);
 	// Receive response
 	int totalBytes = 0;
 	char buffer[MAXJSONSIZE] = "";
@@ -285,6 +286,7 @@ JsonMessage *PhoneProxy::ReceiveNew()
 	char c;
 	char *bufPtr = buffer;
 	*bufPtr = 0;
+	timeMeasurement.start(PhoneProxy::TimeMeasurementCodeDefs::ReceiveNew_WaitAndReceiveJson);
 	while ((received = recv(sock, &c, 1, 0)) > 0) 
 	{
 		if (received<1)
@@ -306,6 +308,7 @@ JsonMessage *PhoneProxy::ReceiveNew()
 				break;
 		}
 	}
+	timeMeasurement.finish(PhoneProxy::TimeMeasurementCodeDefs::ReceiveNew_WaitAndReceiveJson);
 
 	char *jsonBuffer = buffer;
 
@@ -317,10 +320,15 @@ JsonMessage *PhoneProxy::ReceiveNew()
 	}
 
 	// Instantiate appropriate JsonMessage
+	timeMeasurement.start(PhoneProxy::TimeMeasurementCodeDefs::ReceiveNew_ParseJson);
 	JsonMessage *jsonMsg = JsonMessage::parse(jsonBuffer);
+	timeMeasurement.finish(PhoneProxy::TimeMeasurementCodeDefs::ReceiveNew_ParseJson);
 
 	// Ask the message to read its auxiliary data from the socket, if any.
+	timeMeasurement.start(PhoneProxy::TimeMeasurementCodeDefs::ReceiveNew_ReceiveAux);
 	jsonMsg->readAuxIfNeeded(sock);
+	timeMeasurement.finish(PhoneProxy::TimeMeasurementCodeDefs::ReceiveNew_ReceiveAux);
 
+	timeMeasurement.finish(PhoneProxy::TimeMeasurementCodeDefs::ReceiveNew);
 	return jsonMsg;
 }
