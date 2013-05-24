@@ -3,6 +3,10 @@
 
 #include "JsonMessage.h"
 
+/** Ping command and answer message.
+
+	The answer is usually another ping message.
+*/
 class PingMessage : public JsonMessage
 {
 public:

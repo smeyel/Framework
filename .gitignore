@@ -18,3 +18,7 @@ Release/
 *.a
 *.o
 *.lib
+libCommunication/doc/html/
+libCommunication/doc/latex/
+
+

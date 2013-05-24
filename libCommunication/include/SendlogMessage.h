@@ -3,6 +3,10 @@
 
 #include "JsonMessage.h"
 
+/** Command message to send the measurement log.
+
+	Answer is usually a MeasurementLogMessage.
+*/
 class SendlogMessage : public JsonMessage
 {
 public:

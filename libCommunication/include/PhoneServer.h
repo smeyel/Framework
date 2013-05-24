@@ -15,22 +15,53 @@ using namespace std;
 
 #define RCVBUFSIZE 8192//32768//16384//8192
 
+/** Server functions for a phone which can be connected by PhoneProxy.
+	Usage:
+	- Use InitServer() and ListenServerSocket() to start the server.
+	- Currently, server socket handling has to be implemented externally.
+		After receiving the connection, use SetSock().
+		Use GetServerSocket() to get the server socket for accept().
+	- Use Send() and ReceiveNew() to communicate with the remote side.
+	- Use DisconnectServer() to close the server.
+
+	If you use a http based registry of nodes, you can use the RegisterNode()
+	method to send the HTTP message that registers the node.
+*/
 class PhoneServer : public PhoneProxy
 {
 private:
+	/** Helper method to init the OS socket subsystem. */
 	int InitSocket();
+	/** Helper method to close sockets. */
 	void CloseSocket(SOCKET socket);
 
+	SOCKET serversock;
 public:
-	SOCKET serversock;	// public only for debug...
-
+	/** Constructor */
 	PhoneServer() : PhoneProxy()
 	{
 		lastReceivedTimeStamp=0;
 	}
 
+	/** Returns the server socket. */
+	SOCKET GetServerSocket()
+	{
+		return serversock;
+	}
+
+	/** Initializes the server listening on a given port.
+		The server socket is created, but listening is not started.
+		Use ListenServerSocket() to start listening.
+
+		@param port	The TCP port to listen to.
+		@returns	Zero for success, <0 for error codes.
+	*/
 	int InitServer(int port);
+
+	/** Starts listening on the server socket port. */
 	void ListenServerSocket();
+
+	/** Closes the server socket. */
 	void DisconnectServer();
 
 	/** Registers the server on a SMEyeL node registry server.
@@ -43,6 +74,16 @@ public:
 		@return				0 for success, <0 for error codes.
 	*/
 	int RegisterNode(const char *registryHost, const char *registrationURL);
+
+	/** After receiving a connection via the server socket,
+		use this method to set the client socket so that you can use
+		the Send() and ReceiveNew() methods this class derives from PhoneProxy.
+	*/
+	void SetSock(SOCKET newsock)
+	{
+		PhoneProxy::SetSock(newsock);
+	}
+
 };
 
 #endif

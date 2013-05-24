@@ -3,6 +3,9 @@
 
 #include "JsonMessage.h"
 
+/** Command message to send position information.
+	A desired timestamp may be defined.
+*/
 class SendPositionMessage : public JsonMessage
 {
 public:

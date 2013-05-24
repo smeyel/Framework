@@ -1,5 +1,4 @@
 #include <sstream>
-#include "picojson.h"
 #include "TakePictureMessage.h"
 #include "Logger.h"
 

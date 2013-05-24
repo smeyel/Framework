@@ -12,9 +12,6 @@
     <ClInclude Include="include\PhoneProxy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\picojson.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\JsonMessage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
