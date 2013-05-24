@@ -19,7 +19,7 @@ class VideoInput
 								Typical parameters: CLEYE_GAIN CLEYE_EXPOSURE CLEYE_ZOOM
 			@returns			The new value of the parameter
 		*/
-		int IncrementCameraParameter(int param) { return -1; }
+		virtual int IncrementCameraParameter(int param) { return -1; }
 
 		/** Decrements given camera parameter by 10
 			@param parameter	The parameter to increment.
@@ -27,7 +27,18 @@ class VideoInput
 								(Found in VideoInputPs3EyeParameters.h)
 			@returns			The new value of the parameter
 		*/
-		int DecrementCameraParameter(int param) { return -1; }
+		virtual int DecrementCameraParameter(int param) { return -1; }
+
+		// --- New camera settings interface
+		/** Sets Gain (0-100, -1 means auto)
+		*/
+		virtual int SetNormalizedGain(int value) { return -1; }
+		/** Sets Exposure (0-100, -1 means auto)
+		*/
+		virtual int SetNormalizedExposure(int value) { return -1; }
+		/** Sets White balance (0-100, -1 means auto)
+		*/
+		virtual int SetNormalizedWhiteBalance(int r, int g, int b) { return -1; }
 
 		~VideoInput()
 		{

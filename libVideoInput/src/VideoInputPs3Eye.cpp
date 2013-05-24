@@ -97,3 +97,48 @@ int VideoInputPs3Eye::DecrementCameraParameter(int param)
 	CLEyeSetCameraParameter(_cam, (CLEyeCameraParameter)param, CLEyeGetCameraParameter(_cam, (CLEyeCameraParameter)param)-10);
 	return CLEyeGetCameraParameter(_cam, (CLEyeCameraParameter)param);
 }
+
+int VideoInputPs3Eye::SetNormalizedGain(int value)
+{
+	if (value==-1)
+	{
+		CLEyeSetCameraParameter(_cam, CLEYE_AUTO_GAIN, 1);
+	}
+	else
+	{
+		CLEyeSetCameraParameter(_cam, CLEYE_AUTO_GAIN, 0);
+		CLEyeSetCameraParameter(_cam, CLEYE_GAIN, (value*79)/100);
+	}
+	return 0;
+}
+
+int VideoInputPs3Eye::SetNormalizedExposure(int value)
+{
+	if (value==-1)
+	{
+		CLEyeSetCameraParameter(_cam, CLEYE_AUTO_EXPOSURE, 1);
+	}
+	else
+	{
+		CLEyeSetCameraParameter(_cam, CLEYE_AUTO_EXPOSURE, 0);
+		CLEyeSetCameraParameter(_cam, CLEYE_EXPOSURE, (value*511)/100);
+	}
+	return 0;
+}
+
+int VideoInputPs3Eye::SetNormalizedWhiteBalance(int r, int g, int b)
+{
+	if (r==-1 || g==-1 || b==-1)
+	{
+		CLEyeSetCameraParameter(_cam, CLEYE_AUTO_WHITEBALANCE, 1);
+	}
+	else
+	{
+		CLEyeSetCameraParameter(_cam, CLEYE_AUTO_WHITEBALANCE, 0);
+		CLEyeSetCameraParameter(_cam, CLEYE_WHITEBALANCE_RED, (r*255)/100);
+		CLEyeSetCameraParameter(_cam, CLEYE_WHITEBALANCE_GREEN, (g*255)/100);
+		CLEyeSetCameraParameter(_cam, CLEYE_WHITEBALANCE_BLUE, (b*255)/100);
+	}
+	return 0;
+}
+
