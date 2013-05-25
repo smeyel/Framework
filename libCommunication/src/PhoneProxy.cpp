@@ -120,7 +120,7 @@ void PhoneProxy::ReceiveDebug()
 	return;
 }
 
-void PhoneProxy::Connect(char *ip, int port)
+void PhoneProxy::Connect(const char *ip, int port)
 {
 	struct sockaddr_in server;
     struct hostent *host_info;

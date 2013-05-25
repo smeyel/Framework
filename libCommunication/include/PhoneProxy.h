@@ -69,7 +69,7 @@ public:
 		@param	ip		IPv4 address of the phone as a string, like "127.0.0.1".
 		@param	port	TCP port the phone is listening at.
 	*/
-	void Connect(char *ip, int port);
+	void Connect(const char *ip, int port);
 
 	/** Disconnects the connection to the phone. */
 	void Disconnect();
