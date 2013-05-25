@@ -32,7 +32,7 @@ public:
 	virtual void writeAuxStream(std::ostream *targetStream);
 
 	/** Writes the aux binary data into a socket.
-		@param targetStream	The target stream the binary data is written to.
+		@param socket	The target socket the binary data is written to.
 	*/
 	virtual void writeAux(int socket);
 

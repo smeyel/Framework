@@ -16,12 +16,13 @@ using namespace LogConfigTime;
 #define RCVBUFSIZE 8192//32768//16384//8192
 
 /** Proxy class for a remote smartphone.
-	Wraps all connection related functions as well.
+	Wraps all connection related functions.
 
 	To use,
-	- call Connect()
-	- assemble JsonMessage objects and send them with Send()
-	- use ReceiveNew() to wait and receive responses
+	- call Connect(ip,port)
+	- instantiate JsonMessage objects and send them with Send()
+	- use ReceiveNew() to wait and receive responses.
+		After processing the response, do not forget to delete the response.
 	- call Disconnect() to close the communication.
 */
 class PhoneProxy
