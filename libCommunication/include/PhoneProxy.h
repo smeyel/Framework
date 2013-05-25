@@ -75,15 +75,25 @@ public:
 	void Disconnect();
 
 	// Wrappers for Send()
+	/** Wraps Send() for TakePicture command
+		@param desiredTimeStamp	Desired timestamp the picture should be taken.
+	*/
 	void RequestPhoto(long long desiredTimeStamp);
+	/** Wraps Send() for SendPosition command */
 	void RequestPosition();
+	/** Wraps Send() for Ping command */
 	void RequestPing();
+	/** Wraps Send() for Sendlog command */
 	void RequestLog();
 	
 	// Deprecated functions
+	/** @deprecated Use ReceiveNew() instead! */
 	void Receive(char *filename);	// Deprecated, use ReceiveNew()
+	/** @deprecated Use ReceiveNew() instead! */
 	void Receive(ostream *targetStream);	// Deprecated, use ReceiveNew()
+	/** @deprecated Use ReceiveNew() instead! */
 	void ReceiveJpeg(cv::Mat *targetMat);	// Deprecated, use ReceiveNew()
+	/** @deprecated Use ReceiveNew() instead! */
 	void ReceiveDebug();	// Deprecated, use ReceiveNew()
 
 	// New interface
