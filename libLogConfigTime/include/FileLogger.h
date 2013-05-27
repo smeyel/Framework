@@ -1,7 +1,7 @@
 #ifndef __FILELOGGER_H
 #define __FILELOGGER_H
 #include<stdio.h>
-#include<STDARG.H>
+#include<stdarg.h>
 #include"Logger.h"
 
 namespace LogConfigTime

@@ -1,5 +1,5 @@
 #include<stdio.h>
-#include<STDARG.H>
+#include<stdarg.h>
 #include"Logger.h"
 
 using namespace LogConfigTime;
