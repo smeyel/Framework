@@ -2,7 +2,13 @@
 #define __JSONMESSAGE_H
 
 #include <iostream>
+#ifdef _WIN32
 #include <winsock2.h>
+#endif
+
+#ifdef __gnu_linux__
+typedef int SOCKET;
+#endif
 
 #define MAXTYPENAMELENGTH 100
 
