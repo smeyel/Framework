@@ -7,11 +7,15 @@
 
 #include "JsonWithAuxMessage.h"
 
+/** Message containing a binary JPEG file.
+*/
 class JpegMessage : public JsonWithAuxMessage
 {
 private:
 	std::vector<uchar> jpegCompressorTempVect;
 public:
+	/** Timestamp of the image w.r.t. the clock of the image source.
+	*/
 	long long timestamp;
 
 	JpegMessage(char *json);

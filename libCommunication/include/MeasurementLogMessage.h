@@ -8,6 +8,9 @@
 
 #include "JsonWithAuxMessage.h"
 
+/** Message containing a measurement log as aux binary data.
+	For example it can be a logfile, a CSV...
+*/
 class MeasurementLogMessage : public JsonWithAuxMessage
 {
 public:

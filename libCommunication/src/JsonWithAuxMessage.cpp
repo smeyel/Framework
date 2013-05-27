@@ -1,5 +1,6 @@
 #include <sstream>
 #include <vector>
+#include <fstream>
 
 #include "JsonWithAuxMessage.h"
 #include "Logger.h"
@@ -22,6 +23,15 @@ void JsonWithAuxMessage::writeAux(int socket)
 	if (n != size)
 		LogConfigTime::Logger::getInstance()->Log(LogConfigTime::Logger::LOGLEVEL_ERROR,"libCommunication","JsonWithAuxMessage::writeAux: Error on writing answer to socket.\n");
 	return;
+}
+
+void JsonWithAuxMessage::writeAuxFile(char *filename)
+{
+	std::ofstream targetStream;
+	targetStream.open(filename,std::ofstream::binary);
+	this->writeAuxStream(&targetStream);
+	targetStream.flush();
+	targetStream.close();
 }
 
 // Needs "size" to be set

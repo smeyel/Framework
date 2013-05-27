@@ -1,6 +1,7 @@
 #ifndef	_VIDEOINPUTPS3EYEPARAMETERS
 #define _VIDEOINPUTPS3EYEPARAMETERS
 
+// Deprecated, use dedicated VideoInput methods like SetNormalizedGain!
 #define VIDEOINPUTPS3EYEPARAMETERS_GAIN	0
 #define VIDEOINPUTPS3EYEPARAMETERS_EXPOSURE	1
 

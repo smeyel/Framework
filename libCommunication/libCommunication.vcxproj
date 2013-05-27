@@ -31,7 +31,6 @@
     <ClInclude Include="include\MeasurementLogMessage.h" />
     <ClInclude Include="include\PhoneProxy.h" />
     <ClInclude Include="include\PhoneServer.h" />
-    <ClInclude Include="include\picojson.h" />
     <ClInclude Include="include\PingMessage.h" />
     <ClInclude Include="include\SendlogMessage.h" />
     <ClInclude Include="include\SendPositionMessage.h" />

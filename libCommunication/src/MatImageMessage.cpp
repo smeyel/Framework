@@ -74,26 +74,26 @@ void MatImageMessage::Encode(cv::Mat *srcMat)
 		cout << "MatImageMessage::Encode: !isContinuous, not supported." << endl;
 		return;
 	}
-	if (srcMat->channels() != 4)
+	if ((srcMat->channels() != 4) && (srcMat->channels() != 3))
 	{
-		cout << "MatImageMessage::Encode: channels()=="<<srcMat->channels()<<" != 4, not supported." << endl;
+		cout << "MatImageMessage::Encode: channels()=="<<srcMat->channels()<<" != 3 or 4, not supported." << endl;
 		return;
 	}
-	if (srcMat->elemSize() != 4)
+	if ((srcMat->elemSize() != 4) && (srcMat->elemSize() != 3))
 	{
-		cout << "MatImageMessage::Encode: elemSize()=="<<srcMat->elemSize()<<" != 4, not supported." << endl;
+		cout << "MatImageMessage::Encode: elemSize()=="<<srcMat->elemSize()<<" != 3 or 4, not supported." << endl;
 		return;
 	}
-	if (srcMat->type() != CV_8UC4)
+	if ((srcMat->type() != CV_8UC4) && (srcMat->type() != CV_8UC3))
 	{
-		cout << "MatImageMessage::Encode: srcMat->type()=="<<srcMat->type()<<" != CV_8UC4, not supported." << endl;
+		cout << "MatImageMessage::Encode: srcMat->type()=="<<srcMat->type()<<" != CV_8UC3 or CV_8UC4, not supported." << endl;
 		return;
 	}
 
 	height = srcMat->rows;
 	width = srcMat->cols;
 	mattype = srcMat->type();
-	size = width*height*4;
+	size = width * height * srcMat->elemSize();
 	data.assign(srcMat->data, srcMat->data+size);
 	//data = srcMat->data;
 }

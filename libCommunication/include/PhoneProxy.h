@@ -15,6 +15,16 @@ using namespace LogConfigTime;
 
 #define RCVBUFSIZE 8192//32768//16384//8192
 
+/** Proxy class for a remote smartphone.
+	Wraps all connection related functions.
+
+	To use,
+	- call Connect(ip,port)
+	- instantiate JsonMessage objects and send them with Send()
+	- use ReceiveNew() to wait and receive responses.
+		After processing the response, do not forget to delete the response.
+	- call Disconnect() to close the communication.
+*/
 class PhoneProxy
 {
 private:
@@ -42,7 +52,9 @@ private:
 	void receiveIntoStream(ostream *targetStream, SOCKET sock, long bytenum);	// Deprecated, handled by JsonMessage...
 
 public:
-	// Time measurement
+	/** Time measurement object used for measuring the time requirements of the internal procedures.
+		May be accessed to monitor the time consumption.
+	*/
 	TimeMeasurement timeMeasurement;
 
 	long long lastReceivedTimeStamp;	// Used to query the timestamp of the last reception
@@ -54,25 +66,56 @@ public:
 		TimeMeasurementCodeDefs::setnames(&timeMeasurement);
 	}
 
-	void Connect(char *ip, int port);
+	/** Connect the proxy to a phone via TCP/IP.
+		@param	ip		IPv4 address of the phone as a string, like "127.0.0.1".
+		@param	port	TCP port the phone is listening at.
+	*/
+	void Connect(const char *ip, int port);
+
+	/** Disconnects the connection to the phone. */
 	void Disconnect();
 
 	// Wrappers for Send()
+	/** Wraps Send() for TakePicture command
+		@param desiredTimeStamp	Desired timestamp the picture should be taken.
+	*/
 	void RequestPhoto(long long desiredTimeStamp);
+	/** Wraps Send() for SendPosition command */
 	void RequestPosition();
+	/** Wraps Send() for Ping command */
 	void RequestPing();
+	/** Wraps Send() for Sendlog command */
 	void RequestLog();
 	
 	// Deprecated functions
+	/** @deprecated Use ReceiveNew() instead! */
 	void Receive(char *filename);	// Deprecated, use ReceiveNew()
+	/** @deprecated Use ReceiveNew() instead! */
 	void Receive(ostream *targetStream);	// Deprecated, use ReceiveNew()
+	/** @deprecated Use ReceiveNew() instead! */
 	void ReceiveJpeg(cv::Mat *targetMat);	// Deprecated, use ReceiveNew()
+	/** @deprecated Use ReceiveNew() instead! */
 	void ReceiveDebug();	// Deprecated, use ReceiveNew()
 
 	// New interface
+	/** Sends a given JsonMessage object to the phone.
+		If it contains aux binary data, that is sent as well.
+		@param	msg	JsonMessage to be sent.
+	*/
 	void Send(JsonMessage *msg);
+
+	/** Receives a new message. Blocks until the reception is completed.
+		@returns	Pointer to the received JsonMessage.
+
+		@warning The new message is created on heap. Do not forget to delete it after using.
+	*/
 	JsonMessage *ReceiveNew();
 
+protected:
+	/** Used by the derived class PhoneServer to set the socket externally after the server
+		socket opens a new client socket.
+		@param	newsock	The socket to be used for the communication. (Not the server socket.)
+	*/
 	void SetSock(SOCKET newsock)
 	{
 		// Used on server side to define connection socket after accept()
@@ -80,6 +123,9 @@ public:
 	}
 
 private:
+	/**	Processes an incoming JSON message.
+		@deprecated These functions are handled by JsonMessage. Left for compatibility.
+	*/
 	void ProcessIncomingJSON(int sock,char *buffer, ostream *targetStream);	// Deprecated, handled by JsonMessage...
 };
 

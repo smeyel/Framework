@@ -37,6 +37,16 @@ public:
 		@returns			The new value of the parameter
 	*/
 	int DecrementCameraParameter(int param);
+
+	/** Sets Gain (0-100, -1 means auto)
+	*/
+	virtual int SetNormalizedGain(int value);
+	/** Sets Exposure (0-100, -1 means auto)
+	*/
+	virtual int SetNormalizedExposure(int value);
+	/** Sets White balance (0-100, -1 means auto)
+	*/
+	virtual int SetNormalizedWhiteBalance(int r, int g, int b);
 };
 
 #endif
