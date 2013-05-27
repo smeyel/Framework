@@ -115,7 +115,7 @@ void JsonMessage::receiveIntoStream(std::ostream *targetStream, SOCKET sock, lon
 	}
 }
 
-void JsonMessage::readFieldInto(char *json, char *fieldname, char *resultBuffer)
+void JsonMessage::readFieldInto(char *json, const char *fieldname, char *resultBuffer)
 {
 	char buff[MAXJSONFIELDNAMELENGTH];
 
