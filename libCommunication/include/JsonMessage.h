@@ -75,7 +75,7 @@ public:
 		@param	fieldname		The name of the field to look for.
 		@param	resultBuffer	Location where the content should be copied.
 	*/
-	static void readFieldInto(char *json, char *fieldname, char *resultBuffer);
+	static void readFieldInto(char *json, const char *fieldname, char *resultBuffer);
 
 	/** Writes the content of this message into the log provided by the LogConfigTime Log mechanism.
 	*/
