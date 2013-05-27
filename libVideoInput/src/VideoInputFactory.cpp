@@ -5,6 +5,7 @@
 #include "VideoInputPs3Eye.h"
 #endif
 
+//TODO videoInputType sould be an enumeration
 VideoInput *VideoInputFactory::CreateVideoInput(int videoInputType)
 {
 	switch (videoInputType)
