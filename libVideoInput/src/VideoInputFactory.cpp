@@ -5,9 +5,6 @@
 #include "VideoInputPs3Eye.h"
 #endif
 
-#define VIDEOINPUTTYPE_GENERIC	0
-#define VIDEOINPUTTYPE_PS3EYE	1
-
 VideoInput *VideoInputFactory::CreateVideoInput(int videoInputType)
 {
 	switch (videoInputType)
