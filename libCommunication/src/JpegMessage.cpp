@@ -5,6 +5,7 @@
 
 
 #include <sstream>
+#include <stdio.h>
 //#include "picojson.h"
 #include "JpegMessage.h"
 #include "Logger.h"
