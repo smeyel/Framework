@@ -18,6 +18,6 @@ libCommunication.a: $(LIBCOMMUNICATION_OBJECTS)
 	$(CC) $(CFLAGS) $< -o $@
 	
 clean:
-	rm -rf stc/*.o libCommunication.a
+	rm -rf src/*.o libCommunication.a
 	
 .PHONY: all clean
