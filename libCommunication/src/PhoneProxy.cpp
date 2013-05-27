@@ -131,7 +131,6 @@ void PhoneProxy::Connect(const char *ip, int port)
 	struct sockaddr_in server;
     struct hostent *host_info;
     unsigned long addr;
-	int iResult;
 
 	//cout << "Connecting..." << endl;
 #ifdef WIN32
@@ -232,7 +231,7 @@ void PhoneProxy::ProcessIncomingJSON(int sock,char *buffer, ostream *targetStrea
 		len = posSizeValueEnd-posSizeValue;
 		strncpy(tmpS, posSizeValue, len );
 		*(tmpS+len) = 0;
-		int jpegSize = _atoi64(tmpS);
+		int jpegSize = atoi(tmpS);
 
 		// Save for external use...
 		lastReceivedTimeStamp = timestamp;
