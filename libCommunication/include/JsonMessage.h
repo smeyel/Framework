@@ -10,6 +10,10 @@
 typedef int SOCKET;
 #endif
 
+#ifdef _WIN32
+long long atoll(const char *str);
+#endif
+
 #define MAXTYPENAMELENGTH 100
 
 #define DEBUG_JSON_IF_UNKNOWN

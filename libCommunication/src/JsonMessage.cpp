@@ -28,6 +28,14 @@
 #define RCVBUFSIZE 4096
 #define MAXJSONFIELDNAMELENGTH 128
 
+#ifdef _WIN32
+long long atoll(const char *str)
+{
+	return _atoi64(str);
+}
+#endif
+
+
 JsonMessage::JsonMessage()
 {
 	typecode = Default;
