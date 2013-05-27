@@ -6,9 +6,6 @@ using namespace LogConfigTime;
 int PhoneServer::InitServer(int port)
 {
 	struct sockaddr_in server;
-    struct hostent *host_info;
-    unsigned long addr;
-	int iResult;
 
 	if (InitSocket())
 	{
@@ -57,7 +54,6 @@ int PhoneServer::RegisterNode(const char *registryHost, const char *registration
 	struct sockaddr_in server;
     struct hostent *host_info;
     unsigned long addr;
-	int iResult;
 
 	if (InitSocket())
 	{
@@ -106,7 +102,7 @@ int PhoneServer::RegisterNode(const char *registryHost, const char *registration
 	sprintf(buffer,"GET /%s HTTP/1.0\r\nHost: %s\r\nUser-Agent: HTMLGET 1.0\r\n\r\n",registrationURL,registryHost);
 	int len=strlen(buffer);
 
-	int sent = 0;
+	unsigned int sent = 0;
 	while(sent < strlen(buffer))
 	{ 
 		int tmpres = send(regSocket, buffer+sent, len-sent, 0);

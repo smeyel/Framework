@@ -49,7 +49,7 @@ double TimeMeasurement::finish(int measurementid)
 	currentTime = clock();
 #endif
 
-	long current = currentTime - currentStartValues[measurementid];
+	long long current = currentTime - currentStartValues[measurementid];
 	sumvalues[measurementid] += current;
 	numvalues[measurementid]++;
 	// Returns in ms
@@ -95,7 +95,7 @@ void TimeMeasurement::showresults(std::ostream *stream)
 	*stream << "(Average execution times (using tick frequency " << tickFrequency << " Hz)" << endl;
 	for (int i=0; i<MAX_TIMING_CODE; i++)
 	{
-		float avg = getavgms(i);
+		double avg = getavgms(i);
 		if (avg != 0.0)	// not the default value (in this case, can be checked with ==)
 		{
 			*stream << names[i] << ": " << avg << " ms" << endl;
@@ -105,5 +105,5 @@ void TimeMeasurement::showresults(std::ostream *stream)
 
 long long TimeMeasurement::getTimeStamp()
 {
-	return cv::getTickCount() * 1000000L / tickFrequency;
+	return (long long)(cv::getTickCount() * 1000000L / tickFrequency);
 }
