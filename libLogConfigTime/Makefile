@@ -17,3 +17,8 @@ libLogConfigTime.a: $(LIBLOGCONFIGTIME_OBJECTS)
 	
 .c.o:
 	$(CC) $(CFLAGS) $< -o $@
+	
+clean:
+	rm -rf src/*.o libLogConfigTime.a
+	
+.PHONY: all clean

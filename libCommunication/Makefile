@@ -16,3 +16,8 @@ libCommunication.a: $(LIBCOMMUNICATION_OBJECTS)
 
 .cpp.o:
 	$(CC) $(CFLAGS) $< -o $@
+	
+clean:
+	rm -rf stc/*.o libCommunication.a
+	
+.PHONY: all clean
