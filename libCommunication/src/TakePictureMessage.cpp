@@ -1,4 +1,5 @@
 #include <sstream>
+#include <stdlib.h>
 #include "picojson.h"
 #include "TakePictureMessage.h"
 #include "Logger.h"
@@ -29,7 +30,7 @@ bool TakePictureMessage::parse(char *json)
 	memset(timestampString,0,100);
 	strncpy(timestampString,beginPtr,endPtr-beginPtr);
 
-	desiredtimestamp = _atoi64(timestampString);
+	desiredtimestamp = atoll(timestampString);
 		
 	return true;
 }

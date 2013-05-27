@@ -29,7 +29,7 @@ bool JpegMessage::parse(char *json)
 {
 	char timestampString[128];
 	JsonMessage::readFieldInto(json,"timestamp",timestampString);
-	timestamp = _atoi64(timestampString);
+	timestamp = atoll(timestampString);
 		
 	char jpegsizeString[128];
 	JsonMessage::readFieldInto(json,"size",jpegsizeString);

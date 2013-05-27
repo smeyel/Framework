@@ -85,4 +85,4 @@ private:
 
 static void error_exit(char *errorMessage);
 
-#endif __PHONEPROXY_H
+#endif /*__PHONEPROXY_H*/

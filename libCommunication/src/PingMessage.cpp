@@ -1,4 +1,5 @@
 #include <sstream>
+#include <stdio.h>
 #include "PingMessage.h"
 #include "Logger.h"
 

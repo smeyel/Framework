@@ -3,7 +3,7 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/core/core.hpp>
 
-
+#include <stdio.h>
 #include <sstream>
 //#include "picojson.h"
 #include "MeasurementLogMessage.h"
@@ -28,7 +28,7 @@ bool MeasurementLogMessage::parse(char *json)
 {
 	char timestampString[128];
 	JsonMessage::readFieldInto(json,"timestamp",timestampString);
-	timestamp = _atoi64(timestampString);
+	timestamp = atoll(timestampString);
 		
 	char jpegsizeString[128];
 	JsonMessage::readFieldInto(json,"size",jpegsizeString);

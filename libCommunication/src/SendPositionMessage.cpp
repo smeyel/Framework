@@ -1,4 +1,7 @@
 #include <sstream>
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "SendPositionMessage.h"
 #include "Logger.h"
 
@@ -29,7 +32,7 @@ bool SendPositionMessage::parse(char *json)
 	memset(timestampString,0,100);
 	strncpy(timestampString,beginPtr,endPtr-beginPtr);
 
-	desiredtimestamp = _atoi64(timestampString);
+	desiredtimestamp = atoll(timestampString);
 		
 	return true;
 }

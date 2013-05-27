@@ -1,4 +1,5 @@
 #include <sstream>
+#include <stdio.h>
 #include "SendlogMessage.h"
 #include "Logger.h"
 

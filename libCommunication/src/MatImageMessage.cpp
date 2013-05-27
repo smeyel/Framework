@@ -4,6 +4,7 @@
 #include <sstream>
 #include "MatImageMessage.h"
 #include "Logger.h"
+#include <stdio.h>
 
 using namespace std;
 
@@ -33,7 +34,7 @@ bool MatImageMessage::parse(char *json)
 {
 	char timestampString[128];
 	JsonMessage::readFieldInto(json,"timestamp",timestampString);
-	timestamp = _atoi64(timestampString);
+	timestamp = atoll(timestampString);
 	
 	char sizeString[32];
 	JsonMessage::readFieldInto(json,"size",sizeString);

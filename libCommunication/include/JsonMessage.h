@@ -4,9 +4,9 @@
 #include <iostream>
 #ifdef _WIN32
 #include <winsock2.h>
-#endif
-
-#ifdef __gnu_linux__
+#else
+#include <sys/types.h>
+#include <sys/socket.h>
 typedef int SOCKET;
 #endif
 
