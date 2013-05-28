@@ -292,12 +292,19 @@ JsonMessage *PhoneProxy::ReceiveNew()
 	char *bufPtr = buffer;
 	*bufPtr = 0;
 	timeMeasurement.start(PhoneProxy::TimeMeasurementCodeDefs::ReceiveNew_WaitAndReceiveJson);
-	while ((received = recv(sock, &c, 1, 0)) > 0) 
+	do
 	{
-		if (received<1)
+		received = recv(sock, &c, 1, 0);
+		if (received==0)
 		{
 			// Error: JSON not finished, but input ended...
-			cout << "ERROR: JSON not finished properly..." << endl;
+			cout << "ERROR: Connection closed, JSON not finished properly..." << endl;
+			return NULL;
+		}
+		else if (received<0)
+		{
+			// Socket read error
+            cout << "recv() failed: " << WSAGetLastError() << endl;
 			return NULL;
 		}
 
@@ -312,7 +319,8 @@ JsonMessage *PhoneProxy::ReceiveNew()
 			if (bufPtr-buffer>2)	// Do not stop for UTF-8 initial 2 bytes
 				break;
 		}
-	}
+	} while (received > 0);
+
 	timeMeasurement.finish(PhoneProxy::TimeMeasurementCodeDefs::ReceiveNew_WaitAndReceiveJson);
 
 	char *jsonBuffer = buffer;
@@ -321,6 +329,7 @@ JsonMessage *PhoneProxy::ReceiveNew()
 	if (*buffer==0)
 	{
 		// Empty message, possibly the connection was closed from the remote side.
+		cout << "Connection closed (empty message), JSON not finished properly..." << endl;
 		return NULL;
 	}
 
