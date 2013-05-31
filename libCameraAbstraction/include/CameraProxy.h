@@ -32,7 +32,6 @@ class CameraProxy
 {
 private:
 	// Defaults set by constructor, may be overridden
-	PhoneProxy *default_phoneproxy;
 	Camera *default_camera;	// Do not forget: cameraID, isStationary, loadCalibrationData
 	ChessboardDetector *default_chessboarddetector;	// May overwrite its chessboard...
 
@@ -40,8 +39,6 @@ private:
 	void initDefaults();
 
 public:
-	/** Pointer to the used PhoneProxy. Initialized with a default one. */
-	PhoneProxy *phoneproxy;
 	/** Pointer to the used Camera. Initialized with a default one. */
 	Camera *camera;
 	/** Pointer to the used ChessboardDetector. Initialized with a default one. */
@@ -59,24 +56,16 @@ public:
 	/** Constrcutor setting default PhoneProxy, Camera and ChessboardDetector */
 	CameraProxy();
 	/** Constrcutor setting custom PhoneProxy and Camera, using default ChessboardDetector
-		@param aPhoneProxy	PhoneProxy to be used
 		@param aCamera		Camera to be used
 	*/
-	CameraProxy(PhoneProxy *aPhoneProxy, Camera *aCamera);
+	CameraProxy(Camera *aCamera);
 	/** Destructor */
 	~CameraProxy();
-
-	/** Wrapper for PhoneProxy->Connect() for convenience
-		@param	ip		IPv4 address of the remote camera, as a string like "127.0.0.1"
-		@param	port	TCP port the remote camera is listening to
-	*/
-	void Connect(const char *ip, int port);
-	/** Wrapper for PhoneProxy->Disconnect() for convenience */
-	void Disconnect();
 
 	// CaptureImage
 	/** Captures an image. Result can be accessed via lastImageTaken 
 		@param desiredTimestamp	The desired timestamp of the image
+		@warning Derived classes have to unhide this method to use it!
 	*/
 	void CaptureImage(long long desiredTimestamp=0); // calls CaptureImage(lastImageTaken)
 	/** Captures an image. Does not modify the image lastImageTaken.
@@ -84,8 +73,11 @@ public:
 		timestamp cannot be accessed.
 		@param desiredTimestamp	The desired timestamp of the image
 		@param target			The Mat the captured image is stored in.
+
+		@warning Derived classes have to override this method to implement the actual image capture.
 	*/
-	void CaptureImage(long long desiredTimestamp, Mat *target);	// Does not use lastImageTaken
+
+	virtual void CaptureImage(long long desiredTimestamp, Mat *target) = 0;
 
 	/** Try to find a chessboard on the last taken image (accessible via lastImageTaken)
 		@param showResultOnImage	If true, calibration data is written on the image.
@@ -118,14 +110,6 @@ public:
 		@warning The camera has to be calibrated before using this function!
 	*/
 	Ray pointImg2World(Point2f pImg);
-
-	/** Image transfer speed measurement
-		Use only alone (no prior or later operations) to keep the statistics clean
-		Use Connect before and Disconnect after calling it.
-		@param frameNumber	The number of frames to capture after each other as fast as possible.
-		@param resultfilename	The name of the file the resuls are written to.
-	*/
-	void PerformCaptureSpeedMeasurement_A(int frameNumber=100, const char *resultfilename = NULL);
 };
 
 #endif

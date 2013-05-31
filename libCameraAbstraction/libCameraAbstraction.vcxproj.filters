@@ -21,9 +21,15 @@
     <ClInclude Include="include\CameraProxy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\CameraRemoteProxy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CameraProxy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CameraRemoteProxy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
