@@ -9,7 +9,7 @@
 
 using namespace LogConfigTime;
 
-CameraRemoteProxy::CameraRemoteProxy(PhoneProxy *aPhoneProxy, Camera *aCamera=NULL)
+CameraRemoteProxy::CameraRemoteProxy(PhoneProxy *aPhoneProxy, Camera *aCamera)
 	 : CameraProxy(aCamera)
 {
 	initDefaults();
@@ -29,6 +29,10 @@ void CameraRemoteProxy::initDefaults()
 
 CameraRemoteProxy::~CameraRemoteProxy()
 {
+	if (phoneproxy)
+	{
+		phoneproxy->Disconnect();
+	}
 	if (phoneproxy == default_phoneproxy)
 		phoneproxy = NULL;
 	if (default_phoneproxy)

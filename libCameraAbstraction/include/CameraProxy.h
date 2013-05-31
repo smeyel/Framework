@@ -2,7 +2,6 @@
 #define __CAMERAPROXY_H
 
 #include "camera.h"
-#include "PhoneProxy.h"
 #include "chessboarddetector.h"
 
 /** Wraps a PhoneProxy, a Camera and a ChessboardDetector.

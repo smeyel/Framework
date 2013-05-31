@@ -1,6 +1,7 @@
 #ifndef __CAMERAREMOTEPROXY_H
 #define __CAMERAREMOTEPROXY_H
 #include "CameraProxy.h"
+#include "PhoneProxy.h"
 
 class CameraRemoteProxy : public CameraProxy
 {

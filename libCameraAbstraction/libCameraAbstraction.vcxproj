@@ -45,7 +45,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>include;$(OPENCV_DIR)\include;%(AdditionalIncludeDirectories);include;$(SolutionDir)Framework\libLogConfigTime\include;$(SolutionDir)Framework\libCommunication/include;$(SolutionDir)Tracking/lib3dWorld/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;$(OPENCV_DIR)\include;%(AdditionalIncludeDirectories);include;$(SolutionDir)Framework\libLogConfigTime\include;$(SolutionDir)Framework\libCommunication/include;$(SolutionDir)Tracking/lib3dWorld/include;$(SolutionDir)Framework\libVideoInput/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -82,10 +82,12 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\CameraLocalProxy.h" />
     <ClInclude Include="include\CameraProxy.h" />
     <ClInclude Include="include\CameraRemoteProxy.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\CameraLocalProxy.cpp" />
     <ClCompile Include="src\CameraProxy.cpp" />
     <ClCompile Include="src\CameraRemoteProxy.cpp" />
   </ItemGroup>
@@ -98,6 +100,9 @@
     </ProjectReference>
     <ProjectReference Include="..\libLogConfigTime\libLogConfigTime.vcxproj">
       <Project>{8927a516-de0f-4550-ae3f-14876252f716}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\libVideoInput\libVideoInput.vcxproj">
+      <Project>{f0b55c60-9485-43e1-87e2-ede6a73cceef}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
