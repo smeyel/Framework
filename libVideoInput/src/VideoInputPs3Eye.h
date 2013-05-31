@@ -17,10 +17,16 @@ class VideoInputPs3Eye : public VideoInput
 	// Just for asserts
 	int w, h;
 
+	cv::Mat internalFrame;	// Used by capture during conversion BGRA->BGR
+
 	int GetCameraParameterCode(int param);
 
 public:
 	void virtual init(int camID);
+
+	/** Captures a frame.
+		@warning As the PS3Eye returns CV_8UC4 (BGRA) images, a conversion to BGR image is performed.
+	*/
 	bool virtual captureFrame(cv::Mat &frame);
 	void virtual release();
 
