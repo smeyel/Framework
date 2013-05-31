@@ -37,6 +37,14 @@ public:
 	/** Destructor */
 	~CameraLocalProxy();
 
+	/** Returns internal VideoInput to provide access to camera parameters
+		@return	The internal VideoInput
+	*/
+	VideoInput *getVideoInput()
+	{
+		return this->videoInput;
+	}
+
 	/** Initializes a VideoInput for use with given type for given camera ID.
 		This method wraps the VideoInputFactory call.
 		@param videoInputType	Type, use the VIDEOINPUTTYPE_... defines like VIDEOINPUTTYPE_GENERIC or VIDEOINPUTTYPE_PS3EYE.

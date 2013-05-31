@@ -1,5 +1,4 @@
 #include "CameraLocalProxy.h"
-
 #include "Logger.h"
 
 using namespace LogConfigTime;
