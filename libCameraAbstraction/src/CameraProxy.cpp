@@ -27,6 +27,9 @@ void CameraProxy::initDefaults()
 
 	camera = default_camera = new Camera();
 	chessboarddetector = default_chessboarddetector = new ChessboardDetector(Size(9,6),36.1);
+
+	timeMeasurement = new TimeMeasurement();
+	timeMeasurement->init();
 }
 
 CameraProxy::~CameraProxy()
@@ -46,6 +49,12 @@ CameraProxy::~CameraProxy()
 	if (default_chessboarddetector)
 		delete default_chessboarddetector;
 	default_chessboarddetector=NULL;
+
+	if (timeMeasurement)
+	{
+		delete timeMeasurement;
+	}
+	timeMeasurement=NULL;
 }
 
 void CameraProxy::CaptureImage(long long desiredTimestamp)

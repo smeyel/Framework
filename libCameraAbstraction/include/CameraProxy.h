@@ -3,6 +3,7 @@
 
 #include "camera.h"
 #include "chessboarddetector.h"
+#include "TimeMeasurement.h"
 
 /** Wraps a PhoneProxy, a Camera and a ChessboardDetector.
 	Provides a convenient interface for basic operations with remote cameras.
@@ -38,6 +39,9 @@ private:
 	void initDefaults();
 
 public:
+	/** Internal time measurements of CameraProxy */
+	LogConfigTime::TimeMeasurement *timeMeasurement;
+
 	/** Pointer to the used Camera. Initialized with a default one. */
 	Camera *camera;
 	/** Pointer to the used ChessboardDetector. Initialized with a default one. */
