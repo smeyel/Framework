@@ -14,26 +14,6 @@ int PhoneServer::InitServer(int port)
 		return -1;
 	}
 
-	/*struct sockaddr_in server;
-
-    serversock = socket( AF_INET, SOCK_STREAM, 0 );
-    if (serversock < 0)
-	{
-		Logger::getInstance()->Log(Logger::LOGLEVEL_ERROR,"PhoneServer","Error: Cannot create server socket!\n");
-		return -2;
-	}
-
-    memset( &server, 0, sizeof (server));
-	server.sin_family = AF_INET;
-	server.sin_addr.s_addr = INADDR_ANY;
-	server.sin_port = htons(serverport);
-
-	// Binding the socket
-	if (bind(serversock, (struct sockaddr *) &server, sizeof(server)) < 0)
-	{
-		Logger::getInstance()->Log(Logger::LOGLEVEL_ERROR,"PhoneServer","Error: Cannot bind server socket!\n");
-		return -3;
-	}*/
 	serversock = PlatformSpecifics::getInstance()->CreateServerSocket(serverport);
 	Logger::getInstance()->Log(Logger::LOGLEVEL_INFO,"PhoneServer","Server socket initialized on port %d\n",port);
 	return 0;
@@ -49,8 +29,6 @@ void PhoneServer::ListenServerSocket()
 void PhoneServer::DisconnectServer()
 {
 	PlatformSpecifics::getInstance()->CloseSocket(serversock);
-	/*shutdown(serversock, SD_SEND);
-	CloseSocket(serversock);*/
 	serversock = -1;
 }
 
@@ -130,31 +108,12 @@ int PhoneServer::RegisterNode(const char *registryHost, const char *registration
 int PhoneServer::InitSocket()
 {
 	return PlatformSpecifics::getInstance()->InitSocketSystem() ? 0 : 1;
-/*#ifdef WIN32
-    WORD wVersionRequested;
-    WSADATA wsaData;
-    wVersionRequested = MAKEWORD (1, 1);
-    if (WSAStartup (wVersionRequested, &wsaData) != 0)
-	{
-		Logger::getInstance()->Log(Logger::LOGLEVEL_ERROR,"PhoneServer","Error: Cannot initialize winsock!\n");
-		return -1;
-	}
-#else
-#error TODO: Socket init not implemented for this platform!
-#endif */
-//	return 0;
 }
 
 void PhoneServer::CloseSocket(SOCKET socketToClose)
 {
 	PlatformSpecifics::getInstance()->CloseSocket(socketToClose);
 	PlatformSpecifics::getInstance()->ShutdownSocketSystem();
-/*#ifdef WIN32
-	closesocket(socketToClose);
-	WSACleanup();
-#else
-#error TODO: Socket disconnect is not implemented for this platform.
-#endif*/
 }
 
 void PhoneServer::Run()
@@ -187,8 +146,6 @@ void PhoneServer::Run()
 			}
 		}
 		// Convert IP address to string
-/*		char ipAddressStr[INET_ADDRSTRLEN];
-		inet_ntop( AF_INET, &addr.sin_addr, ipAddressStr, INET_ADDRSTRLEN );*/
 		Logger::getInstance()->Log(Logger::LOGLEVEL_INFO,"PhoneServer","Connection received from %s\n",
 			PlatformSpecifics::getInstance()->GetLastRemoteIp());
 		cout << "Connected." << endl;
@@ -225,14 +182,13 @@ void PhoneServer::Run()
 
 			timeMeasurement.finish(TimeMeasurementCodeDefs::HandleMessageCallback);
 
-			// Send answer
-			timeMeasurement.start(TimeMeasurementCodeDefs::SendingAnswer);
-			Send(answer);
-			timeMeasurement.finish(TimeMeasurementCodeDefs::SendingAnswer);
+			// Send and delete answer created by callback
 
-			// Destruct answer message created by callback
 			if (answer)
 			{
+				timeMeasurement.start(TimeMeasurementCodeDefs::SendingAnswer);
+				Send(answer);
+				timeMeasurement.finish(TimeMeasurementCodeDefs::SendingAnswer);
 				delete answer;
 				answer = NULL;
 			}

@@ -2,6 +2,7 @@
 #define __CAMERAREMOTEPROXY_H
 #include "CameraProxy.h"
 #include "PhoneProxy.h"
+#include "TextMessage.h"
 
 /** Before using the remote camera, call Connect()!
 */
@@ -52,6 +53,8 @@ public:
 		@param resultfilename	The name of the file the resuls are written to.
 	*/
 	void PerformCaptureSpeedMeasurement_A(int frameNumber=100, const char *resultfilename = NULL);
+
+	TextMessage *SingleTrackMarker(long long desiredtimestamp, bool askImage, Mat *imageTarget);
 
 };
 

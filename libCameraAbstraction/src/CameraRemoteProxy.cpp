@@ -4,6 +4,8 @@
 #include "Logger.h"
 #include "JpegMessage.h"
 #include "MatImageMessage.h"
+#include "SendPositionMessage.h"
+#include "TextMessage.h"
 
 #include "MeasurementLogMessage.h"
 
@@ -215,4 +217,73 @@ void CameraRemoteProxy::PerformCaptureSpeedMeasurement_A(int frameNumber, const 
 	resultFile.close();
 
 	Logger::getInstance()->Log(Logger::LOGLEVEL_INFO,"CameraProxy","PerformCaptureSpeedMeasurement_A results written to %s\n.",resultfilename);
+}
+
+TextMessage *CameraRemoteProxy::SingleTrackMarker(long long desiredtimestamp, bool askImage, Mat *imageTarget)
+{
+	// Request image from the phone
+	SendPositionMessage *sendPosMsg = new SendPositionMessage();
+	sendPosMsg->desiredtimestamp = desiredtimestamp;
+	sendPosMsg->sendImage = askImage ? 1 : 0;
+	phoneproxy->Send(sendPosMsg);
+
+	// Receiving TextMessage answer
+	JsonMessage *msg = NULL;
+	msg = phoneproxy->ReceiveNew();
+	TextMessage *answer = NULL;
+	if (msg->getMessageType() == Text)
+	{
+		answer = (TextMessage*)msg;
+	}
+	else
+	{
+		cout << "Error... received something else than TextMessage... see the log for details!" << endl;
+		Logger::getInstance()->Log(Logger::LOGLEVEL_ERROR,"CameraRemoteProxy","Received something else than TextMessage:\n");
+		msg->log();
+	}
+
+	// If asked for image, receiving image
+	if (askImage)
+	{
+		bool isImgValid = false;
+		msg = phoneproxy->ReceiveNew();
+		if (msg->getMessageType() == Jpeg)
+		{
+			JpegMessage *jpegMsg = NULL;
+			jpegMsg = (JpegMessage *)msg;
+			jpegMsg->Decode(imageTarget);
+
+			if (imageTarget==lastImageTaken)
+				lastImageTakenTimestamp = jpegMsg->timestamp;
+			
+			if(imageTarget->type()==CV_8UC4)	// Convert frames from CV_8UC4 to CV_8UC3
+				cvtColor(*imageTarget,*imageTarget,CV_BGRA2BGR);
+
+			isImgValid = true;
+		}
+		else if (msg->getMessageType() == MatImage)
+		{
+			MatImageMessage *matimgMsg = NULL;
+			matimgMsg = (MatImageMessage *)msg;
+			if (matimgMsg->size != 0)
+			{
+				matimgMsg->Decode();
+				matimgMsg->getMat()->copyTo(*imageTarget);	// TODO: avoid this copy...
+
+				if (imageTarget==lastImageTaken)
+					lastImageTakenTimestamp = matimgMsg->timestamp;
+
+				isImgValid = true;
+			}
+		}
+		else
+		{
+			cout << "Error... received something else than JPEG or MAT... see the log for details!" << endl;
+			Logger::getInstance()->Log(Logger::LOGLEVEL_ERROR,"CameraRemoteProxy","Received something else than JPEG image:\n");
+			msg->log();
+		}
+		delete msg;
+		msg = NULL;
+	}
+	return answer;
 }
