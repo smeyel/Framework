@@ -1,22 +1,20 @@
 #include "Logger.h"
 #include "PhoneServer.h"
 
-#ifdef _WIN32
-#include <winsock2.h>
-#include <ws2tcpip.h>
-#endif
+#include "PlatformSpecifics.h"	// Handles socket-related includes as well
 
 using namespace LogConfigTime;
 
 int PhoneServer::InitServer(int port)
 {
 	serverport = port;	// Save for cases when we have to re-init the connection.
-	struct sockaddr_in server;
 
 	if (InitSocket())
 	{
 		return -1;
 	}
+
+	/*struct sockaddr_in server;
 
     serversock = socket( AF_INET, SOCK_STREAM, 0 );
     if (serversock < 0)
@@ -35,21 +33,24 @@ int PhoneServer::InitServer(int port)
 	{
 		Logger::getInstance()->Log(Logger::LOGLEVEL_ERROR,"PhoneServer","Error: Cannot bind server socket!\n");
 		return -3;
-	}
+	}*/
+	serversock = PlatformSpecifics::getInstance()->CreateServerSocket(serverport);
 	Logger::getInstance()->Log(Logger::LOGLEVEL_INFO,"PhoneServer","Server socket initialized on port %d\n",port);
 	return 0;
 }
 
 void PhoneServer::ListenServerSocket()
 {
-	listen(serversock,5);
+	PlatformSpecifics::getInstance()->ListenServerSocket(serversock);
+	//listen(serversock,5);
 	Logger::getInstance()->Log(Logger::LOGLEVEL_INFO,"PhoneServer","Server socket now listening.\n");
 }
 
 void PhoneServer::DisconnectServer()
 {
-	shutdown(serversock, SD_SEND);
-	CloseSocket(serversock);
+	PlatformSpecifics::getInstance()->CloseSocket(serversock);
+	/*shutdown(serversock, SD_SEND);
+	CloseSocket(serversock);*/
 	serversock = -1;
 }
 
@@ -128,7 +129,8 @@ int PhoneServer::RegisterNode(const char *registryHost, const char *registration
 
 int PhoneServer::InitSocket()
 {
-#ifdef WIN32
+	return PlatformSpecifics::getInstance()->InitSocketSystem() ? 0 : 1;
+/*#ifdef WIN32
     WORD wVersionRequested;
     WSADATA wsaData;
     wVersionRequested = MAKEWORD (1, 1);
@@ -139,18 +141,20 @@ int PhoneServer::InitSocket()
 	}
 #else
 #error TODO: Socket init not implemented for this platform!
-#endif
-	return 0;
+#endif */
+//	return 0;
 }
 
 void PhoneServer::CloseSocket(SOCKET socketToClose)
 {
-#ifdef WIN32
+	PlatformSpecifics::getInstance()->CloseSocket(socketToClose);
+	PlatformSpecifics::getInstance()->ShutdownSocketSystem();
+/*#ifdef WIN32
 	closesocket(socketToClose);
 	WSACleanup();
 #else
 #error TODO: Socket disconnect is not implemented for this platform.
-#endif
+#endif*/
 }
 
 void PhoneServer::Run()
@@ -163,8 +167,9 @@ void PhoneServer::Run()
 		// Wait for connection
 		Logger::getInstance()->Log(Logger::LOGLEVEL_INFO,"PhoneServer","Waiting for connection\n");
 		cout << "Waiting for connection." << endl;
-		struct sockaddr_in addr;
-		SOCKET clientsock = accept(serversock, (struct sockaddr *) &addr, NULL);
+		//struct sockaddr_in addr;
+		//SOCKET clientsock = accept(serversock, (struct sockaddr *) &addr, NULL);
+		SOCKET clientsock = PlatformSpecifics::getInstance()->accept(serversock);
 		if (clientsock < 0 || clientsock == INVALID_SOCKET)
 		{
 //			WSAGetLastError
@@ -173,7 +178,7 @@ void PhoneServer::Run()
 			InitServer(serverport);
 			ListenServerSocket();
 			cout << "Server rebinded, waiting for connection." << endl;
-			clientsock = accept(serversock, (struct sockaddr *) &addr, NULL);
+			clientsock = PlatformSpecifics::getInstance()->accept(serversock);
 			if (clientsock < 0 || clientsock == INVALID_SOCKET)
 			{
 				Logger::getInstance()->Log(Logger::LOGLEVEL_ERROR,"PhoneServer","Error on accept(), 2nd try failed, exiting.\n");
@@ -182,9 +187,10 @@ void PhoneServer::Run()
 			}
 		}
 		// Convert IP address to string
-		char ipAddressStr[INET_ADDRSTRLEN];
-		inet_ntop( AF_INET, &addr.sin_addr, ipAddressStr, INET_ADDRSTRLEN );
-		Logger::getInstance()->Log(Logger::LOGLEVEL_INFO,"PhoneServer","Connection received from %s\n",ipAddressStr);
+/*		char ipAddressStr[INET_ADDRSTRLEN];
+		inet_ntop( AF_INET, &addr.sin_addr, ipAddressStr, INET_ADDRSTRLEN );*/
+		Logger::getInstance()->Log(Logger::LOGLEVEL_INFO,"PhoneServer","Connection received from %s\n",
+			PlatformSpecifics::getInstance()->GetLastRemoteIp());
 		cout << "Connected." << endl;
 
 		// TODO: while socket is not closed by remote size, repeat waiting for commands and execute them...

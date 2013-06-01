@@ -2,17 +2,7 @@
 #define __JSONMESSAGE_H
 
 #include <iostream>
-#ifdef _WIN32
-#include <winsock2.h>
-#else
-#include <sys/types.h>
-#include <sys/socket.h>
-typedef int SOCKET;
-#endif
-
-#ifdef _WIN32
-long long atoll(const char *str);
-#endif
+#include "PlatformSpecifics.h"	// Handles socket-related includes as well
 
 #define MAXTYPENAMELENGTH 100
 
@@ -48,7 +38,7 @@ protected:
 	*/
 	JsonMessageTypeEnum typecode;
 
-	static void receiveIntoStream(std::ostream *targetStream, SOCKET sock, long bytenum);
+	static void receiveIntoStream(std::ostream *targetStream, int sock, long bytenum);
 
 public:
 	/** Constructor

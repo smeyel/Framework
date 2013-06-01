@@ -1,9 +1,7 @@
 #include "CameraLocalProxy.h"
 #include "Logger.h"
 
-#ifdef _WIN32
-#include <windows.h>	// for Sleep
-#endif
+#include "PlatformSpecifics.h"
 
 using namespace LogConfigTime;
 
@@ -46,8 +44,6 @@ CameraLocalProxy::~CameraLocalProxy()
 	videoInput=NULL;
 }
 
-
-
 // Factory wrappers
 void CameraLocalProxy::initFromCameraID(int videoInputType, int camID)
 {
@@ -84,11 +80,7 @@ void CameraLocalProxy::CaptureImage(long long desiredTimestamp, Mat *target)
 			Logger::getInstance()->Log(Logger::LOGLEVEL_VERBOSE,"CameraLocalProxy","Waiting, sleepMilliSec = %Ld\n",sleepMilliSec);
 			if (sleepMilliSec > 0)
 			{
-#ifdef WIN32
-				Sleep(sleepMilliSec);
-#else
-#error TODO: Sleep not implemented for non-Win32.
-#endif
+				PlatformSpecifics::getInstance()->SleepMs(sleepMilliSec);
 			}
 			currentTimeStamp = timeMeasurement->getTimeStamp();
 		}

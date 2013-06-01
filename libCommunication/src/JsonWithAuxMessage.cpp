@@ -19,7 +19,7 @@ void JsonWithAuxMessage::writeAuxStream(std::ostream *targetStream)
 
 void JsonWithAuxMessage::writeAux(int socket)
 {
-	int n = send(socket, (const char *)(data.data()), data.size(), 0);
+	int n = PlatformSpecifics::getInstance()->send(socket, (const char *)(data.data()), data.size(), 0);
 	if (n != size)
 		LogConfigTime::Logger::getInstance()->Log(LogConfigTime::Logger::LOGLEVEL_ERROR,"libCommunication","JsonWithAuxMessage::writeAux: Error on writing answer to socket.\n");
 	return;

@@ -32,7 +32,7 @@ bool SendPositionMessage::parse(char *json)
 	memset(timestampString,0,100);
 	strncpy(timestampString,beginPtr,endPtr-beginPtr);
 
-	desiredtimestamp = atoll(timestampString);
+	desiredtimestamp = PlatformSpecifics::getInstance()->atoll(timestampString);
 		
 	return true;
 }

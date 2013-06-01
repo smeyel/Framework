@@ -1,14 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <stdio.h>
-#ifdef _WIN32
-#include <winsock2.h>
-#else
-#include <sys/types.h>
-#include <sys/socket.h>
-typedef int SOCKET;
-#endif
 
+#include "PlatformSpecifics.h"
 
 #include <opencv2/opencv.hpp>
 #include <opencv2/core/core.hpp>
@@ -133,18 +127,10 @@ void PhoneProxy::Connect(const char *ip, int port)
     unsigned long addr;
 
 	//cout << "Connecting..." << endl;
-#ifdef WIN32
-    WORD wVersionRequested;
-    WSADATA wsaData;
-    wVersionRequested = MAKEWORD (1, 1);
-    if (WSAStartup (wVersionRequested, &wsaData) != 0)
+	if (!PlatformSpecifics::getInstance()->InitSocketSystem())
+	{
         error_exit( "Initialisation of Winsock failed");
-    //else
-        //printf("Winsock Initialised\n");
-#else
-#error TODO: Socket initialization is not implemented for this platform.
-#endif
-
+	}
 
     sock = socket( AF_INET, SOCK_STREAM, 0 );
 
@@ -173,13 +159,8 @@ void PhoneProxy::Connect(const char *ip, int port)
 void PhoneProxy::Disconnect()
 {
 	shutdown(sock, SD_SEND);
-#ifdef WIN32
-	closesocket(sock);
-	WSACleanup();
-#else
-#error TODO: Socket disconnect is not implemented for this platform.
-#endif
-
+	PlatformSpecifics::getInstance()->CloseSocket(sock);
+	PlatformSpecifics::getInstance()->ShutdownSocketSystem();
 	sock = -1;
 }
 
@@ -273,7 +254,7 @@ void PhoneProxy::Send(JsonMessage *msg)
     char buffer[MAXJSONSIZE];
 	msg->writeJson(buffer);
     int len = strlen(buffer);
-    if (send(sock, buffer, len, 0) != len)
+	if (PlatformSpecifics::getInstance()->send(sock, buffer, len, 0) != len)
         error_exit("send() has sent a different number of bytes than excepted !!!!");
 	msg->writeAux(sock);
 	return;
@@ -294,7 +275,7 @@ JsonMessage *PhoneProxy::ReceiveNew()
 	timeMeasurement.start(PhoneProxy::TimeMeasurementCodeDefs::ReceiveNew_WaitAndReceiveJson);
 	do
 	{
-		received = recv(sock, &c, 1, 0);
+		received = PlatformSpecifics::getInstance()->recv(sock, &c, 1, 0);
 		if (received==0)
 		{
 			// Error: JSON not finished, but input ended...

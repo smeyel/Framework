@@ -3,12 +3,8 @@
 
 #include <iostream>
 #include <fstream>
-#ifdef _WIN32
-#include <winsock2.h>
-#else
-#include <sys/types.h>
-#include <sys/socket.h>
-#endif
+
+#include "PlatformSpecifics.h"	// Handles socket-related includes as well
 
 #include "JsonMessage.h"
 #include "JpegMessage.h"
@@ -23,18 +19,9 @@
 
 // Used for debugging JSON messages
 #include <sstream>
-//#include "picojson.h"
 
 #define RCVBUFSIZE 4096
 #define MAXJSONFIELDNAMELENGTH 128
-
-#ifdef _WIN32
-long long atoll(const char *str)
-{
-	return _atoi64(str);
-}
-#endif
-
 
 JsonMessage::JsonMessage()
 {
@@ -99,14 +86,14 @@ void JsonMessage::log()
 }
 
 // targetStream may be NULL, given number of bytes will be read anyway.
-void JsonMessage::receiveIntoStream(std::ostream *targetStream, SOCKET sock, long bytenum)
+void JsonMessage::receiveIntoStream(std::ostream *targetStream, int sock, long bytenum)
 {
 	char receiveBuffer[RCVBUFSIZE];
 	long receivedTotalBytes = 0;
 	int received;
 	while (receivedTotalBytes < bytenum)
 	{
-		received = recv(sock, receiveBuffer, RCVBUFSIZE, 0);
+		received = PlatformSpecifics::getInstance()->recv(sock, receiveBuffer, RCVBUFSIZE, 0);
 		receivedTotalBytes += received;
 		if (targetStream!=NULL)
 		{

@@ -34,7 +34,7 @@ bool MatImageMessage::parse(char *json)
 {
 	char timestampString[128];
 	JsonMessage::readFieldInto(json,"timestamp",timestampString);
-	timestamp = atoll(timestampString);
+	timestamp = PlatformSpecifics::getInstance()->atoll(timestampString);
 	
 	char sizeString[32];
 	JsonMessage::readFieldInto(json,"size",sizeString);
