@@ -53,6 +53,10 @@ void CameraLocalProxy::initFromCameraID(int videoInputType, int camID)
 {
 	videoInput = VideoInputFactory::CreateVideoInput(videoInputType);
 	videoInput->init(camID);
+
+	videoInput->SetNormalizedGain(-1);
+	videoInput->SetNormalizedExposure(-1);
+	videoInput->SetNormalizedWhiteBalance(-1,-1,-1);
 }
 
 void CameraLocalProxy::initFromFile(const char *filename)

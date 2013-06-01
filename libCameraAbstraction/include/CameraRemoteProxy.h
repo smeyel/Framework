@@ -3,6 +3,8 @@
 #include "CameraProxy.h"
 #include "PhoneProxy.h"
 
+/** Before using the remote camera, call Connect()!
+*/
 class CameraRemoteProxy : public CameraProxy
 {
 private:

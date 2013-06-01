@@ -13,7 +13,7 @@
 	- Instantiate CameraProxy
 	- You may want to set chessboarddetector.chessboard (but default 9x6 board with 36mm grid size is already set)
 	- You may want to set camera->cameraID, camera->isStationary and call camera->loadCalibrationData()
-	- Call Connect()
+	- Init the connection w.r.t the used derived class (for example call Connect() in CameraRemoteProxy).
 
 	Usage: beside the many other functions, most important ones are the following:
 	- CaptureImage()

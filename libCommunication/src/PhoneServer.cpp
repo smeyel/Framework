@@ -1,10 +1,16 @@
 #include "Logger.h"
 #include "PhoneServer.h"
 
+#ifdef _WIN32
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#endif
+
 using namespace LogConfigTime;
 
 int PhoneServer::InitServer(int port)
 {
+	serverport = port;	// Save for cases when we have to re-init the connection.
 	struct sockaddr_in server;
 
 	if (InitSocket())
@@ -22,7 +28,7 @@ int PhoneServer::InitServer(int port)
     memset( &server, 0, sizeof (server));
 	server.sin_family = AF_INET;
 	server.sin_addr.s_addr = INADDR_ANY;
-	server.sin_port = htons(port);
+	server.sin_port = htons(serverport);
 
 	// Binding the socket
 	if (bind(serversock, (struct sockaddr *) &server, sizeof(server)) < 0)
@@ -145,4 +151,122 @@ void PhoneServer::CloseSocket(SOCKET socketToClose)
 #else
 #error TODO: Socket disconnect is not implemented for this platform.
 #endif
+}
+
+void PhoneServer::Run()
+{
+	ListenServerSocket();
+
+	mainLoopRunning=true;
+	while(mainLoopRunning)
+	{
+		// Wait for connection
+		Logger::getInstance()->Log(Logger::LOGLEVEL_INFO,"PhoneServer","Waiting for connection\n");
+		cout << "Waiting for connection." << endl;
+		struct sockaddr_in addr;
+		SOCKET clientsock = accept(serversock, (struct sockaddr *) &addr, NULL);
+		if (clientsock < 0 || clientsock == INVALID_SOCKET)
+		{
+//			WSAGetLastError
+			Logger::getInstance()->Log(Logger::LOGLEVEL_ERROR,"PhoneServer","Error on accept(), trying to re-initialize server.\n");
+			DisconnectServer();
+			InitServer(serverport);
+			ListenServerSocket();
+			cout << "Server rebinded, waiting for connection." << endl;
+			clientsock = accept(serversock, (struct sockaddr *) &addr, NULL);
+			if (clientsock < 0 || clientsock == INVALID_SOCKET)
+			{
+				Logger::getInstance()->Log(Logger::LOGLEVEL_ERROR,"PhoneServer","Error on accept(), 2nd try failed, exiting.\n");
+				DisconnectServer();
+				exit(1);
+			}
+		}
+		// Convert IP address to string
+		char ipAddressStr[INET_ADDRSTRLEN];
+		inet_ntop( AF_INET, &addr.sin_addr, ipAddressStr, INET_ADDRSTRLEN );
+		Logger::getInstance()->Log(Logger::LOGLEVEL_INFO,"PhoneServer","Connection received from %s\n",ipAddressStr);
+		cout << "Connected." << endl;
+
+		// TODO: while socket is not closed by remote size, repeat waiting for commands and execute them...
+		bool connectionOpen = true;
+		// Use internal PhoneProxy to  handle the data reception
+		PhoneProxy::SetSock(clientsock);
+		while(connectionOpen)
+		{
+			// Handle connection
+
+			// Wait for command
+			// Receive command
+			// TODO: wait for the whole message
+			timeMeasurement.start(TimeMeasurementCodeDefs::ReceiveCommand);
+			JsonMessage *msg = ReceiveNew();
+			timeMeasurement.finish(TimeMeasurementCodeDefs::ReceiveCommand);
+			
+			if (!msg)
+			{
+				// The connection was closed from the remote side.
+				// (Or a malformed JSON was received...)
+				Logger::getInstance()->Log(Logger::LOGLEVEL_ERROR,"PhoneServer","Error on reading from socket. Closing connection.\n");
+				connectionOpen=false;
+				break;
+			}
+
+			// Call respective handler callback
+			timeMeasurement.start(TimeMeasurementCodeDefs::HandleMessageCallback);
+
+			//handleJSON(msg, &server);
+			JsonMessage *answer = HandleMessage(msg);
+
+			timeMeasurement.finish(TimeMeasurementCodeDefs::HandleMessageCallback);
+
+			// Send answer
+			timeMeasurement.start(TimeMeasurementCodeDefs::SendingAnswer);
+			Send(answer);
+			timeMeasurement.finish(TimeMeasurementCodeDefs::SendingAnswer);
+
+			// Destruct answer message created by callback
+			if (answer)
+			{
+				delete answer;
+				answer = NULL;
+			}
+		}
+
+		// Close connection
+		Disconnect();
+		Logger::getInstance()->Log(Logger::LOGLEVEL_INFO,"PhoneServer","Connection closed\n");
+	}
+
+	DisconnectServer();
+}
+
+JsonMessage *PhoneServer::HandleMessage(JsonMessage *message)
+{
+	JsonMessage *response = NULL;
+	if (!message)
+		return NULL;
+	switch(message->getMessageType())
+	{
+	case Default:	// Not a command, nothing to do.
+		break;
+	case Ping:
+		response = PingCallback((PingMessage *)message);
+		break;
+	case TakePicture:
+		response = TakePictureCallback((TakePictureMessage *)message);
+		break;
+	case Sendlog:
+		response = SendLogCallback((SendlogMessage *)message);
+		break;
+	case Jpeg:	// Not a command, nothing to do.
+		break;
+	case MeasurementLog:	// Not a command, nothing to do.
+		break;
+	case SendPosition:
+		response = SendPositionCallback((SendPositionMessage *)message);
+		break;
+	case MatImage:	// Not a command, nothing to do.
+		break;
+	}
+	return response;
 }
