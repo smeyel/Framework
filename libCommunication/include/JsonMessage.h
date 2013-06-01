@@ -17,7 +17,8 @@ typedef enum _messagetype
 	Jpeg,
 	MeasurementLog,
 	SendPosition,
-	MatImage
+	MatImage,
+	Text
 } JsonMessageTypeEnum;
 
 /** Generic base class JSON based message class used for communication between phones.
@@ -26,8 +27,10 @@ typedef enum _messagetype
 
 	If a new derived class is introduced, the following steps are required:
 	- Extend JsonMessageTypeEnum with the new type.
-	- Extend the parse() method to recognize the new type.
-
+	- Extend the JsonMessage.parse() method to recognize the new type.
+	- Extend PhoneServer.HandleMessage to call the callback for the message
+	- The derived class should not forget to set its typecode
+	
 	Warning: current implementation requires to close the JSON data with a hashmark (#), like
 		{"type": "example", "somedata": "data1"}#
 */

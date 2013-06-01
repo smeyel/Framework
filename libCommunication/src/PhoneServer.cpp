@@ -271,6 +271,9 @@ JsonMessage *PhoneServer::HandleMessage(JsonMessage *message)
 	case SendPosition:
 		response = SendPositionCallback((SendPositionMessage *)message);
 		break;
+	case Text:
+		response = TextCallback((TextMessage *)message);
+		break;
 	case MatImage:	// Not a command, nothing to do.
 		break;
 	}

@@ -14,6 +14,7 @@
 #include "MeasurementLogMessage.h"
 #include "SendPositionMessage.h"
 #include "MatImageMessage.h"
+#include "TextMessage.h"
 
 #include "Logger.h"
 
@@ -66,6 +67,10 @@ JsonMessage *JsonMessage::parse(char *json)
 	else if (!strcmp(typeString,"matimage"))
 	{
 		return new MatImageMessage(json);
+	}
+	else if (!strcmp(typeString,"text"))
+	{
+		return new TextMessage(json);
 	}
 
 #ifdef DEBUG_JSON_IF_UNKNOWN

@@ -181,7 +181,7 @@ void PhoneProxy::receiveIntoStream(ostream *targetStream, SOCKET sock, long byte
 	}
 }
 
-
+// TODO: deprecated???
 void PhoneProxy::ProcessIncomingJSON(int sock,char *buffer, ostream *targetStream)
 {
 	//cout << "JSON received:" << endl << buffer << endl << "End of JSON" << endl;

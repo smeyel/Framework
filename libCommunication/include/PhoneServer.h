@@ -16,6 +16,8 @@
 #include "TakePictureMessage.h"
 #include "SendPositionMessage.h"
 #include "SendLogMessage.h"
+#include "TextMessage.h"
+
 
 using namespace std;
 
@@ -82,6 +84,9 @@ public:
 
 	/** SendLog callback */
 	virtual JsonMessage *SendLogCallback(SendlogMessage *sendlogMessage) { return NULL; }
+
+	/** Text callback */
+	virtual JsonMessage *TextCallback(TextMessage *textMessage) { return NULL; }
 	/** ///@} */
 
 	/** Constructor */

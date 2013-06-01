@@ -22,6 +22,7 @@
     <ClCompile Include="src\SendlogMessage.cpp" />
     <ClCompile Include="src\SendPositionMessage.cpp" />
     <ClCompile Include="src\TakePictureMessage.cpp" />
+    <ClCompile Include="src\TextMessage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\JpegMessage.h" />
@@ -35,6 +36,7 @@
     <ClInclude Include="include\SendlogMessage.h" />
     <ClInclude Include="include\SendPositionMessage.h" />
     <ClInclude Include="include\TakePictureMessage.h" />
+    <ClInclude Include="include\TextMessage.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\libLogConfigTime\libLogConfigTime.vcxproj">
