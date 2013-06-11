@@ -6,7 +6,7 @@ LDFLAGS =
 all: libLogConfigTime.a
 
 
-LIBLOGCONFIGTIME_OBJECTS = src/ConfigReader.o src/ConfigReader.o src/ConvertUTF.c src/FileLogger.o src/FileLogger.o src/Logger.o src/Logger.cpp~ src/Logger.o src/SimpleIniConfigReader.o src/StdOutLogger.o src/TimeMeasurement.o
+LIBLOGCONFIGTIME_OBJECTS = src/ConfigReader.o src/ConfigReader.o src/ConvertUTF.c src/FileLogger.o src/FileLogger.o src/Logger.o src/Logger.o src/SimpleIniConfigReader.o src/StdOutLogger.o src/TimeMeasurement.o
 
 
 libLogConfigTime.a: $(LIBLOGCONFIGTIME_OBJECTS)
