@@ -24,6 +24,39 @@ bool PlatformSpecificsWin32::InitSocketSystem()
 	return true;
 }
 
+int PlatformSpecificsWin32::Connect(const char *ip, int port)
+{
+    struct sockaddr_in server;
+    struct hostent *host_info;
+    unsigned long addr;
+
+	int sock = socket( AF_INET, SOCK_STREAM, 0 );
+
+    if (sock < 0)
+        return sock;
+
+    memset( &server, 0, sizeof (server));
+    if ((addr = inet_addr( ip)) != INADDR_NONE) {
+        memcpy( (char *)&server.sin_addr, &addr, sizeof(addr));
+    }
+    else {
+        host_info = gethostbyname(ip);
+        if (NULL == host_info)
+            return -1;	//error_exit("Unknown Server");
+        memcpy( (char *)&server.sin_addr,
+                host_info->h_addr, host_info->h_length );
+    }
+
+    server.sin_family = AF_INET;
+    server.sin_port = htons( port );
+
+    if(connect(sock,(struct sockaddr*)&server,sizeof(server)) <0)
+		return -2;
+        //error_exit("Connection to the server failed");
+
+	return sock;
+}
+
 void PlatformSpecificsWin32::CloseSocket(int socket)
 {
 	closesocket(socket);

@@ -16,6 +16,7 @@ class PlatformSpecificsWin32 : public PlatformSpecifics
 public:
 	virtual void SleepMs(long ms);
 	virtual bool InitSocketSystem();
+	virtual int Connect(const char *ip, int port);
 	virtual void CloseSocket(int socket);
 	virtual void ShutdownSocketSystem();
 	virtual long long atoll(const char *str);
