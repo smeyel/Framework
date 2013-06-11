@@ -1,3 +1,4 @@
+#ifdef _WIN32
 #include <winsock2.h>
 #include <ws2tcpip.h>
 
@@ -92,3 +93,4 @@ int PlatformSpecificsWin32::recv(int socket, char *buff, int size, int flags)
 	return ::recv(socket,buff,size,flags);
 }
 
+#endif

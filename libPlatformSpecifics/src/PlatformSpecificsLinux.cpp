@@ -1,6 +1,7 @@
-#ifndef _WIN32	// TODO: better condition
+#ifndef __gnu_linux__
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <unistd.h>
 
 #include "PlatformSpecificsLinux.h"
 
@@ -10,21 +11,18 @@ PlatformSpecificsLinux::PlatformSpecificsLinux()
 
 void PlatformSpecificsLinux::SleepMs(long ms)
 {
-#error TODO How to sleep for ms milliseconds in Linux?
-	//sleep(ms/1000.0);	?
+	if (usleep((useconds_t)ms*1000) == EINVAL)
+		throw "usleep returned EINVAL. Sleeping smaller than 1s is not supported on this platform";
 }
 
 bool PlatformSpecificsLinux::InitSocketSystem()
 {
-#error TODO What to do before a socket can be created in Linux? Return true for success.
-	// Nothing?
 	return true;
 }
 
 void PlatformSpecificsLinux::CloseSocket(int socket)
 {
-#error TODO How to close a socket in Linux?
-	//close(socket) ?;
+	close(socket);
 }
 
 void PlatformSpecificsLinux::ShutdownSocketSystem()

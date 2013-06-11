@@ -1,4 +1,4 @@
-//#ifndef _WIN32	// TODO: what should be the condition?
+#ifdef __gnu_linux__
 #ifndef __PLATFROMSPECIFICSLINUX_H
 #define __PLATFROMSPECIFICSLINUX_H
 #include "PlatformSpecifics.h"
@@ -8,7 +8,7 @@ class PlatformSpecificsLinux : PlatformSpecifics
 	static PlatformSpecifics *instance;
 
 	friend PlatformSpecifics;	// Allows it to instantiate
-	PlatformSpecificsWin32();
+	PlatformSpecificsLinux();
 
 	char lastIpAddressStr[100];//INET_ADDRSTRLEN];
 
@@ -28,5 +28,5 @@ public:
 
 };
 
-#endif
-//#endif // not WIN32
+#endif //__PLATFROMSPECIFICSLINUX_H
+#endif //__gnu_linux__
