@@ -19,3 +19,5 @@ Release/
 *.o
 *.lib
 doc/html/
+.cproject
+.project
