@@ -27,6 +27,10 @@ public:
 	*/
 	virtual bool InitSocketSystem()=0;
 
+	/** Connects with a socket and returns it. */
+	virtual int Connect(const char *ip, int port)=0;
+
+
 	/** Closes a given socket. */
 	virtual void CloseSocket(int socket)=0;
 
