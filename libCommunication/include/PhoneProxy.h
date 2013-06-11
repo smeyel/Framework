@@ -1,7 +1,9 @@
 #ifndef __PHONEPROXY_H
 #define __PHONEPROXY_H
-#ifdef WIN32
+#ifdef _WIN32
 #include <winsock2.h>
+#elif  	__gnu_linux__
+typedef int SOCKET;
 #endif
 
 #include <opencv2/opencv.hpp>
@@ -133,6 +135,6 @@ private:
 	void ProcessIncomingJSON(int sock,char *buffer, ostream *targetStream);	// Deprecated, handled by JsonMessage...
 };
 
-static void error_exit(char *errorMessage);
+static void error_exit(const char *errorMessage);
 
 #endif /*__PHONEPROXY_H*/

@@ -15,7 +15,7 @@
 #include "PingMessage.h"
 #include "TakePictureMessage.h"
 #include "SendPositionMessage.h"
-#include "SendLogMessage.h"
+#include "SendlogMessage.h"
 #include "TextMessage.h"
 
 

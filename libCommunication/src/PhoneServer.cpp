@@ -1,5 +1,12 @@
 #include "Logger.h"
 #include "PhoneServer.h"
+#include <sys/types.h>          /* See NOTES */
+#include <sys/socket.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <stdio.h>
 
 #include "PlatformSpecifics.h"	// Handles socket-related includes as well
 

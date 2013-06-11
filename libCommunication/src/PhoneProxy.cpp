@@ -21,9 +21,11 @@
 
 using namespace std;
 
-static void error_exit(char *errorMessage) {
-
+static void error_exit(const char *errorMessage) 
+{
+#ifdef _WIN32
     fprintf(stderr,"%s: %d\n", errorMessage, WSAGetLastError());
+#endif
     exit(EXIT_FAILURE);
 }
 
@@ -185,7 +187,7 @@ void PhoneProxy::ProcessIncomingJSON(int sock,char *buffer, ostream *targetStrea
 		int len = posTimeStampValueEnd-posTimeStampValue;
 		strncpy(tmpS, posTimeStampValue, len );
 		*(tmpS+len) = 0;
-		long long timestamp = _atoi64(tmpS);
+		long long timestamp = PlatformSpecifics::getInstance()->atoll(tmpS);
 
 		char *posSize = strstr(buffer,"size");
 		char *posSizeValue = posSize + 7;
@@ -210,7 +212,7 @@ void PhoneProxy::ProcessIncomingJSON(int sock,char *buffer, ostream *targetStrea
 		int len = posTimeStampValueEnd-posTimeStampValue;
 		strncpy(tmpS, posTimeStampValue, len );
 		*(tmpS+len) = 0;
-		long long timestamp = _atoi64(tmpS);
+		long long timestamp = PlatformSpecifics::getInstance()->atoll(tmpS);
 
 		char *posSize = strstr(buffer,"size");
 		char *posSizeValue = posSize + 7;
@@ -218,7 +220,7 @@ void PhoneProxy::ProcessIncomingJSON(int sock,char *buffer, ostream *targetStrea
 		len = posSizeValueEnd-posSizeValue;
 		strncpy(tmpS, posSizeValue, len );
 		*(tmpS+len) = 0;
-		int logSize = _atoi64(tmpS);
+		int logSize = PlatformSpecifics::getInstance()->atoll(tmpS);
 
 		// Save for external use...
 		lastReceivedTimeStamp = timestamp;
@@ -266,7 +268,9 @@ JsonMessage *PhoneProxy::ReceiveNew()
 		else if (received<0)
 		{
 			// Socket read error
+#ifdef _WIN32
             cout << "recv() failed: " << WSAGetLastError() << endl;
+#endif
 			return NULL;
 		}
 

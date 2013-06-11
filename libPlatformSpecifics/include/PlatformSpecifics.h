@@ -5,6 +5,16 @@
 	Use the static getInstance() to get the instance pointer
 	corresponding to the current platform.
 */
+#ifdef __gnu_linux__
+#define SD_SEND SHUT_WR
+
+/** On Windows INVALID_SOCKET is used for error checking. There is no
+    equivalent of this on GNU/Linux systems. For details see
+    http://msdn.microsoft.com/en-us/library/windows/desktop/ms740516%28v=vs.85%29.aspx
+ */
+#define INVALID_SOCKET -1
+#endif
+
 class PlatformSpecifics
 {
 	static PlatformSpecifics *instance;
