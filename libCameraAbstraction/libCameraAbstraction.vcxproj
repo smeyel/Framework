@@ -32,9 +32,15 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\props\Framework.props" />
+    <Import Project="..\..\Tracking\props\Tracking.props" />
+    <Import Project="..\..\props\OpenCV_Debug.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\props\Framework.props" />
+    <Import Project="..\..\Tracking\props\Tracking.props" />
+    <Import Project="..\..\props\OpenCV_Release.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
@@ -45,7 +51,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(OPENCV_DIR)\include;%(AdditionalIncludeDirectories);include;$(SolutionDir)Framework\libLogConfigTime\include;$(SolutionDir)Framework\libCommunication/include;$(SolutionDir)Tracking/lib3dWorld/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -65,7 +71,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(OPENCV_DIR)\include;%(AdditionalIncludeDirectories);include;$(SolutionDir)Framework\libLogConfigTime\include;$(SolutionDir)Framework\libCommunication/include;$(SolutionDir)Tracking/lib3dWorld/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -74,7 +80,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>opencv_core243.lib;opencv_imgproc243.lib;opencv_highgui243.lib;opencv_ml243.lib;opencv_video243.lib;opencv_features2d243.lib;opencv_calib3d243.lib;opencv_objdetect243.lib;opencv_contrib243.lib;opencv_legacy243.lib;opencv_flann243.lib;%(AdditionalDependencies);ws2_32.lib</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies);ws2_32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(OPENCV_DIR)\x86\vc10\lib;</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
@@ -82,10 +88,14 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\CameraLocalProxy.h" />
     <ClInclude Include="include\CameraProxy.h" />
+    <ClInclude Include="include\CameraRemoteProxy.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\CameraLocalProxy.cpp" />
     <ClCompile Include="src\CameraProxy.cpp" />
+    <ClCompile Include="src\CameraRemoteProxy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Tracking\lib3dWorld\lib3dWorld.vcxproj">
@@ -96,6 +106,12 @@
     </ProjectReference>
     <ProjectReference Include="..\libLogConfigTime\libLogConfigTime.vcxproj">
       <Project>{8927a516-de0f-4550-ae3f-14876252f716}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\libPlatformSpecifics\libPlatformSpecifics.vcxproj">
+      <Project>{5c2abdc3-6e47-40c0-80a1-a020f188f756}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\libVideoInput\libVideoInput.vcxproj">
+      <Project>{f0b55c60-9485-43e1-87e2-ede6a73cceef}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

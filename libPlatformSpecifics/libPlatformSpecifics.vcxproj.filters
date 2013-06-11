@@ -18,24 +18,24 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\CameraProxy.h">
+    <ClInclude Include="include\PlatformSpecifics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\CameraRemoteProxy.h">
+    <ClInclude Include="include\PlatformSpecificsWin32.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\CameraLocalProxy.h">
+    <ClInclude Include="include\PlatformSpecificsLinux.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\CameraProxy.cpp">
+    <ClCompile Include="src\PlatformSpecifics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\CameraRemoteProxy.cpp">
+    <ClCompile Include="src\PlatformSpecificsWin32.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\CameraLocalProxy.cpp">
+    <ClCompile Include="src\PlatformSpecificsLinux.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

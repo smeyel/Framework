@@ -27,6 +27,8 @@ class VideoInput
 		/** Used to capture a frame into a given OpenCV Mat.
 			@param frame	An already initialized Mat.
 			@return			Returns false if not successful or not implemented.
+
+			@warning As the output Mat type is always CV_8UC3 BGR, this may involve a time-consuming conversion.
 		*/
 		bool virtual captureFrame(cv::Mat &frame)  { return false; }
 

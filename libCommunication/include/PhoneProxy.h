@@ -42,10 +42,12 @@ private:
 		{
 			measurement->setMeasurementName("PhoneProxy internal time measurements");
 
-			measurement->setname(ReceiveNew,"ReceiveNew");
-			measurement->setname(ReceiveNew_WaitAndReceiveJson,"ReceiveNew_WaitAndReceiveJson");
-			measurement->setname(ReceiveNew_ParseJson,"ReceiveNew_ParseJson");
-			measurement->setname(ReceiveNew_ReceiveAux,"ReceiveNew_ReceiveAux");
+			// "PhoneProxy" prefix is used to separate results from the ones of derived classes
+			//	using the TimeMeasurement object derived from PhoneProxy.
+			measurement->setname(ReceiveNew,"PhoneProxy-ReceiveNew");
+			measurement->setname(ReceiveNew_WaitAndReceiveJson,"PhoneProxy-ReceiveNew_WaitAndReceiveJson");
+			measurement->setname(ReceiveNew_ParseJson,"PhoneProxy-ReceiveNew_ParseJson");
+			measurement->setname(ReceiveNew_ReceiveAux,"PhoneProxy-ReceiveNew_ReceiveAux");
 		}
 	};
 
@@ -54,10 +56,12 @@ private:
 public:
 	/** Time measurement object used for measuring the time requirements of the internal procedures.
 		May be accessed to monitor the time consumption.
+		Derived classes may use measurement ID-s >100
 	*/
 	TimeMeasurement timeMeasurement;
 
 	long long lastReceivedTimeStamp;	// Used to query the timestamp of the last reception
+
 	PhoneProxy()
 	{
 		lastReceivedTimeStamp=0;

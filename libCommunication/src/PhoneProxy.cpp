@@ -1,14 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <stdio.h>
-#ifdef _WIN32
-#include <winsock2.h>
-#else
-#include <sys/types.h>
-#include <sys/socket.h>
-typedef int SOCKET;
-#endif
 
+#include "PlatformSpecifics.h"
 
 #include <opencv2/opencv.hpp>
 #include <opencv2/core/core.hpp>
@@ -19,6 +13,8 @@ typedef int SOCKET;
 #include "SendlogMessage.h"
 #include "PingMessage.h"
 #include "SendPositionMessage.h"
+
+#include "PlatformSpecifics.h"
 
 #define MAXJSONSIZE 4096
 #define MAXTYPENAMELENGTH 128
@@ -100,7 +96,7 @@ void PhoneProxy::Receive(ostream *targetStream)
 	char c;
 	char *bufPtr = buffer;
 	*bufPtr = 0;
-	while ((received = recv(sock, &c, 1, 0)) > 0) 
+	while ((received = PlatformSpecifics::getInstance()->recv(sock, &c, 1, 0)) > 0) 
 	{
 		if (c != '#')	// Not at end of JSON
 		{
@@ -121,65 +117,31 @@ void PhoneProxy::ReceiveDebug()
 {
 	// Receive response
 	char buffer[RCVBUFSIZE] = "";
-	int received = recv(sock, buffer, RCVBUFSIZE, 0);
+	int received = PlatformSpecifics::getInstance()->recv(sock, buffer, RCVBUFSIZE, 0);
 	cout << "DEBUG RECEIVE:" << endl << buffer << endl << "END RECEIVE" << endl;
 	return;
 }
 
 void PhoneProxy::Connect(const char *ip, int port)
 {
-	struct sockaddr_in server;
-    struct hostent *host_info;
-    unsigned long addr;
-
 	//cout << "Connecting..." << endl;
-#ifdef WIN32
-    WORD wVersionRequested;
-    WSADATA wsaData;
-    wVersionRequested = MAKEWORD (1, 1);
-    if (WSAStartup (wVersionRequested, &wsaData) != 0)
+	if (!PlatformSpecifics::getInstance()->InitSocketSystem())
+	{
         error_exit( "Initialisation of Winsock failed");
-    //else
-        //printf("Winsock Initialised\n");
-#else
-#error TODO: Socket initialization is not implemented for this platform.
-#endif
+	}
 
+	sock = PlatformSpecifics::getInstance()->Connect(ip,port);
 
-    sock = socket( AF_INET, SOCK_STREAM, 0 );
-
-    if (sock < 0)
-        error_exit( "Socket error");
-
-    memset( &server, 0, sizeof (server));
-    if ((addr = inet_addr( ip)) != INADDR_NONE) {
-        memcpy( (char *)&server.sin_addr, &addr, sizeof(addr));
-    }
-    else {
-        host_info = gethostbyname(ip);
-        if (NULL == host_info)
-            error_exit("Unknown Server");
-        memcpy( (char *)&server.sin_addr,
-                host_info->h_addr, host_info->h_length );
-    }
-
-    server.sin_family = AF_INET;
-    server.sin_port = htons( port );
-
-    if(connect(sock,(struct sockaddr*)&server,sizeof(server)) <0)
-        error_exit("Connection to the server failed");
+	if(sock<0)
+	{
+        error_exit( "Connecting failed");
+	}
 }
 
 void PhoneProxy::Disconnect()
 {
-	shutdown(sock, SD_SEND);
-#ifdef WIN32
-	closesocket(sock);
-	WSACleanup();
-#else
-#error TODO: Socket disconnect is not implemented for this platform.
-#endif
-
+	PlatformSpecifics::getInstance()->CloseSocket(sock);
+	PlatformSpecifics::getInstance()->ShutdownSocketSystem();
 	sock = -1;
 }
 
@@ -191,7 +153,7 @@ void PhoneProxy::receiveIntoStream(ostream *targetStream, SOCKET sock, long byte
 	int received;
 	while (receivedTotalBytes < bytenum)
 	{
-		received = recv(sock, receiveBuffer, RCVBUFSIZE, 0);
+		received = PlatformSpecifics::getInstance()->recv(sock, receiveBuffer, RCVBUFSIZE, 0);
 		receivedTotalBytes += received;
 		if (targetStream!=NULL)
 		{
@@ -200,7 +162,7 @@ void PhoneProxy::receiveIntoStream(ostream *targetStream, SOCKET sock, long byte
 	}
 }
 
-
+// TODO: deprecated???
 void PhoneProxy::ProcessIncomingJSON(int sock,char *buffer, ostream *targetStream)
 {
 	//cout << "JSON received:" << endl << buffer << endl << "End of JSON" << endl;
@@ -273,7 +235,7 @@ void PhoneProxy::Send(JsonMessage *msg)
     char buffer[MAXJSONSIZE];
 	msg->writeJson(buffer);
     int len = strlen(buffer);
-    if (send(sock, buffer, len, 0) != len)
+	if (PlatformSpecifics::getInstance()->send(sock, buffer, len, 0) != len)
         error_exit("send() has sent a different number of bytes than excepted !!!!");
 	msg->writeAux(sock);
 	return;
@@ -294,7 +256,7 @@ JsonMessage *PhoneProxy::ReceiveNew()
 	timeMeasurement.start(PhoneProxy::TimeMeasurementCodeDefs::ReceiveNew_WaitAndReceiveJson);
 	do
 	{
-		received = recv(sock, &c, 1, 0);
+		received = PlatformSpecifics::getInstance()->recv(sock, &c, 1, 0);
 		if (received==0)
 		{
 			// Error: JSON not finished, but input ended...

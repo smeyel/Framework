@@ -10,6 +10,7 @@ class SendPositionMessage : public JsonMessage
 {
 public:
 	long long desiredtimestamp;
+	int sendImage;	// If nonzero, a successive JpegMessage is also sent (if supported)
 
 	SendPositionMessage();
 	SendPositionMessage(char *json);

@@ -9,6 +9,7 @@ SendPositionMessage::SendPositionMessage(char *json)
 {
 	typecode = SendPosition;
 	desiredtimestamp = 0;
+	sendImage=0;
 	parse(json);
 }
 
@@ -16,8 +17,8 @@ SendPositionMessage::SendPositionMessage()
 {
 	typecode = SendPosition;
 	desiredtimestamp = 0;
+	sendImage=0;
 }
-
 
 bool SendPositionMessage::parse(char *json)
 {
@@ -32,17 +33,23 @@ bool SendPositionMessage::parse(char *json)
 	memset(timestampString,0,100);
 	strncpy(timestampString,beginPtr,endPtr-beginPtr);
 
-	desiredtimestamp = atoll(timestampString);
-		
+	desiredtimestamp = PlatformSpecifics::getInstance()->atoll(timestampString);
+
+	char buffer[11];
+	JsonMessage::readFieldInto(json,"sendimage",buffer);
+	sendImage = atoi(buffer);
+
 	return true;
 }
 
 void SendPositionMessage::writeJson(char *buffer)
 {
-	sprintf(buffer,"{ \"type\": \"requestposition\", \"desiredtimestamp\": \"%lld\" }#",desiredtimestamp);
+	sprintf(buffer,"{ \"type\": \"requestposition\", \"desiredtimestamp\": \"%lld\", \"sendimage\": \"%d\" }#",
+		desiredtimestamp,sendImage);
 }
 
 void SendPositionMessage::log()
 {
-	LogConfigTime::Logger::getInstance()->Log(LogConfigTime::Logger::LOGLEVEL_INFO,"Message","SendPositionMessage( desiredtimestamp=%lld )",desiredtimestamp);
+	LogConfigTime::Logger::getInstance()->Log(LogConfigTime::Logger::LOGLEVEL_INFO,"Message","SendPositionMessage( desiredtimestamp=%lld sendimage=%d )",
+		desiredtimestamp,sendImage);
 }

@@ -2,17 +2,7 @@
 #define __JSONMESSAGE_H
 
 #include <iostream>
-#ifdef _WIN32
-#include <winsock2.h>
-#else
-#include <sys/types.h>
-#include <sys/socket.h>
-typedef int SOCKET;
-#endif
-
-#ifdef _WIN32
-long long atoll(const char *str);
-#endif
+#include "PlatformSpecifics.h"	// Handles socket-related includes as well
 
 #define MAXTYPENAMELENGTH 100
 
@@ -27,7 +17,8 @@ typedef enum _messagetype
 	Jpeg,
 	MeasurementLog,
 	SendPosition,
-	MatImage
+	MatImage,
+	Text
 } JsonMessageTypeEnum;
 
 /** Generic base class JSON based message class used for communication between phones.
@@ -36,8 +27,10 @@ typedef enum _messagetype
 
 	If a new derived class is introduced, the following steps are required:
 	- Extend JsonMessageTypeEnum with the new type.
-	- Extend the parse() method to recognize the new type.
-
+	- Extend the JsonMessage.parse() method to recognize the new type.
+	- Extend PhoneServer.HandleMessage to call the callback for the message
+	- The derived class should not forget to set its typecode
+	
 	Warning: current implementation requires to close the JSON data with a hashmark (#), like
 		{"type": "example", "somedata": "data1"}#
 */
@@ -48,7 +41,7 @@ protected:
 	*/
 	JsonMessageTypeEnum typecode;
 
-	static void receiveIntoStream(std::ostream *targetStream, SOCKET sock, long bytenum);
+	static void receiveIntoStream(std::ostream *targetStream, int sock, long bytenum);
 
 public:
 	/** Constructor

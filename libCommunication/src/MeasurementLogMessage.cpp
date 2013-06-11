@@ -28,7 +28,7 @@ bool MeasurementLogMessage::parse(char *json)
 {
 	char timestampString[128];
 	JsonMessage::readFieldInto(json,"timestamp",timestampString);
-	timestamp = atoll(timestampString);
+	timestamp = PlatformSpecifics::getInstance()->atoll(timestampString);
 		
 	char jpegsizeString[128];
 	JsonMessage::readFieldInto(json,"size",jpegsizeString);

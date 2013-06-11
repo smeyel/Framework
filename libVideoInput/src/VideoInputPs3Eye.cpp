@@ -1,3 +1,6 @@
+#include <opencv2/opencv.hpp>
+#include <opencv2/core/core.hpp>
+
 #include "VideoInputPs3Eye.h"
 #include "VideoInputPs3EyeParameters.h"
 
@@ -40,11 +43,20 @@ void VideoInputPs3Eye::init(int camID)
 
 bool VideoInputPs3Eye::captureFrame(Mat &frame)
 {
-	CV_Assert(frame.rows == h);
-	CV_Assert(frame.cols == w);
+	if (internalFrame.type()!=CV_8UC4)
+	{
+		internalFrame.release();
+		// Allocate matrix if not done yet...
+		internalFrame.create(h,w,CV_8UC4);
+	}
+	CV_Assert(internalFrame.rows == h);
+	CV_Assert(internalFrame.cols == w);
 	//CV_Assert(frame.type() == (_mode == CLEYE_COLOR_PROCESSED ? CV_8UC4 : CV_8UC1 ));
 
-	CLEyeCameraGetFrame(_cam, frame.data);
+	CLEyeCameraGetFrame(_cam, internalFrame.data);
+
+	cvtColor(internalFrame,frame,CV_BGRA2BGR);
+
 	return true;
 }
 

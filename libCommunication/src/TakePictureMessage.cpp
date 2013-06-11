@@ -21,6 +21,7 @@ TakePictureMessage::TakePictureMessage()
 bool TakePictureMessage::parse(char *json)
 {
 	// find desiredtimestamp
+	// TODO: use JsonMessage::readFieldInto
 	char *typePtr = strstr(json,"\"desiredtimestamp\":");
 	if (!typePtr) return NULL;
 	char *beginPtr = strstr(typePtr+18,"\"") + 1;
@@ -31,7 +32,7 @@ bool TakePictureMessage::parse(char *json)
 	memset(timestampString,0,100);
 	strncpy(timestampString,beginPtr,endPtr-beginPtr);
 
-	desiredtimestamp = atoll(timestampString);
+	desiredtimestamp = PlatformSpecifics::getInstance()->atoll(timestampString);
 		
 	return true;
 }

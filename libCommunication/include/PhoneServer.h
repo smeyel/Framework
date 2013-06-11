@@ -11,6 +11,14 @@
 #include "PhoneProxy.h"
 #include "JsonMessage.h"
 
+// Used for the callbacks
+#include "PingMessage.h"
+#include "TakePictureMessage.h"
+#include "SendPositionMessage.h"
+#include "SendLogMessage.h"
+#include "TextMessage.h"
+
+
 using namespace std;
 
 #define RCVBUFSIZE 8192//32768//16384//8192
@@ -36,18 +44,64 @@ private:
 	void CloseSocket(SOCKET socket);
 
 	SOCKET serversock;
+	int serverport;
+
+	// !!! TimeMeasurement is derived from PhoneProxy!
+	// Derived classes may use measurement ID-s >20
+	class TimeMeasurementCodeDefs
+	{
+	public:
+		// This class may use ID-s 101-200.
+		const static int ReceiveCommand			= 11;
+		const static int HandleMessageCallback	= 12;
+		const static int SendingAnswer			= 13;
+
+		static void setnames(TimeMeasurement *measurement)
+		{
+			measurement->setMeasurementName("PhoneServer internal time measurements");
+
+			measurement->setname(ReceiveCommand,"PhoneServer-ReceiveCommand");
+			measurement->setname(HandleMessageCallback,"PhoneServer-HandleMessageCallback");
+			measurement->setname(SendingAnswer,"PhoneServer-SendingAnswer");
+		}
+	};
+
 public:
+	/** Message handling callbacks to override.
+		If the handler function returns a valid pointer (not NULL),
+		that message is sent as response. If NULL, no answer is sent.
+		Callbacks should create the new response message in heap. The communication
+		loop will delete that.
+	///@{ */
+	/** Ping callback */
+	virtual JsonMessage *PingCallback(PingMessage *pingMessage) { return NULL; }
+
+	/** TakePicture callback */
+	virtual JsonMessage *TakePictureCallback(TakePictureMessage *takePictureMessage) { return NULL; }
+
+	/** SendPosition callback */
+	virtual JsonMessage *SendPositionCallback(SendPositionMessage *sendPositionMessage) { return NULL; }
+
+	/** SendLog callback */
+	virtual JsonMessage *SendLogCallback(SendlogMessage *sendlogMessage) { return NULL; }
+
+	/** Text callback */
+	virtual JsonMessage *TextCallback(TextMessage *textMessage) { return NULL; }
+	/** ///@} */
+
 	/** Constructor */
 	PhoneServer() : PhoneProxy()
 	{
 		lastReceivedTimeStamp=0;
+		serverport = -1;
+		TimeMeasurementCodeDefs::setnames(&timeMeasurement);
 	}
 
 	/** Returns the server socket. */
-	SOCKET GetServerSocket()
+/*	SOCKET GetServerSocket()
 	{
 		return serversock;
-	}
+	}*/
 
 	/** Initializes the server listening on a given port.
 		The server socket is created, but listening is not started.
@@ -57,12 +111,6 @@ public:
 		@returns	Zero for success, <0 for error codes.
 	*/
 	int InitServer(int port);
-
-	/** Starts listening on the server socket port. */
-	void ListenServerSocket();
-
-	/** Closes the server socket. */
-	void DisconnectServer();
 
 	/** Registers the server on a SMEyeL node registry server.
 		(Do not have to call InitServer before this. This only registers the servers presence.)
@@ -75,6 +123,25 @@ public:
 	*/
 	int RegisterNode(const char *registryHost, const char *registrationURL);
 
+	/** Set by Run() true. If set false externally, main loop in Run() stops after handling
+		the message in progress (if any). */
+	bool mainLoopRunning;
+
+	/** Main communication loop.
+		Receives commands, calls callbacks and sends answers if any.
+		@see mainLoopRunning on how to terminate it.
+	*/
+	void Run();
+
+private:
+	JsonMessage *HandleMessage(JsonMessage *message);
+
+	/** Starts listening on the server socket port. */
+	void ListenServerSocket();
+
+	/** Closes the server socket. */
+	void DisconnectServer();
+
 	/** After receiving a connection via the server socket,
 		use this method to set the client socket so that you can use
 		the Send() and ReceiveNew() methods this class derives from PhoneProxy.
@@ -83,6 +150,8 @@ public:
 	{
 		PhoneProxy::SetSock(newsock);
 	}
+
+
 
 };
 
