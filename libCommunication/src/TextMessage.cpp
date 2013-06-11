@@ -1,5 +1,6 @@
 #include <sstream>
 #include <stdio.h>
+#include <string.h>
 #include "TextMessage.h"
 #include "Logger.h"
 
