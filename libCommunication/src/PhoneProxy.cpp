@@ -17,7 +17,6 @@
 #include "PlatformSpecifics.h"
 
 #define MAXJSONSIZE 4096
-#define MAXTYPENAMELENGTH 128
 
 using namespace std;
 
@@ -218,7 +217,7 @@ void PhoneProxy::ProcessIncomingJSON(int sock,char *buffer, ostream *targetStrea
 		len = posSizeValueEnd-posSizeValue;
 		strncpy(tmpS, posSizeValue, len );
 		*(tmpS+len) = 0;
-		int logSize = _atoi64(tmpS);
+		int logSize = atoi(tmpS);
 
 		// Save for external use...
 		lastReceivedTimeStamp = timestamp;

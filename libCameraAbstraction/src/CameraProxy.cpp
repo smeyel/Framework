@@ -26,7 +26,7 @@ void CameraProxy::initDefaults()
 	lastImageTaken = new Mat();
 
 	camera = default_camera = new Camera();
-	chessboarddetector = default_chessboarddetector = new ChessboardDetector(Size(9,6),36.1);
+	chessboarddetector = default_chessboarddetector = new ChessboardDetector(Size(9,6),36.1F);
 
 	timeMeasurement = new TimeMeasurement();
 	timeMeasurement->init();

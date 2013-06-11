@@ -32,7 +32,7 @@ const bool SimpleIniConfigReader::getBoolValue(const char *section, const char *
 	const char *value = getOverrideValueIfExists(section,key,argc,argv);
 	if (value)
 	{
-		return (atoi(value));
+		return (atoi(value)!=0);
 	}
 	else
 	{
