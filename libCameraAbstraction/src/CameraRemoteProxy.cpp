@@ -60,7 +60,7 @@ void CameraRemoteProxy::CaptureImage(long long desiredTimestamp, Mat *target)
 	phoneproxy->RequestPhoto(desiredTimestamp);
 	// Receiving picture
 	JsonMessage *msg = NULL;
-	bool isImgValid = false;
+//	bool isImgValid = false; //Norbi -- variable set but not used
 	msg = phoneproxy->ReceiveNew();
 	if (msg->getMessageType() == Jpeg)
 	{
@@ -74,7 +74,7 @@ void CameraRemoteProxy::CaptureImage(long long desiredTimestamp, Mat *target)
 		if(target->type()==CV_8UC4)	// Convert frames from CV_8UC4 to CV_8UC3
 			cvtColor(*target,*target,CV_BGRA2BGR);
 
-		isImgValid = true;
+//		isImgValid = true;
 	}
 	else if (msg->getMessageType() == MatImage)
 	{
@@ -88,7 +88,7 @@ void CameraRemoteProxy::CaptureImage(long long desiredTimestamp, Mat *target)
 			if (target==lastImageTaken)
 				lastImageTakenTimestamp = matimgMsg->timestamp;
 
-			isImgValid = true;
+//			isImgValid = true;
 		}
 	}
 	else
@@ -142,7 +142,7 @@ void CameraRemoteProxy::PerformCaptureSpeedMeasurement_A(int frameNumber, const 
 
 		JsonMessage *msg = NULL;
 		Mat img;
-		bool isImgValid = false;
+//		bool isImgValid = false;	//Norbi -- variable set but not used
 		msg = phoneproxy->ReceiveNew();
 		timeMeasurement.finish(TimeWaitAndReceive);
 		timeMeasurement.start(TimeProcessImage);
@@ -151,7 +151,7 @@ void CameraRemoteProxy::PerformCaptureSpeedMeasurement_A(int frameNumber, const 
 			JpegMessage *jpegMsg = NULL;
 			jpegMsg = (JpegMessage *)msg;
 			jpegMsg->Decode(&img);
-			isImgValid = true;
+//			isImgValid = true;
 		}
 		else if (msg->getMessageType() == MatImage)
 		{
@@ -161,7 +161,7 @@ void CameraRemoteProxy::PerformCaptureSpeedMeasurement_A(int frameNumber, const 
 			{
 				matimgMsg->Decode();
 				matimgMsg->getMat()->copyTo(img);	// TODO: avoid this copy...
-				isImgValid = true;
+//				isImgValid = true;
 			}
 		}
 		else
@@ -245,7 +245,7 @@ TextMessage *CameraRemoteProxy::SingleTrackMarker(long long desiredtimestamp, bo
 	// If asked for image, receiving image
 	if (askImage)
 	{
-		bool isImgValid = false;
+//		bool isImgValid = false; //Norbi -- variable set but not used
 		msg = phoneproxy->ReceiveNew();
 		if (msg->getMessageType() == Jpeg)
 		{
@@ -259,7 +259,7 @@ TextMessage *CameraRemoteProxy::SingleTrackMarker(long long desiredtimestamp, bo
 			if(imageTarget->type()==CV_8UC4)	// Convert frames from CV_8UC4 to CV_8UC3
 				cvtColor(*imageTarget,*imageTarget,CV_BGRA2BGR);
 
-			isImgValid = true;
+//			isImgValid = true;
 		}
 		else if (msg->getMessageType() == MatImage)
 		{
@@ -273,7 +273,7 @@ TextMessage *CameraRemoteProxy::SingleTrackMarker(long long desiredtimestamp, bo
 				if (imageTarget==lastImageTaken)
 					lastImageTakenTimestamp = matimgMsg->timestamp;
 
-				isImgValid = true;
+//				isImgValid = true;
 			}
 		}
 		else
