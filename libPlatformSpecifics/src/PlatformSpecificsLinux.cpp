@@ -1,7 +1,11 @@
-#ifndef __gnu_linux__
+#ifdef __gnu_linux__
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <arpa/inet.h>
 #include <unistd.h>
+#include <string.h>
+#include <netdb.h>
+#include <errno.h>
 
 #include "PlatformSpecificsLinux.h"
 
@@ -20,10 +24,9 @@ bool PlatformSpecificsLinux::InitSocketSystem()
 	return true;
 }
 
-int PlatformSpecificsWin32::Connect(const char *ip, int port)
+int PlatformSpecificsLinux::Connect(const char *ip, int port)
 {
-#error TODO How to connect?
-/*    struct sockaddr_in server;
+    struct sockaddr_in server;
     struct hostent *host_info;
     unsigned long addr;
 
@@ -51,7 +54,7 @@ int PlatformSpecificsWin32::Connect(const char *ip, int port)
 		return -2;
         //error_exit("Connection to the server failed");
 
-	return sock;*/
+	return sock;
 }
 
 
@@ -72,7 +75,7 @@ long long PlatformSpecificsLinux::atoll(const char *str)
 int PlatformSpecificsLinux::accept(int serversocket)
 {
 	struct sockaddr_in addr;
-	SOCKET clientsock = ::accept(serversocket, (struct sockaddr *) &addr, NULL);
+	int clientsock = ::accept(serversocket, (struct sockaddr *) &addr, NULL);
 	inet_ntop( AF_INET, &addr.sin_addr, lastIpAddressStr, INET_ADDRSTRLEN );
 	return (int)clientsock;
 
@@ -87,7 +90,7 @@ int PlatformSpecificsLinux::CreateServerSocket(int port)
 {
 	struct sockaddr_in server;
 
-    SOCKET serversock = socket( AF_INET, SOCK_STREAM, 0 );
+    int serversock = socket( AF_INET, SOCK_STREAM, 0 );
     if (serversock < 0)
 	{
 		return -2;
