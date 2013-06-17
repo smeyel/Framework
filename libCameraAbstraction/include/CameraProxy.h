@@ -63,7 +63,7 @@ public:
 	*/
 	CameraProxy(Camera *aCamera);
 	/** Destructor */
-	~CameraProxy();
+	virtual ~CameraProxy();
 
 	// CaptureImage
 	/** Captures an image. Result can be accessed via lastImageTaken 

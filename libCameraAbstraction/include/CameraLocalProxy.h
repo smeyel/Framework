@@ -35,7 +35,7 @@ public:
 	CameraLocalProxy(const char *filename);
 	
 	/** Destructor */
-	~CameraLocalProxy();
+	virtual ~CameraLocalProxy();
 
 	/** Returns internal VideoInput to provide access to camera parameters
 		@return	The internal VideoInput
