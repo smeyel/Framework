@@ -9,7 +9,7 @@ LIBVIDEOINPUT_OBJECTS =  src/VideoInputFactory.o src/VideoInputGeneric.o src/Vid
 
 
 libVideoInput.a: $(LIBVIDEOINPUT_OBJECTS)
-	$(AR) rcs libLogConfigTime.a $(LIBVIDEOINPUT_OBJECTS)
+	$(AR) rcs libVideoInput.a $(LIBVIDEOINPUT_OBJECTS)
 
 .cpp.o:
 	$(CC) $(CFLAGS) $< -o $@
