@@ -91,3 +91,18 @@ void CameraLocalProxy::CaptureImage(long long desiredTimestamp, Mat *target)
 	if (target==lastImageTaken)
 		lastImageTakenTimestamp = timeMeasurement->getTimeStamp();
 }
+
+int CameraLocalProxy::SetNormalizedGain(int value)
+{
+	return videoInput->SetNormalizedGain(value);
+}
+
+int CameraLocalProxy::SetNormalizedExposure(int value)
+{
+	return videoInput->SetNormalizedExposure(value);
+}
+
+int CameraLocalProxy::SetNormalizedWhiteBalance(int r, int g, int b)
+{
+	return videoInput->SetNormalizedWhiteBalance(r,g,b);
+}

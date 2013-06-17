@@ -113,6 +113,27 @@ public:
 		@warning The camera has to be calibrated before using this function!
 	*/
 	Ray pointImg2World(Point2f pImg);
+
+	/** If implemented by current video input, sets gain.
+		@param	value	Gain value 0-100, -1 means automatic gain.
+		@return			0 for success, -1 for not implemented.
+	*/
+	virtual int SetNormalizedGain(int value) { return -1; }
+
+	/** If implemented by current video input, sets exposure.
+		@param	value	exposure value 0-100, -1 means automatic exposure.
+		@return			0 for success, -1 for not implemented.
+	*/
+	virtual int SetNormalizedExposure(int value) { return -1; }
+
+	/** If implemented by current video input, sets white balance.
+		If any of r, g, and b are -1, automatic white balance is selected.
+		@param	r	white balance for red channel, 0-100.
+		@param	g	white balance for green channel, 0-100.
+		@param	b	white balance for blue channel, 0-100.
+		@return		0 for success, -1 for not implemented.
+	*/
+	virtual int SetNormalizedWhiteBalance(int r, int g, int b) { return -1; }
 };
 
 #endif
