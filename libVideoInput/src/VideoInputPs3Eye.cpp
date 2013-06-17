@@ -1,3 +1,4 @@
+#ifdef _WIN32
 #include <opencv2/opencv.hpp>
 #include <opencv2/core/core.hpp>
 
@@ -154,3 +155,4 @@ int VideoInputPs3Eye::SetNormalizedWhiteBalance(int r, int g, int b)
 	return 0;
 }
 
+#endif /*_WIN32*/

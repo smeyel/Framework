@@ -5,8 +5,7 @@ LDFLAGS =
 
 all: libVideoInput.a
 
-LIBVIDEOINPUT_OBJECTS =  src/VideoInputFactory.o src/VideoInputGeneric.o 
-#src/VideoInputPs3Eye.o
+LIBVIDEOINPUT_OBJECTS =  src/VideoInputFactory.o src/VideoInputGeneric.o src/VideoInputPs3Eye.o
 
 
 libVideoInput.a: $(LIBVIDEOINPUT_OBJECTS)

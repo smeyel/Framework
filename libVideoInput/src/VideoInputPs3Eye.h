@@ -1,3 +1,4 @@
+#ifdef _WIN32
 #ifndef __VIDEOINPUTPS3EYE_H
 #define __VIDEOINPUTPS3EYE_H
 #include "VideoInput.h"
@@ -55,4 +56,5 @@ public:
 	virtual int SetNormalizedWhiteBalance(int r, int g, int b);
 };
 
-#endif
+#endif /*__VIDEOINPUTPS3EYE_H*/
+#endif /*_WIN32*/
