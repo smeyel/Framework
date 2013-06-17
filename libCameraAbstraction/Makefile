@@ -10,7 +10,7 @@ all: libCameraAbstraction.a
 
 LIBCAMERAABSTRACTION_OBJECTS =  src/CameraLocalProxy.o src/CameraProxy.o src/CameraRemoteProxy.o
 libCameraAbstraction.a: $(LIBCAMERAABSTRACTION_OBJECTS)
-	$(AR) rcs libCommunication.a $(LIBCAMERAABSTRACTION_OBJECTS)
+	$(AR) rcs libCameraAbstraction.a $(LIBCAMERAABSTRACTION_OBJECTS)
 
 .cpp.o:
 	$(CC) $(IN_CXXFLAGS) $< -o $@
