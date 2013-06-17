@@ -90,7 +90,7 @@ void PhoneProxy::ReceiveJpeg(cv::Mat *targetMat)
 void PhoneProxy::Receive(ostream *targetStream)
 {
 	// Receive response
-	int totalBytes = 0;
+	//int totalBytes = 0;
 	char buffer[RCVBUFSIZE] = "";
 	int received = 0;
 
@@ -119,7 +119,8 @@ void PhoneProxy::ReceiveDebug()
 {
 	// Receive response
 	char buffer[RCVBUFSIZE] = "";
-	int received = PlatformSpecifics::getInstance()->recv(sock, buffer, RCVBUFSIZE, 0);
+//	int received = PlatformSpecifics::getInstance()->recv(sock, buffer, RCVBUFSIZE, 0);
+	PlatformSpecifics::getInstance()->recv(sock, buffer, RCVBUFSIZE, 0); //Norbi -- received is an unused variable
 	cout << "DEBUG RECEIVE:" << endl << buffer << endl << "END RECEIVE" << endl;
 	return;
 }
@@ -247,7 +248,7 @@ JsonMessage *PhoneProxy::ReceiveNew()
 {
 	timeMeasurement.start(PhoneProxy::TimeMeasurementCodeDefs::ReceiveNew);
 	// Receive response
-	int totalBytes = 0;
+	//int totalBytes = 0; //Norbi -- Unused variable
 	char buffer[MAXJSONSIZE] = "";
 	int received = 0;
 
