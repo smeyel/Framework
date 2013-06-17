@@ -76,7 +76,7 @@ void CameraLocalProxy::CaptureImage(long long desiredTimestamp, Mat *target)
 		while( currentTimeStamp < desiredTimestamp )
 		{
 			// Sleep length: calculated time minus 50ms for safety...
-			long sleepMilliSec = (long)((desiredTimestamp - currentTimeStamp) / 1000 - 50);
+			long sleepMilliSec = (long)((desiredTimestamp - currentTimeStamp) / 1000 - 1000);	// Sleep stops 1 sec before desired timestamp
 			Logger::getInstance()->Log(Logger::LOGLEVEL_VERBOSE,"CameraLocalProxy","Waiting, sleepMilliSec = %Ld\n",sleepMilliSec);
 			if (sleepMilliSec > 0)
 			{
