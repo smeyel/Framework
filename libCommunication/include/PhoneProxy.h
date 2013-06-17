@@ -135,6 +135,6 @@ private:
 	void ProcessIncomingJSON(int sock,char *buffer, ostream *targetStream);	// Deprecated, handled by JsonMessage...
 };
 
-static void error_exit(const char *errorMessage);
+void error_exit(const char *errorMessage);
 
 #endif /*__PHONEPROXY_H*/

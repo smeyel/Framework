@@ -21,7 +21,7 @@
 
 using namespace std;
 
-static void error_exit(const char *errorMessage) 
+void error_exit(const char *errorMessage)
 {
 #ifdef _WIN32
     fprintf(stderr,"%s: %d\n", errorMessage, WSAGetLastError());
