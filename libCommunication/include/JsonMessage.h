@@ -109,6 +109,8 @@ public:
 	*/
 	virtual void readAuxIfNeeded(int socket) { }
 
+	virtual ~JsonMessage() { }
+
 };
 
 #endif
