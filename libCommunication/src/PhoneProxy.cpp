@@ -269,9 +269,7 @@ JsonMessage *PhoneProxy::ReceiveNew()
 		else if (received<0)
 		{
 			// Socket read error
-#ifdef _WIN32
-            cout << "recv() failed: " << WSAGetLastError() << endl;
-#endif
+            cout << "recv() failed: " << PlatformSpecifics::getInstance()->GetLastError() << endl;
 			return NULL;
 		}
 
