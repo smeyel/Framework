@@ -126,4 +126,9 @@ int PlatformSpecificsWin32::recv(int socket, char *buff, int size, int flags)
 	return ::recv(socket,buff,size,flags);
 }
 
+int PlatformSpecificsWin32::GetLastError()
+{
+    return WSAGetLastError();
+}
+
 #endif

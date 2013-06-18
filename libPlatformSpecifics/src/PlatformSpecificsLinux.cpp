@@ -6,6 +6,7 @@
 #include <string.h>
 #include <netdb.h>
 #include <errno.h>
+#include <stdlib.h>
 
 #include "PlatformSpecificsLinux.h"
 
@@ -69,13 +70,14 @@ void PlatformSpecificsLinux::ShutdownSocketSystem()
 
 long long PlatformSpecificsLinux::atoll(const char *str)
 {
-	return atoll(str);
+    return ::atoll(str);
 }
 
 int PlatformSpecificsLinux::accept(int serversocket)
 {
 	struct sockaddr_in addr;
-	int clientsock = ::accept(serversocket, (struct sockaddr *) &addr, NULL);
+    socklen_t clilen = sizeof(addr);
+    int clientsock = ::accept(serversocket, (struct sockaddr *) &addr, &clilen);
 	inet_ntop( AF_INET, &addr.sin_addr, lastIpAddressStr, INET_ADDRSTRLEN );
 	return (int)clientsock;
 
@@ -123,6 +125,11 @@ int PlatformSpecificsLinux::send(int socket, const char *buff, int size, int fla
 int PlatformSpecificsLinux::recv(int socket, char *buff, int size, int flags)
 {
 	return ::recv(socket,buff,size,flags);
+}
+
+int PlatformSpecificsLinux::GetLastError()
+{
+    return errno;
 }
 
 #endif

@@ -70,6 +70,8 @@ public:
 	virtual int send(int socket, const char *buff, int size, int flags)=0;
 	/** Receive */
 	virtual int recv(int socket, char *buff, int size, int flags)=0;
+    /** Get last error*/
+    virtual int GetLastError() = 0;
 	/** ///@{ */
 };
 

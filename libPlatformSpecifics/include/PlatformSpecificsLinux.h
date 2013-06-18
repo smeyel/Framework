@@ -26,7 +26,7 @@ public:
 	virtual void ListenServerSocket(int serversocket);
 	virtual int send(int socket, const char *buff, int size, int flags);
 	virtual int recv(int socket, char *buff, int size, int flags);
-
+    virtual int GetLastError();
 };
 
 #endif //__PLATFROMSPECIFICSLINUX_H
