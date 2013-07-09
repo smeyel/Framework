@@ -1,6 +1,7 @@
 CC = gcc
 AR = ar
-CFLAGS = -c -Wall -I include/
+OPENCV_CFLAGS = `pkg-config --cflags opencv`
+CFLAGS = -c -Wall -I include/ $(OPENCV_CFLAGS)
 LDFLAGS = 
 
 all: libLogConfigTime.a

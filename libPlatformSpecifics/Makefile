@@ -5,11 +5,11 @@ LDFLAGS =
 
 all: libPlatformSpecifics.a
 
-LIBCOMMUNICATION_OBJECTS =  src/PlatformSpecifics.o src/PlatformSpecificsLinux.o src/PlatformSpecificsWin32.o
+LIBPLATFORMSPECIFICS_OBJECTS =  src/PlatformSpecifics.o src/PlatformSpecificsLinux.o src/PlatformSpecificsWin32.o
 
 
-libPlatformSpecifics.a: $(LIBCOMMUNICATION_OBJECTS)
-	$(AR) rcs libPlatformSpecifics.a $(LIBCOMMUNICATION_OBJECTS)
+libPlatformSpecifics.a: $(LIBPLATFORMSPECIFICS_OBJECTS)
+	$(AR) rcs libPlatformSpecifics.a $(LIBPLATFORMSPECIFICS_OBJECTS)
 
 .cpp.o:
 	$(CC) $(CFLAGS) $< -o $@

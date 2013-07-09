@@ -1,6 +1,7 @@
 CC = g++
 AR = ar
-IN_CXXFLAGS = $(CXXFLAGS) -c -Wall -I include/ -I ../libLogConfigTime/include/ -I ../libPlatformSpecifics/include/ -I /lib
+OPENCV_CFLAGS = `pkg-config --cflags opencv`
+IN_CXXFLAGS = $(CXXFLAGS) -c -Wall -I include/ -I ../libLogConfigTime/include/ -I ../libPlatformSpecifics/include/ -I /lib $(OPENCV_CFLAGS)
 IN_LDFLAGS = $(LDFLAGS)
 
 all: libCommunication.a

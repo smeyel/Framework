@@ -1,6 +1,7 @@
 CC = g++
 AR = ar
-CFLAGS = -c -Wall -I include/ -I ../libLogConfigTime/include/
+OPENCV_CFLAGS = `pkg-config --cflags opencv`
+CFLAGS = -c -Wall -I include/ -I ../libLogConfigTime/include/ $(OPENCV_CFLAGS)
 LDFLAGS = 
 
 all: libVideoInput.a
