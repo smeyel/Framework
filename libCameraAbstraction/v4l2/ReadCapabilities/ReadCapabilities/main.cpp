@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <linux/videodev2.h>
+#include "EnumControls.h"
 
 using namespace std;
 
@@ -80,6 +81,7 @@ int main(int argc, char* argv[])
     printcaps(cap.device_caps);
     cout << endl;
 
+    EnumControls(fd);
     return 0;
 }
 
