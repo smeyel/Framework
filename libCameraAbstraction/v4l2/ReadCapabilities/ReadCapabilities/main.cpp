@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 #include <linux/videodev2.h>
 #include "EnumControls.h"
 
@@ -47,6 +48,35 @@ void printcaps(__u32 cap)
     }
 }
 
+void setControl(int fd, __u32 controlID, const char *controlIDString, __u32 val)
+{
+    struct v4l2_queryctrl queryctrl;
+    struct v4l2_control control;
+
+    memset (&queryctrl, 0, sizeof (queryctrl));
+    queryctrl.id = controlID;
+
+    if (-1 == ioctl (fd, VIDIOC_QUERYCTRL, &queryctrl)) {
+        if (errno != EINVAL) {
+            perror ("VIDIOC_QUERYCTRL");
+            exit (EXIT_FAILURE);
+        } else {
+            printf ("%s is not supported\n", controlIDString);
+        }
+    } else if (queryctrl.flags & V4L2_CTRL_FLAG_DISABLED) {
+        printf ("%s is not supported\n", controlIDString);
+    } else {
+        memset (&control, 0, sizeof (control));
+        control.id = controlID;
+        control.value = val;
+
+        if (-1 == ioctl (fd, VIDIOC_S_CTRL, &control)) {
+            perror ("VIDIOC_S_CTRL");
+            exit (EXIT_FAILURE);
+        }
+    }
+}
+
 int main(int argc, char* argv[])
 {
     if (argc < 2) {
@@ -82,6 +112,11 @@ int main(int argc, char* argv[])
     cout << endl;
 
     EnumControls(fd);
+
+    setControl(fd, V4L2_CID_EXPOSURE_AUTO, "V4L2_CID_EXPOSURE_AUTO", 1);
+    setControl(fd, V4L2_CID_EXPOSURE, "V4L2_CID_EXPOSURE", 10);
+
+
     return 0;
 }
 
