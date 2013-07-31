@@ -10,6 +10,10 @@
 */
 #define VIDEOINPUTTYPE_PS3EYE	1
 
+/** Video input wrapping V4L2 devices
+ */
+#define VIDEOINPUTTYPE_V4L2 2
+
 /** Factory class to create various VideoInput implementations.
 */
 class VideoInputFactory

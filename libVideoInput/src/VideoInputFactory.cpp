@@ -4,6 +4,9 @@
 #ifdef _WIN32
 #include "VideoInputPs3Eye.h"
 #endif
+#ifdef __gnu_linux__
+#include "VideoInputV4L2.h"
+#endif
 
 //TODO videoInputType sould be an enumeration
 VideoInput *VideoInputFactory::CreateVideoInput(int videoInputType, int CamID)
@@ -17,6 +20,11 @@ VideoInput *VideoInputFactory::CreateVideoInput(int videoInputType, int CamID)
 	case VIDEOINPUTTYPE_PS3EYE:
 		return new VideoInputPs3Eye();
 	break;
+#endif
+#ifdef __gnu_linux__
+    case VIDEOINPUTTYPE_V4L2:
+        return new VideoInputV4L2();
+        break;
 #endif
 	}
 	return NULL;
