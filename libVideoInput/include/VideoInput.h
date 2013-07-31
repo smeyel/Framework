@@ -73,7 +73,7 @@ class VideoInput
 		*/
         virtual int SetNormalizedWhiteBalance(int r, int g, int b) = 0;
 
-        virtual ~VideoInput() = 0;
+//      virtual ~VideoInput() = 0;
 //		{
 //			// TODO: this does not seem to invoke the correct release() function, only the one of this base class...
 //			this->release();
