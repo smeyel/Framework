@@ -29,6 +29,10 @@ VideoInputGeneric::VideoInputGeneric(const char *filename)
     }
 }
 
+VideoInputGeneric::~VideoInputGeneric()
+{
+    release();
+}
 
 void VideoInputGeneric::init(int camID)
 {

@@ -14,6 +14,8 @@ public:
     VideoInputGeneric() __attribute__ ((deprecated));
     VideoInputGeneric(int camID);
     VideoInputGeneric(const char *filename);
+
+    ~VideoInputGeneric();
     void virtual init(int camID) __attribute__ ((deprecated));
     void virtual init(const char *filename) __attribute__ ((deprecated));
 
