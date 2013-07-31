@@ -18,7 +18,8 @@ public:
 	/** Creates a video input with given type.
 		@param	VideoInputType	Type, use the VIDEOINPUTTYPE_... defines like VIDEOINPUTTYPE_GENERIC or VIDEOINPUTTYPE_PS3EYE.
 	*/
-	static VideoInput *CreateVideoInput(int VideoInputType);
+    static VideoInput *CreateVideoInput(int VideoInputType, int CamID);
+    static VideoInput *CreateVideoInput(int VideoInputType, const char* filename);
 };
 
 #endif

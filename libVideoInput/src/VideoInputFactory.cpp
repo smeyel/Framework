@@ -6,12 +6,12 @@
 #endif
 
 //TODO videoInputType sould be an enumeration
-VideoInput *VideoInputFactory::CreateVideoInput(int videoInputType)
+VideoInput *VideoInputFactory::CreateVideoInput(int videoInputType, int CamID)
 {
 	switch (videoInputType)
 	{
 	case VIDEOINPUTTYPE_GENERIC:
-		return new VideoInputGeneric();
+        return new VideoInputGeneric(CamID);
 	break;
 #ifdef _WIN32
 	case VIDEOINPUTTYPE_PS3EYE:
@@ -20,4 +20,18 @@ VideoInput *VideoInputFactory::CreateVideoInput(int videoInputType)
 #endif
 	}
 	return NULL;
+}
+
+VideoInput *VideoInputFactory::CreateVideoInput(int videoInputType, const char* filename)
+{
+    switch (videoInputType)
+    {
+    case VIDEOINPUTTYPE_GENERIC:
+        return new VideoInputGeneric(filename);
+        break;
+    default:
+        //TODO exception?
+        break;
+    }
+    return NULL;
 }
