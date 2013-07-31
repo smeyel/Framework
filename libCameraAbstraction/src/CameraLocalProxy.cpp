@@ -47,8 +47,7 @@ CameraLocalProxy::~CameraLocalProxy()
 // Factory wrappers
 void CameraLocalProxy::initFromCameraID(int videoInputType, int camID)
 {
-	videoInput = VideoInputFactory::CreateVideoInput(videoInputType);
-	videoInput->init(camID);
+    videoInput = VideoInputFactory::CreateVideoInput(videoInputType, camID);
 
 	videoInput->SetNormalizedGain(-1);
 	videoInput->SetNormalizedExposure(-1);
@@ -57,8 +56,7 @@ void CameraLocalProxy::initFromCameraID(int videoInputType, int camID)
 
 void CameraLocalProxy::initFromFile(const char *filename)
 {
-	videoInput = VideoInputFactory::CreateVideoInput(VIDEOINPUTTYPE_GENERIC);
-	videoInput->init(filename);
+    videoInput = VideoInputFactory::CreateVideoInput(VIDEOINPUTTYPE_GENERIC, filename);
 }
 
 // CaptureImage
