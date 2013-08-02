@@ -6,11 +6,6 @@
 using namespace cv;
 using namespace std;
 
-VideoInputGeneric::VideoInputGeneric()
-{
-
-}
-
 VideoInputGeneric::VideoInputGeneric(int camID)
 {
     capture = new VideoCapture(camID);
@@ -31,25 +26,11 @@ VideoInputGeneric::VideoInputGeneric(const char *filename)
 
 VideoInputGeneric::~VideoInputGeneric()
 {
-    release();
-}
-
-void VideoInputGeneric::init(int camID)
-{
-	capture = new VideoCapture(camID);
-	if (!capture->isOpened())
-	{
-		cout << "Cannot open input camera, ID= " << camID << endl;
-	}
-}
-
-void VideoInputGeneric::init(const char *filename)
-{
-	capture = new VideoCapture(filename);
-	if (!capture->isOpened())
-	{
-		cout << "Cannot open input file: " << filename << endl;
-	}
+    if (capture != NULL)
+    {
+        delete capture;
+        capture = NULL;
+    }
 }
 
 bool VideoInputGeneric::captureFrame(Mat &frame)
@@ -60,15 +41,6 @@ bool VideoInputGeneric::captureFrame(Mat &frame)
 		return false;
 	}
 	return true;
-}
-
-void VideoInputGeneric::release()
-{
-	if (capture != NULL)
-	{
-		delete capture;
-		capture = NULL;
-	}
 }
 
 int VideoInputGeneric::IncrementCameraParameter(int param)

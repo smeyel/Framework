@@ -25,8 +25,6 @@ public:
     VideoInputV4L2(int camID);
     ~VideoInputV4L2();
 
-    virtual void release();
-
     virtual int IncrementCameraParameter(int param);
     virtual int DecrementCameraParameter(int param);
     virtual int SetNormalizedGain(int value);

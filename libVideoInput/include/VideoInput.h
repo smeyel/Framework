@@ -13,16 +13,6 @@
 class VideoInput
 {
 	public:
-//		/** Initializes the video input using a camera with given ID.
-//			@param	camID	ID of the camera, like 0 for the first one.
-//		*/
-//		void virtual init(int camID=0) { OPENCV_ASSERT(false,"VideoInput.init(int)","This function should be overridden..."); }
-
-//		/** Initializes the video input using a source file, like an AVI.
-//			@param	filename	Name of an image of video file.
-//		*/
-//		void virtual init(const char *filename) { OPENCV_ASSERT(false,"VideoInput.init(char*)","This function should be overridden..."); }
-
 		/** Used to capture a frame into a given OpenCV Mat.
 			@param frame	An already initialized Mat.
 			@return			Returns false if not successful or not implemented.
@@ -30,10 +20,6 @@ class VideoInput
 			@warning As the output Mat type is always CV_8UC3 BGR, this may involve a time-consuming conversion.
 		*/
         virtual bool captureFrame(cv::Mat &frame)  = 0;
-
-		/** Used to release the resources of the VideoInput.
-		*/
-        virtual void release() = 0;
 
 		/** Increments given camera parameter by 10
 			@deprecated	Use dedicated methods like SetNormalizedGain, SetNormalizedExposure, and SetNormalizedWhiteBalance instead!

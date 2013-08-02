@@ -20,13 +20,6 @@ VideoInputV4L2::VideoInputV4L2(int camID) : VideoInputGeneric(camID)
     }
 }
 
-void VideoInputV4L2::release()
-{
-    VideoInputGeneric::release();
-    if (fd >= 0)
-        (void)close(fd);
-}
-
 int VideoInputV4L2::queryControl(u_int32_t controlID, struct v4l2_queryctrl *qc)
 {
     //TODO: it might be possible to optimalize the caos of if structures
@@ -153,7 +146,8 @@ int VideoInputV4L2::SetNormalizedWhiteBalance(int r, int g, int b)
 
 VideoInputV4L2::~VideoInputV4L2()
 {
-    release();
+    if (fd >= 0)
+        (void)close(fd);
 }
 
 #endif //__gnu_linux__

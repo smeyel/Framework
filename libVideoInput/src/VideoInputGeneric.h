@@ -11,16 +11,12 @@ private:
 	cv::VideoCapture *capture;
 	
 public:
-    VideoInputGeneric() __attribute__ ((deprecated));
     VideoInputGeneric(int camID);
     VideoInputGeneric(const char *filename);
 
     virtual ~VideoInputGeneric();
-    void virtual init(int camID) __attribute__ ((deprecated));
-    void virtual init(const char *filename) __attribute__ ((deprecated));
 
     bool virtual captureFrame(cv::Mat &frame);
-	void virtual release();
 
     virtual int IncrementCameraParameter(int param);
     virtual int DecrementCameraParameter(int param);
