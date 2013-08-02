@@ -101,13 +101,13 @@ int VideoInputV4L2::DecrementCameraParameter(int param)
     return -1;
 }
 
-int normailze(v4l2_queryctrl *qc, int value)
+int VideoInputV4L2::normailze(v4l2_queryctrl *qc, int value)
 {
     if (qc != NULL) {
         double min = qc->minimum;
         double max = qc->maximum;
         if (min==max) return min;
-        return min+(min*max*value)/100;
+        return min+((max-min)*value)/100;
     }
     return 0;
 }
@@ -115,8 +115,8 @@ int normailze(v4l2_queryctrl *qc, int value)
 int VideoInputV4L2::setControlNormalized(u_int32_t controlID, u_int32_t valnorm)
 {
     struct v4l2_queryctrl qc;
-    if (queryControl(controlID, &qc)) {
-        int val = normailze(&qc, val);
+    if (queryControl(controlID, &qc) != -1) {
+        int val = normailze(&qc, valnorm);
         return setControl(controlID, val);
     }
     return -1;
@@ -128,7 +128,7 @@ int VideoInputV4L2::SetNormalizedGain(int value)
     if (value == -1) {
         return setControl(V4L2_CID_AUTOGAIN, 0);
     } else {
-        if (setControl(V4L2_CID_AUTOGAIN, 1))
+        if (setControl(V4L2_CID_AUTOGAIN, 1) != -1)
             return setControlNormalized(V4L2_CID_GAIN, value);
     }
     return -1;
@@ -139,8 +139,9 @@ int VideoInputV4L2::SetNormalizedExposure(int value)
     if (value == -1) {
         return setControl(V4L2_CID_EXPOSURE_AUTO, 0);
     } else {
-        if (setControl(V4L2_CID_EXPOSURE_AUTO, 1))
+        if (setControl(V4L2_CID_EXPOSURE_AUTO, 1) != -1) {
             return setControlNormalized(V4L2_CID_EXPOSURE, value);
+        }
     }
     return -1;
 }
@@ -148,6 +149,11 @@ int VideoInputV4L2::SetNormalizedExposure(int value)
 int VideoInputV4L2::SetNormalizedWhiteBalance(int r, int g, int b)
 {
     return -1;
+}
+
+VideoInputV4L2::~VideoInputV4L2()
+{
+    release();
 }
 
 #endif //__gnu_linux__

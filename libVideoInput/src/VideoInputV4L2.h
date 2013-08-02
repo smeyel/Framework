@@ -23,8 +23,8 @@ private:
 
 public:
     VideoInputV4L2(int camID);
+    ~VideoInputV4L2();
 
-    virtual bool captureFrame(cv::Mat &frame);
     virtual void release();
 
     virtual int IncrementCameraParameter(int param);

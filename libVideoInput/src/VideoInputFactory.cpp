@@ -23,7 +23,7 @@ VideoInput *VideoInputFactory::CreateVideoInput(int videoInputType, int CamID)
 #endif
 #ifdef __gnu_linux__
     case VIDEOINPUTTYPE_V4L2:
-        return new VideoInputV4L2();
+        return new VideoInputV4L2(CamID);
         break;
 #endif
 	}
