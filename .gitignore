@@ -21,3 +21,7 @@ Release/
 doc/html/
 .cproject
 .project
+libVideoInput/testVideoInput
+libVideoInput/v4l2/ReadCapabilities/ReadCapabilities/ReadCapabilities.pro.user
+libVideoInput/v4l2/ReadCapabilities/build-ReadCapabilities-Desktop-Debug/
+libVideoInput/v4l2/ReadCapabilities/build-ReadCapabilities-Desktop-Release/
