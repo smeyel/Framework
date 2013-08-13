@@ -7,7 +7,7 @@
 
 class VideoInputGeneric : public VideoInput
 {
-private:
+protected:
 	cv::VideoCapture *capture;
 	
 public:
@@ -23,6 +23,7 @@ public:
     virtual int SetNormalizedGain(int value);
     virtual int SetNormalizedExposure(int value);
     virtual int SetNormalizedWhiteBalance(int r, int g, int b);
+    virtual int SetFrameSize(unsigned width, unsigned height);
 };
 
 #endif

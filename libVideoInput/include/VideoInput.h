@@ -59,6 +59,14 @@ class VideoInput
 		*/
         virtual int SetNormalizedWhiteBalance(int r, int g, int b) = 0;
 
+        /** If implemented by the current video input, sets the size of
+         *  the frame in pixels
+         *  @param width    desired width of the frame
+         *  @param height   desired height of the frame
+         *  @return     returns 0 on success, and -1 when this feature is not implemented.
+         */
+        virtual int SetFrameSize(unsigned width, unsigned height) = 0;
+
       virtual ~VideoInput() { }
 //		{
 //			// TODO: this does not seem to invoke the correct release() function, only the one of this base class...

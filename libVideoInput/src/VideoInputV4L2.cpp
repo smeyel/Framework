@@ -16,6 +16,7 @@ VideoInputV4L2::VideoInputV4L2(int camID) : VideoInputGeneric(camID)
     sprintf(devFileName, "/dev/video%d", camID);
     fd = open(devFileName, O_RDWR);
     if (fd < 0) {
+        perror("open");
         //TODO exception?
     }
 }
@@ -142,6 +143,13 @@ int VideoInputV4L2::SetNormalizedExposure(int value)
 int VideoInputV4L2::SetNormalizedWhiteBalance(int r, int g, int b)
 {
     return -1;
+}
+
+int VideoInputV4L2::SetFrameSize(unsigned width, unsigned height)
+{
+    capture->set(CV_CAP_PROP_FRAME_WIDTH, width);
+    capture->set(CV_CAP_PROP_FRAME_HEIGHT, height);
+    return 0;
 }
 
 VideoInputV4L2::~VideoInputV4L2()

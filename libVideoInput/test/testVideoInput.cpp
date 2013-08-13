@@ -7,7 +7,7 @@ int main(int argc, char* argv[])
 {
     cv::Mat frame(480,640,CV_8UC3);
     VideoInput *vi = VideoInputFactory::CreateVideoInput(VIDEOINPUTTYPE_V4L2, 1);
-
+    vi->SetFrameSize(640,480);
 
     vi->SetNormalizedExposure(0);
     for (int i = 0; i < 10; ++i) vi->captureFrame(frame);

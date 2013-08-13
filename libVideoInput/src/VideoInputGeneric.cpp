@@ -75,3 +75,9 @@ int VideoInputGeneric::SetNormalizedWhiteBalance(int r, int g, int b)
     return -1;
 }
 
+int VideoInputGeneric::SetFrameSize(unsigned width, unsigned height)
+{
+    (void)width;
+    (void)height;
+    return -1;
+}
