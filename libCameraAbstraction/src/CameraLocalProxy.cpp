@@ -37,11 +37,6 @@ void CameraLocalProxy::initDefaults()
 
 CameraLocalProxy::~CameraLocalProxy()
 {
-	if (videoInput)
-	{
-		videoInput->release();
-	}
-	videoInput=NULL;
 }
 
 // Factory wrappers
