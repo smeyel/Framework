@@ -13,6 +13,17 @@
     http://msdn.microsoft.com/en-us/library/windows/desktop/ms740516%28v=vs.85%29.aspx
  */
 #define INVALID_SOCKET -1
+
+#include <sys/types.h>          /* See NOTES */
+#include <sys/socket.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#endif
+
+#ifdef WIN32
+#include <WinSock2.h>
 #endif
 
 class PlatformSpecifics

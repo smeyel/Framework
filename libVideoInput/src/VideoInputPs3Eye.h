@@ -28,7 +28,7 @@ public:
 	/** Captures a frame.
 		@warning As the PS3Eye returns CV_8UC4 (BGRA) images, a conversion to BGR image is performed.
 	*/
-	bool virtual captureFrame(cv::Mat &frame);
+	virtual bool captureFrame(cv::Mat &frame);
 	void virtual release();
 
 	/** Increments given camera parameter by 10
@@ -36,14 +36,14 @@ public:
 							Typical parameters: CLEYE_GAIN CLEYE_EXPOSURE CLEYE_ZOOM
 		@returns			The new value of the parameter
 	*/
-	int IncrementCameraParameter(int param);
+	virtual int IncrementCameraParameter(int param);
 
 	/** Decrements given camera parameter by 10
 		@param parameter	The parameter to increment.
 							Typical parameters: CLEYE_GAIN CLEYE_EXPOSURE CLEYE_ZOOM
 		@returns			The new value of the parameter
 	*/
-	int DecrementCameraParameter(int param);
+	virtual int DecrementCameraParameter(int param);
 
 	/** Sets Gain (0-100, -1 means auto)
 	*/
@@ -54,6 +54,9 @@ public:
 	/** Sets White balance (0-100, -1 means auto)
 	*/
 	virtual int SetNormalizedWhiteBalance(int r, int g, int b);
+
+	virtual int SetFrameSize(unsigned width, unsigned height) { return -1; };
+
 };
 
 #endif /*__VIDEOINPUTPS3EYE_H*/
