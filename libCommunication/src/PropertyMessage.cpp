@@ -5,7 +5,7 @@
 
 PropertyMessage::PropertyMessage(char *json)
 {
-	typecode = Text;
+	typecode = Property;
 	memset(key,0,PROPERTY_KEY_SIZE);
 	memset(value,0,PROPERTY_VALUE_SIZE);
 	parse(json);
