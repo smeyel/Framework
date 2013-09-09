@@ -27,6 +27,8 @@ public:
 
 	void set(const char *srcKey, const char *srcValue);
 	void set(const char *srcKey, const int srcValue);
+
+	int getIntValue();
 };
 
 #endif

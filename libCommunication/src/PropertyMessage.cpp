@@ -13,7 +13,7 @@ PropertyMessage::PropertyMessage(char *json)
 
 PropertyMessage::PropertyMessage()
 {
-	typecode = Text;
+	typecode = Property;
 }
 
 bool PropertyMessage::parse(char *json)
@@ -43,4 +43,9 @@ void PropertyMessage::set(const char *srcKey, int srcValue)
 {
 	strcpy(this->key,srcKey);
 	sprintf(this->value,"%d",srcValue);
+}
+
+int PropertyMessage::getIntValue()
+{
+	return atoi(this->value);
 }
