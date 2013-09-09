@@ -15,6 +15,7 @@
 #include "SendPositionMessage.h"
 #include "MatImageMessage.h"
 #include "TextMessage.h"
+#include "PropertyMessage.h"
 
 #include "Logger.h"
 
@@ -71,6 +72,10 @@ JsonMessage *JsonMessage::parse(char *json)
 	else if (!strcmp(typeString,"text"))
 	{
 		return new TextMessage(json);
+	}
+	else if (!strcmp(typeString,"property"))
+	{
+		return new PropertyMessage(json);
 	}
 
 #ifdef DEBUG_JSON_IF_UNKNOWN

@@ -17,7 +17,7 @@
 #include "SendPositionMessage.h"
 #include "SendLogMessage.h"
 #include "TextMessage.h"
-
+#include "PropertyMessage.h"
 
 using namespace std;
 
@@ -87,6 +87,9 @@ public:
 
 	/** Text callback */
 	virtual JsonMessage *TextCallback(TextMessage *textMessage) { return NULL; }
+
+	/** Text callback */
+	virtual JsonMessage *PropertyCallback(PropertyMessage *propertyMessage) { return NULL; }
 	/** ///@} */
 
 	/** Constructor */
