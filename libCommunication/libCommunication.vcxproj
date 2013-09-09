@@ -19,6 +19,7 @@
     <ClCompile Include="src\PhoneProxy.cpp" />
     <ClCompile Include="src\PhoneServer.cpp" />
     <ClCompile Include="src\PingMessage.cpp" />
+    <ClCompile Include="src\PropertyMessage.cpp" />
     <ClCompile Include="src\SendlogMessage.cpp" />
     <ClCompile Include="src\SendPositionMessage.cpp" />
     <ClCompile Include="src\TakePictureMessage.cpp" />
@@ -33,6 +34,7 @@
     <ClInclude Include="include\PhoneProxy.h" />
     <ClInclude Include="include\PhoneServer.h" />
     <ClInclude Include="include\PingMessage.h" />
+    <ClInclude Include="include\PropertyMessage.h" />
     <ClInclude Include="include\SendlogMessage.h" />
     <ClInclude Include="include\SendPositionMessage.h" />
     <ClInclude Include="include\TakePictureMessage.h" />

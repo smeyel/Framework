@@ -230,6 +230,9 @@ JsonMessage *PhoneServer::HandleMessage(JsonMessage *message)
 	case Text:
 		response = TextCallback((TextMessage *)message);
 		break;
+	case Property:
+		response = PropertyCallback((PropertyMessage *)message);
+		break;
 	case MatImage:	// Not a command, nothing to do.
 		break;
 	}

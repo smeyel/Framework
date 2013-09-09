@@ -18,7 +18,8 @@ typedef enum _messagetype
 	MeasurementLog,
 	SendPosition,
 	MatImage,
-	Text
+	Text,
+	Property
 } JsonMessageTypeEnum;
 
 /** Generic base class JSON based message class used for communication between phones.
