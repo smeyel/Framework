@@ -9,7 +9,7 @@ namespace LogConfigTime
 	class StdoutLogger : public Logger
 	{
 	public:
-		virtual void Log(int aLogLevel, const char *tag, const char *format, ...);
+		virtual void vlog(int _logLevel, const char *tag, const char *format, va_list argp);
 	};
 }
 

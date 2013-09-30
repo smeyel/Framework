@@ -28,7 +28,12 @@ namespace Logging
 		va_end (argp);
 	}
 
-	void Logger::registerLogger(Logger& _logger) {
+	void Logger::registerLogger(Logger& _logger)
+	{
+		if(instance != NULL)
+		{
+			delete instance;
+		}
 		instance = &_logger;
 	}
 

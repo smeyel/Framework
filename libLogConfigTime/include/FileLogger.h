@@ -11,8 +11,9 @@ namespace LogConfigTime
 		FILE *F;
 	public:
 		FileLogger(const char *filename);
+		virtual ~FileLogger();
 		void close();
-		virtual void Log(int aLogLevel, const char *tag, const char *format, ...);
+		virtual void vlog(int _logLevel, const char *tag, const char *format, va_list argp);
 	};
 }
 

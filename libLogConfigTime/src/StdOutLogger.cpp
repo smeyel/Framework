@@ -2,13 +2,10 @@
 
 using namespace LogConfigTime;
 
-void StdoutLogger::Log(int aLogLevel, const char *tag, const char *format, ...)
+void StdoutLogger::vlog(int _logLevel, const char *tag, const char *format, va_list argp)
 {
-	if (aLogLevel >= loglevel)
+	if (_logLevel >= loglevel)
 	{
-		va_list args;
-		va_start (args, format);
-		vfprintf (stdout, format, args);
-		va_end (args);
+		vfprintf (stdout, format, argp);
 	}
 }
