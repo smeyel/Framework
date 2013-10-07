@@ -44,7 +44,7 @@ public:
 		@param desiredTimestamp	The desired timestamp of the image
 		@param target			The Mat the captured image is stored in.
 	*/
-	virtual void CaptureImage(long long desiredTimestamp, Mat *target);
+	virtual bool CaptureImage(long long desiredTimestamp, Mat *target);
 
 	/** Image transfer speed measurement
 		Use only alone (no prior or later operations) to keep the statistics clean

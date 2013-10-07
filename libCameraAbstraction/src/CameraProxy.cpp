@@ -57,10 +57,10 @@ CameraProxy::~CameraProxy()
 	timeMeasurement=NULL;
 }
 
-void CameraProxy::CaptureImage(long long desiredTimestamp)
+bool CameraProxy::CaptureImage(long long desiredTimestamp)
 {
 	// Calls virtual (and now abstract) capture function
-	this->CaptureImage(desiredTimestamp, lastImageTaken);
+	return this->CaptureImage(desiredTimestamp, lastImageTaken);
 }
 
 // Capture image and try to find chessboard

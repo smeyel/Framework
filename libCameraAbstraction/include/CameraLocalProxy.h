@@ -67,7 +67,7 @@ public:
 		@param desiredTimestamp	The desired timestamp of the image
 		@param target			The Mat the captured image is stored in.
 	*/
-	virtual void CaptureImage(long long desiredTimestamp, Mat *target);
+	virtual bool CaptureImage(long long desiredTimestamp, Mat *target);
 
 	/** If implemented by current video input, sets gain.
 		@param	value	Gain value 0-100, -1 means automatic gain.

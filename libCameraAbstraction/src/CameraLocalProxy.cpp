@@ -62,12 +62,12 @@ void CameraLocalProxy::initFromFile(const char *filename)
 }
 
 // CaptureImage
-void CameraLocalProxy::CaptureImage(long long desiredTimestamp, Mat *target)
+bool CameraLocalProxy::CaptureImage(long long desiredTimestamp, Mat *target)
 {
 	if (!videoInput)
 	{
 		Logger::getInstance()->Log(Logger::LOGLEVEL_ERROR,"CameraLocalProxy","CaptureImage: VideoInput not set!\n.");
-		return;
+		return false;
 	}
 
 	if (desiredTimestamp>0)
@@ -86,10 +86,12 @@ void CameraLocalProxy::CaptureImage(long long desiredTimestamp, Mat *target)
 		}
 	}
 
-	videoInput->captureFrame(*target);
+	bool isSuccessful = videoInput->captureFrame(*target);
 
 	if (target==lastImageTaken)
 		lastImageTakenTimestamp = timeMeasurement->getTimeStamp();
+
+	return isSuccessful;
 }
 
 int CameraLocalProxy::SetNormalizedGain(int value)

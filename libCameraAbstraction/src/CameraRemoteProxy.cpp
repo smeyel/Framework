@@ -54,7 +54,7 @@ void CameraRemoteProxy::Disconnect()
 
 
 // CaptureImage
-void CameraRemoteProxy::CaptureImage(long long desiredTimestamp, Mat *target)
+bool CameraRemoteProxy::CaptureImage(long long desiredTimestamp, Mat *target)
 {
 	// Request image from the phone
 	phoneproxy->RequestPhoto(desiredTimestamp);
@@ -99,6 +99,7 @@ void CameraRemoteProxy::CaptureImage(long long desiredTimestamp, Mat *target)
 	}
 	delete msg;
 	msg = NULL;
+	return isImgValid;
 }
 
 

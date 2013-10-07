@@ -68,19 +68,20 @@ public:
 	// CaptureImage
 	/** Captures an image. Result can be accessed via lastImageTaken 
 		@param desiredTimestamp	The desired timestamp of the image
+		@return	True is capture was successful. False otherwise.
 		@warning Derived classes have to unhide this method to use it!
 	*/
-	void CaptureImage(long long desiredTimestamp=0); // calls CaptureImage(lastImageTaken)
+	bool CaptureImage(long long desiredTimestamp=0); // calls CaptureImage(lastImageTaken)
 	/** Captures an image. Does not modify the image lastImageTaken.
 		If target==lastImageTaken, it sets lastImageTakenTimestamp. Otherwise the received
 		timestamp cannot be accessed.
 		@param desiredTimestamp	The desired timestamp of the image
 		@param target			The Mat the captured image is stored in.
-
+		@return	True is capture was successful. False otherwise.
 		@warning Derived classes have to override this method to implement the actual image capture.
 	*/
 
-	virtual void CaptureImage(long long desiredTimestamp, Mat *target) = 0;
+	virtual bool CaptureImage(long long desiredTimestamp, Mat *target) = 0;
 
 	/** Try to find a chessboard on the last taken image (accessible via lastImageTaken)
 		@param showResultOnImage	If true, calibration data is written on the image.
