@@ -13,13 +13,14 @@ void FileLogger::close()
 	fclose(F);
 }
 
-void FileLogger::Log(int aLogLevel, const char *tag, const char *format, ...)
+FileLogger::~FileLogger() {
+	this->close();
+}
+
+void FileLogger::vlog(int _logLevel, const char *tag, const char *format, va_list argp)
 {
-	if (aLogLevel >= loglevel)
+	if (_logLevel >= loglevel)
 	{
-		va_list args;
-		va_start (args, format);
-		vfprintf (F, format, args);
-		va_end (args);
+		vfprintf (F, format, argp);
 	}
 }

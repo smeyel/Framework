@@ -6,6 +6,7 @@
 #include "MatImageMessage.h"
 #include "SendPositionMessage.h"
 #include "TextMessage.h"
+#include "PropertyMessage.h"
 
 #include "MeasurementLogMessage.h"
 
@@ -102,6 +103,31 @@ bool CameraRemoteProxy::CaptureImage(long long desiredTimestamp, Mat *target)
 	return isImgValid;
 }
 
+int CameraRemoteProxy::SetNormalizedGain(int value)
+{
+	PropertyMessage msg;
+	msg.set("gain",value);
+	phoneproxy->Send(&msg);
+	return 0;
+}
+
+int CameraRemoteProxy::SetNormalizedExposure(int value)
+{
+	PropertyMessage msg;
+	msg.set("exposure",value);
+	phoneproxy->Send(&msg);
+	return 0;
+}
+
+int CameraRemoteProxy::SetNormalizedWhiteBalance(int r, int g, int b)
+{
+	PropertyMessage msg;
+	char buffer[100];
+	sprintf(buffer,"%d/%d/%d",r,g,b);
+	msg.set("whitebalance",buffer);
+	phoneproxy->Send(&msg);
+	return 0;
+}
 
 // Warning: results are influenced by remote side settings, like send Jpeg or Mat!
 // TODO: disable for local camera! (Or even better, modify for that!)

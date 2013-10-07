@@ -6,7 +6,7 @@
 
 namespace Logging
 {
-	/** Base class for logging
+	/** Base abstract class for logging
 	 *  Usage:
 	 *  - have an inherited class which implements the vlog method
 	 *  - register an instance of the inherited class with registerLogger
@@ -19,9 +19,9 @@ namespace Logging
 		static Logger* instance;
 		static int logLevel;
 
-		virtual ~Logger ();
 	public:
 
+		const static int LOGLEVEL_FATAL = 7;
 		const static int LOGLEVEL_ERROR = 6;
 		const static int LOGLEVEL_WARNING = 5;
 		const static int LOGLEVEL_INFO = 4;
@@ -29,6 +29,8 @@ namespace Logging
 		const static int LOGLEVEL_VERBOSE = 2;
 
 
+		virtual ~Logger ();
+		
 		static void setLogLevel(int _logLevel);
 
 		static int getLogLevel();

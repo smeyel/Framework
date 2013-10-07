@@ -12,6 +12,8 @@ Logger::Logger()
 	loglevel = LOGLEVEL_WARNING;
 }
 
+Logger::~Logger() {}
+
 void Logger::SetLogLevel(int iLogLevel)
 {
 	loglevel = iLogLevel;
@@ -20,6 +22,16 @@ void Logger::SetLogLevel(int iLogLevel)
 int Logger::GetLogLevel(void)
 {
 	return loglevel;
+}
+
+void Logger::Log(int aLogLevel, const char *tag, const char *format, ...)
+{
+	va_list argp;
+	va_start (argp, format);
+
+	vlog(aLogLevel, tag, format, argp);
+	
+	va_end (argp);
 }
 
 Logger *Logger::getInstance(void)
