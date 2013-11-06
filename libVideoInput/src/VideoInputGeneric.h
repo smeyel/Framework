@@ -14,6 +14,8 @@ public:
 	void virtual init(const char *filename);
 	bool virtual captureFrame(cv::Mat &frame);
 	void virtual release();
+	virtual void JumpToFrame(int frameIndex);
+
 };
 
 #endif

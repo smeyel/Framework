@@ -79,6 +79,12 @@ class VideoInput
 			// TODO: this does not seem to invoke the correct release() function, only the one of this base class...
 			this->release();
 		}
+
+		/** Jumps to a given frame. Works only with video files,
+			has no effect otherwise.
+			@param	frameIndex	Index of the desired next frame.
+		*/
+		virtual void JumpToFrame(int frameIndex) { return; }
 };
 		
 #endif

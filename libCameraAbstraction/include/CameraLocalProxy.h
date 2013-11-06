@@ -89,6 +89,12 @@ public:
 		@return		0 for success, -1 for not implemented.
 	*/
 	virtual int SetNormalizedWhiteBalance(int r, int g, int b);
+
+	/** Jumps to a given frame. Works only with video files,
+		has no effect otherwise.
+		@param	frameIndex	Index of the desired next frame.
+	*/
+	virtual void JumpToFrame(int frameIndex);
 };
 
 #endif
