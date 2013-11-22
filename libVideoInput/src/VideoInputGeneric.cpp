@@ -42,3 +42,8 @@ void VideoInputGeneric::release()
 		capture = NULL;
 	}
 }
+
+void VideoInputGeneric::JumpToFrame(int frameIndex)
+{
+	capture->set(CV_CAP_PROP_POS_FRAMES, frameIndex);
+}

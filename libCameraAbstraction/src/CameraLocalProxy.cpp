@@ -108,3 +108,9 @@ int CameraLocalProxy::SetNormalizedWhiteBalance(int r, int g, int b)
 {
 	return videoInput->SetNormalizedWhiteBalance(r,g,b);
 }
+
+void CameraLocalProxy::JumpToFrame(int frameIndex)
+{
+	videoInput->JumpToFrame(frameIndex);
+}
+
