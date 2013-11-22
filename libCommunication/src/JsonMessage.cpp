@@ -13,6 +13,7 @@
 #include "TakePictureMessage.h"
 #include "MeasurementLogMessage.h"
 #include "SendPositionMessage.h"
+#include "PositionMessage.h"
 #include "MatImageMessage.h"
 #include "TextMessage.h"
 #include "PropertyMessage.h"
@@ -64,6 +65,10 @@ JsonMessage *JsonMessage::parse(char *json)
 	else if (!strcmp(typeString,"requestposition"))
 	{
 		return new SendPositionMessage(json);
+	}
+	else if (!strcmp(typeString,"position"))
+	{
+		return new PositionMessage(json);
 	}
 	else if (!strcmp(typeString,"matimage"))
 	{

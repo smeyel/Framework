@@ -17,6 +17,7 @@ typedef enum _messagetype
 	Jpeg,
 	MeasurementLog,
 	SendPosition,
+	Position,
 	MatImage,
 	Text,
 	Property
