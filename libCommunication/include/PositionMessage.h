@@ -9,6 +9,7 @@ class PositionMessage : public JsonMessage
 {
 public:
 	long long timestamp;
+	int size;
 
 	PositionMessage();
 	PositionMessage(char *json);
