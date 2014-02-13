@@ -7,7 +7,6 @@
 #include "SendPositionMessage.h"
 #include "TextMessage.h"
 #include "PropertyMessage.h"
-
 #include "MeasurementLogMessage.h"
 
 using namespace LogConfigTime;
