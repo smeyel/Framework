@@ -30,6 +30,7 @@ using namespace cv;
 		int retval = cameraCalibrator.calibrate(image, true);
 		if(retval == cameraCalibrator.FINISHED)
 		{
+			cameraCalibrator.setCameraResolution(image.size());
 			cameraCalibrator.saveCameraParams("intrinsic.xml");
 			break;
 		}
@@ -46,6 +47,7 @@ private:
 	float aspectRatio;
     Mat* cameraMatrix;
 	Mat* distCoeffs;
+	Size cameraResolution;
 	
     int nframes;	// number of chessboard testing
 	int flags;
@@ -54,7 +56,7 @@ private:
     vector<vector<Point2f>> imagePoints;
 
 public:
-	enum { FINISHED = 1, NOT_FINISHED = 0, ERROR = -1 };
+	enum { FINISHED = 1, NOT_FINISHED = 0, CALIBRATING_FAILED = -1 };
 	/** Constructor */
 	CameraCalibrator();
 	/** Constructor */
@@ -77,6 +79,8 @@ public:
 	Mat* getCameraMatrix();
 	/** Get distortion coeffs matrix */
 	Mat* getDistortionCoefficients();
+
+	void setCameraResolution(Size _cameraResolution);
 
 	~CameraCalibrator();
 };

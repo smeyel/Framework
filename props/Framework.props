@@ -5,7 +5,7 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(SolutionDir)Framework\libLogConfigTime\include;$(SolutionDir)Framework\libCommunication/include;$(SolutionDir)Framework\libCameraAbstraction\include;$(SolutionDir)Framework\libPlatformSpecifics/include;$(SolutionDir)Framework\libVideoInput\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(SolutionDir)Framework\libLogConfigTime\include;$(SolutionDir)Framework\libCommunication/include;$(SolutionDir)Framework\libCameraAbstraction\include;$(SolutionDir)Framework\libPlatformSpecifics/include;$(SolutionDir)Framework\libVideoInput\include;$(SolutionDir)Framework\libCameraCalibrator\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_UNICODE;UNICODE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>

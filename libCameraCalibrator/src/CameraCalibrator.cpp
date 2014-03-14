@@ -60,7 +60,7 @@ int CameraCalibrator::calibrate(Mat* target, bool showResultOnImage)
 
 	if(imagePoints.size() >= (unsigned)nframes )
 	{
-		return runCalibration() ? FINISHED : ERROR;
+		return runCalibration() ? FINISHED : CALIBRATING_FAILED;
 	}
 
 	return NOT_FINISHED;
@@ -100,6 +100,7 @@ void CameraCalibrator::saveCameraParams(const string& filename)
 	FileStorage fs( filename, FileStorage::WRITE );
 	fs << "Camera_Matrix" << *cameraMatrix;
 	fs << "Distortion_Coefficients" << *distCoeffs;
+	fs << "Camera_Resolution" << "{" << "Width" << cameraResolution.width << "Height" << cameraResolution.height << "}";
 }
 
 void CameraCalibrator::showImageAsDistorted(Mat* target)
@@ -122,4 +123,9 @@ Mat* CameraCalibrator::getDistortionCoefficients()
 		return distCoeffs;
 	else
 		return NULL;
+}
+
+void CameraCalibrator::setCameraResolution(Size _cameraResolution)
+{
+	cameraResolution = _cameraResolution;
 }
