@@ -1,5 +1,8 @@
 #include <sstream>
 #include <stdio.h>
+#include <string.h> // memset
+#include <cstdlib> // atoi
+
 #include "PropertyMessage.h"
 #include "Logger.h"
 

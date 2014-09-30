@@ -1,6 +1,12 @@
 #ifndef _WIN32	// TODO: better condition
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <unistd.h> // sleep
+#include <netdb.h>      // Needed for the socket functions
+
+#include <cstdio> // itoa, NULL
+#include <string.h> // memset
+#include <cstdlib> // atoll
 
 #include "PlatformSpecificsLinux.h"
 
@@ -10,74 +16,72 @@ PlatformSpecificsLinux::PlatformSpecificsLinux()
 
 void PlatformSpecificsLinux::SleepMs(long ms)
 {
-#error TODO How to sleep for ms milliseconds in Linux?
-	//sleep(ms/1000.0);	?
+	usleep(1000 * ms);
 }
 
 bool PlatformSpecificsLinux::InitSocketSystem()
 {
-#error TODO What to do before a socket can be created in Linux? Return true for success.
-	// Nothing?
+	// no need to initialize anything.
 	return true;
 }
 
-int PlatformSpecificsWin32::Connect(const char *ip, int port)
+int PlatformSpecificsLinux::Connect(const char *ip, int port)
 {
-#error TODO How to connect?
-/*    struct sockaddr_in server;
-    struct hostent *host_info;
-    unsigned long addr;
-
-	int sock = socket( AF_INET, SOCK_STREAM, 0 );
-
-    if (sock < 0)
-        return sock;
-
-    memset( &server, 0, sizeof (server));
-    if ((addr = inet_addr( ip)) != INADDR_NONE) {
-        memcpy( (char *)&server.sin_addr, &addr, sizeof(addr));
-    }
-    else {
-        host_info = gethostbyname(ip);
-        if (NULL == host_info)
-            return -1;	//error_exit("Unknown Server");
-        memcpy( (char *)&server.sin_addr,
-                host_info->h_addr, host_info->h_length );
-    }
-
-    server.sin_family = AF_INET;
-    server.sin_port = htons( port );
-
-    if(connect(sock,(struct sockaddr*)&server,sizeof(server)) <0)
-		return -2;
-        //error_exit("Connection to the server failed");
-
-	return sock;*/
+	// port # to char*
+	char charport[6];
+	sprintf(charport, "%d", port);
+	
+	//source: http://codebase.eu/tutorial/linux-socket-programming-c/
+	int status;
+	struct addrinfo host_info;
+	struct addrinfo* host_info_list;
+	
+	memset(&host_info, 0, sizeof host_info);
+	
+	host_info.ai_family = AF_UNSPEC;
+	host_info.ai_socktype = SOCK_STREAM;
+	
+	status = getaddrinfo(ip, charport, &host_info, &host_info_list);
+	
+	if (status != 0) return status; //std::cout << "getaddrinfo error" << gai_strerror(status) ;
+	
+	int socketfd ; // The socket descripter
+	socketfd = socket(host_info_list->ai_family, host_info_list->ai_socktype, host_info_list->ai_protocol);
+	if (socketfd == -1)  return -1; //std::cout << "socket error " ;
+	
+	status = connect(socketfd, host_info_list->ai_addr, host_info_list->ai_addrlen);
+	if (status == -1)  return -1; //std::cout << "connect error" ;
+	
+	// cleanup
+	freeaddrinfo(host_info_list);
+	
+	return socketfd;
 }
 
 
 void PlatformSpecificsLinux::CloseSocket(int socket)
 {
-#error TODO How to close a socket in Linux?
-	//close(socket) ?;
+	close(socket);
 }
 
 void PlatformSpecificsLinux::ShutdownSocketSystem()
 {
+	// nothing to do here
 }
 
 long long PlatformSpecificsLinux::atoll(const char *str)
 {
-	return atoll(str);
+	return ::atoll(str);
 }
 
 int PlatformSpecificsLinux::accept(int serversocket)
 {
-	struct sockaddr_in addr;
-	SOCKET clientsock = ::accept(serversocket, (struct sockaddr *) &addr, NULL);
-	inet_ntop( AF_INET, &addr.sin_addr, lastIpAddressStr, INET_ADDRSTRLEN );
-	return (int)clientsock;
-
+	int new_sd;
+    struct sockaddr_storage their_addr;
+    socklen_t addr_size = sizeof(their_addr);
+    new_sd = ::accept(serversocket, (struct sockaddr *)&their_addr, &addr_size);
+    
+    return new_sd;
 }
 
 const char *PlatformSpecificsLinux::GetLastRemoteIp()
@@ -87,26 +91,39 @@ const char *PlatformSpecificsLinux::GetLastRemoteIp()
 
 int PlatformSpecificsLinux::CreateServerSocket(int port)
 {
-	struct sockaddr_in server;
-
-    SOCKET serversock = socket( AF_INET, SOCK_STREAM, 0 );
-    if (serversock < 0)
-	{
-		return -2;
-	}
-
-    memset( &server, 0, sizeof (server));
-	server.sin_family = AF_INET;
-	server.sin_addr.s_addr = INADDR_ANY;
-	server.sin_port = htons(port);
-
-	// Binding the socket
-	if (bind(serversock, (struct sockaddr *) &server, sizeof(server)) < 0)
-	{
-		return -3;
-	}
-
-	return (int)serversock;
+	// port # to char*
+	char charport[6];
+	sprintf(charport, "%d", port);
+	
+	//source: http://codebase.eu/tutorial/linux-socket-programming-c/
+	int status;
+	struct addrinfo host_info;
+	struct addrinfo* host_info_list;
+	
+	memset(&host_info, 0, sizeof host_info);
+	
+	host_info.ai_family = AF_UNSPEC;
+	host_info.ai_socktype = SOCK_STREAM;
+	host_info.ai_flags = AI_PASSIVE;     // IP Wildcard
+	
+	status = getaddrinfo(NULL, charport, &host_info, &host_info_list);
+	
+	int socketfd ; // The socket descripter
+    socketfd = socket(host_info_list->ai_family, host_info_list->ai_socktype,
+                      host_info_list->ai_protocol);
+    if (socketfd == -1) return -1; // std::cout << "socket error " ;
+	
+	// reuse socket address
+	int yes = 1;
+	status = setsockopt(socketfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int));
+	
+	status = bind(socketfd, host_info_list->ai_addr, host_info_list->ai_addrlen);
+	if (status == -1) return -1; //std::cout << "bind error" << std::endl ;
+	
+	// cleanup
+	freeaddrinfo(host_info_list);
+	
+	return socketfd;
 }
 
 void PlatformSpecificsLinux::ListenServerSocket(int serversocket)
@@ -116,12 +133,12 @@ void PlatformSpecificsLinux::ListenServerSocket(int serversocket)
 
 int PlatformSpecificsLinux::send(int socket, const char *buff, int size, int flags)
 {
-	return ::send(socket,buff, size, flags);
+	return ::send(socket, buff, size, flags);
 }
 
 int PlatformSpecificsLinux::recv(int socket, char *buff, int size, int flags)
 {
-	return ::recv(socket,buff,size,flags);
+	return ::recv(socket, buff, size, flags);
 }
 
 #endif

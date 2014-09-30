@@ -1,7 +1,9 @@
 #ifndef __PHONEPROXY_H
 #define __PHONEPROXY_H
 #ifdef WIN32
-#include <winsock2.h>
+	#include <winsock2.h>
+#else
+	#define SOCKET int
 #endif
 
 #include <opencv2/opencv.hpp>

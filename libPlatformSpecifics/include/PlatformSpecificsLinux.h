@@ -8,7 +8,7 @@ class PlatformSpecificsLinux : PlatformSpecifics
 	static PlatformSpecifics *instance;
 
 	friend PlatformSpecifics;	// Allows it to instantiate
-	PlatformSpecificsWin32();
+	PlatformSpecificsLinux();
 
 	char lastIpAddressStr[100];//INET_ADDRSTRLEN];
 

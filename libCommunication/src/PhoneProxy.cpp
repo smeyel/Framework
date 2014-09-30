@@ -21,8 +21,11 @@
 using namespace std;
 
 static void error_exit(char *errorMessage) {
-
-    fprintf(stderr,"%s: %d\n", errorMessage, WSAGetLastError());
+	#ifdef WIN32
+		fprintf(stderr,"%s: %d\n", errorMessage, WSAGetLastError());
+	#else
+		// TODO what to do on Linux?
+	#endif
     exit(EXIT_FAILURE);
 }
 
@@ -32,6 +35,10 @@ void PhoneProxy::RequestPhoto(long long desiredTimeStamp)
 {
 	TakePictureMessage msg;
 	msg.desiredtimestamp = desiredTimeStamp;
+
+	char buf[1024];
+	 msg.writeJson(buf);
+	cout << buf << endl;
 	Send(&msg);
 }
 
@@ -184,7 +191,7 @@ void PhoneProxy::ProcessIncomingJSON(int sock,char *buffer, ostream *targetStrea
 		int len = posTimeStampValueEnd-posTimeStampValue;
 		strncpy(tmpS, posTimeStampValue, len );
 		*(tmpS+len) = 0;
-		long long timestamp = _atoi64(tmpS);
+		long long timestamp = PlatformSpecifics::getInstance()->atoll(tmpS);
 
 		char *posSize = strstr(buffer,"size");
 		char *posSizeValue = posSize + 7;
@@ -192,7 +199,7 @@ void PhoneProxy::ProcessIncomingJSON(int sock,char *buffer, ostream *targetStrea
 		len = posSizeValueEnd-posSizeValue;
 		strncpy(tmpS, posSizeValue, len );
 		*(tmpS+len) = 0;
-		int jpegSize = atoi(tmpS);
+		int jpegSize = PlatformSpecifics::getInstance()->atoll(tmpS);
 
 		// Save for external use...
 		lastReceivedTimeStamp = timestamp;
@@ -209,7 +216,7 @@ void PhoneProxy::ProcessIncomingJSON(int sock,char *buffer, ostream *targetStrea
 		int len = posTimeStampValueEnd-posTimeStampValue;
 		strncpy(tmpS, posTimeStampValue, len );
 		*(tmpS+len) = 0;
-		long long timestamp = _atoi64(tmpS);
+		long long timestamp = PlatformSpecifics::getInstance()->atoll(tmpS);
 
 		char *posSize = strstr(buffer,"size");
 		char *posSizeValue = posSize + 7;
@@ -217,7 +224,7 @@ void PhoneProxy::ProcessIncomingJSON(int sock,char *buffer, ostream *targetStrea
 		len = posSizeValueEnd-posSizeValue;
 		strncpy(tmpS, posSizeValue, len );
 		*(tmpS+len) = 0;
-		int logSize = atoi(tmpS);
+		int logSize = PlatformSpecifics::getInstance()->atoll(tmpS);
 
 		// Save for external use...
 		lastReceivedTimeStamp = timestamp;
@@ -253,6 +260,8 @@ JsonMessage *PhoneProxy::ReceiveNew()
 	char *bufPtr = buffer;
 	*bufPtr = 0;
 	timeMeasurement.start(PhoneProxy::TimeMeasurementCodeDefs::ReceiveNew_WaitAndReceiveJson);
+
+	bool startFound = false;
 	do
 	{
 		received = PlatformSpecifics::getInstance()->recv(sock, &c, 1, 0);
@@ -265,11 +274,20 @@ JsonMessage *PhoneProxy::ReceiveNew()
 		else if (received<0)
 		{
 			// Socket read error
+			#ifdef WIN32
             cout << "recv() failed: " << WSAGetLastError() << endl;
+			#else
+				// TODO what to do on Linux?
+            	cout << "recv() failed" << endl;
+			#endif
 			return NULL;
 		}
 
-		if (c != '#' && c != 0)	// Not at end of JSON
+		if (! startFound && c == '{') {
+			startFound = true;
+		}
+
+		if (c != '#' && c != 0 && startFound)	// Not at end of JSON
 		{
 			*bufPtr = c;
 			bufPtr++;

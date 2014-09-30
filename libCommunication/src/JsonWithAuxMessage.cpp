@@ -37,6 +37,7 @@ void JsonWithAuxMessage::writeAuxFile(char *filename)
 // Needs "size" to be set
 void JsonWithAuxMessage::readAuxIfNeeded(int socket)
 {
+	cout << "Reading " << size << " bytes of payload" << endl;
 	if (size<=0) return;
 
 	stringstream ss;

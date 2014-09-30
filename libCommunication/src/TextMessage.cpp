@@ -1,5 +1,7 @@
 #include <sstream>
 #include <stdio.h>
+#include <string.h> // memset
+
 #include "TextMessage.h"
 #include "Logger.h"
 
