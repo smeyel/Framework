@@ -10,11 +10,13 @@
 class PingMessage : public JsonMessage
 {
 public:
+	PingMessage(Json::Value root);
 	PingMessage(char *json);
 	PingMessage();
+	virtual ~PingMessage() {}
 	bool parse(char *json);
-	virtual void writeJson(char *buffer);
 	virtual void log();
 };
+
 
 #endif

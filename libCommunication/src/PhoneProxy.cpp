@@ -24,7 +24,7 @@ static void error_exit(char *errorMessage) {
 	#ifdef WIN32
 		fprintf(stderr,"%s: %d\n", errorMessage, WSAGetLastError());
 	#else
-		// TODO what to do on Linux?
+		fprintf(stderr, "%s: %s\n", errorMessage, PlatformSpecifics::getInstance()->getLastErrorMessage().c_str());
 	#endif
     exit(EXIT_FAILURE);
 }
@@ -34,7 +34,7 @@ static void error_exit(char *errorMessage) {
 void PhoneProxy::RequestPhoto(long long desiredTimeStamp)
 {
 	TakePictureMessage msg;
-	msg.desiredtimestamp = desiredTimeStamp;
+	msg.setDesiredTimestamp(desiredTimeStamp);
 
 	char buf[1024];
 	 msg.writeJson(buf);
@@ -269,6 +269,7 @@ JsonMessage *PhoneProxy::ReceiveNew()
 		{
 			// Error: JSON not finished, but input ended...
 			cout << "ERROR: Connection closed, JSON not finished properly..." << endl;
+			cout << "Msg so far: " << string(buffer) << endl;
 			return NULL;
 		}
 		else if (received<0)
@@ -283,7 +284,7 @@ JsonMessage *PhoneProxy::ReceiveNew()
 			return NULL;
 		}
 
-		if (! startFound && c == '{') {
+		if (! startFound && (c == '{' || c =='[')) {
 			startFound = true;
 		}
 
@@ -304,7 +305,7 @@ JsonMessage *PhoneProxy::ReceiveNew()
 
 	char *jsonBuffer = buffer;
 
-	//cout << "ProcessIncomingJson: " << endl << jsonBuffer << endl << "End of JSON" << endl;
+	cout << "ProcessIncomingJson: " << endl << jsonBuffer << endl << "End of JSON" << endl;
 	if (*buffer==0)
 	{
 		// Empty message, possibly the connection was closed from the remote side.

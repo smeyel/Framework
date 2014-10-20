@@ -5,35 +5,34 @@
 #include "TextMessage.h"
 #include "Logger.h"
 
-TextMessage::TextMessage(char *json)
+TextMessage::TextMessage() : JsonMessage(Text)
 {
-	typecode = Text;
-	memset(content,0,TEXT_MESSAGE_BUFFER_SIZE);
-	parse(json);
 }
 
-TextMessage::TextMessage()
+TextMessage::TextMessage(Json::Value root) : JsonMessage(root, Text)
 {
-	typecode = Text;
-}
-
-bool TextMessage::parse(char *json)
-{
-	JsonMessage::readFieldInto(json,"content",content);
-	return true;
-}
-
-void TextMessage::writeJson(char *buffer)
-{
-	sprintf(buffer,"{ \"type\": \"text\", \"content\": \"%s\" }#",content);
+	unpack();
 }
 
 void TextMessage::log()
 {
-	LogConfigTime::Logger::getInstance()->Log(LogConfigTime::Logger::LOGLEVEL_INFO,"Message","StringMessage(%s)\n",content);
+	LogConfigTime::Logger::getInstance()->Log(
+			LogConfigTime::Logger::LOGLEVEL_INFO,
+			"Message",
+			"StringMessage(%s)\n",
+			content.c_str()
+	);
 }
 
-void TextMessage::copyToContent(const char *srcText)
-{
-	strcpy(this->content,srcText);
+void TextMessage::pack() {
+	JsonMessage::pack();
+	root[Types::Misc::KEY_TEXT] = content;
+}
+
+void TextMessage::unpack() {
+	content = root[Types::Misc::KEY_TEXT].asString();
+}
+
+void TextMessage::setContent(const std::string& content) {
+	this->content = content;
 }

@@ -16,13 +16,10 @@ private:
 public:
 	/** Timestamp of the image w.r.t. the clock of the image source.
 	*/
-	long long timestamp;
 
 	JpegMessage(char *json);
 	JpegMessage();
-
-	bool parse(char *json);
-	virtual void writeJson(char *buffer);
+	JpegMessage(Json::Value root);
 
 	void Decode(cv::Mat *targetMat);
 	void Encode(cv::Mat *srcMat);

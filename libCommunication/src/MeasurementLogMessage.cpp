@@ -11,38 +11,24 @@
 
 using namespace std;
 
-MeasurementLogMessage::MeasurementLogMessage(char *json) : JsonWithAuxMessage()
+
+MeasurementLogMessage::MeasurementLogMessage() : JsonWithAuxMessage(MeasurementLog)
 {
-	typecode = MeasurementLog;
-	timestamp = 0;
-	parse(json);
+	root[Types::Action::KEY] = Types::Action::INFO;
+	root[Types::Subject::KEY] = Types::Subject::LOG;
 }
 
-MeasurementLogMessage::MeasurementLogMessage() : JsonWithAuxMessage()
+MeasurementLogMessage::MeasurementLogMessage(Json::Value root) : JsonWithAuxMessage(root, MeasurementLog)
 {
-	typecode = MeasurementLog;
-	timestamp = 0;
 }
 
-bool MeasurementLogMessage::parse(char *json)
-{
-	char timestampString[128];
-	JsonMessage::readFieldInto(json,"timestamp",timestampString);
-	timestamp = PlatformSpecifics::getInstance()->atoll(timestampString);
-		
-	char jpegsizeString[128];
-	JsonMessage::readFieldInto(json,"size",jpegsizeString);
-	size = atoi(jpegsizeString);
-		
-	return true;
-}
 
-void MeasurementLogMessage::writeJson(char *buffer)
-{
-	sprintf(buffer,"{ \"type\": \"measurementlog\", \"timestamp\": \"%lld\", \"size\": \"%d\" }#",timestamp,size);
-}
 
 void MeasurementLogMessage::log()
 {
-	LogConfigTime::Logger::getInstance()->Log(LogConfigTime::Logger::LOGLEVEL_INFO,"Message","MeasurementLogMessage( timestamp=%lld size=%d )",timestamp,size);
+	LogConfigTime::Logger::getInstance()->Log(
+			LogConfigTime::Logger::LOGLEVEL_INFO,
+			"Message",
+			"MeasurementLogMessage( timestamp=%lld size=%d )", getTimestamp(), getAuxSize()
+	);
 }

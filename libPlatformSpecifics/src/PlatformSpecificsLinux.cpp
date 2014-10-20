@@ -8,6 +8,8 @@
 #include <string.h> // memset
 #include <cstdlib> // atoll
 
+#include <errno.h>
+
 #include "PlatformSpecificsLinux.h"
 
 PlatformSpecificsLinux::PlatformSpecificsLinux()
@@ -43,14 +45,23 @@ int PlatformSpecificsLinux::Connect(const char *ip, int port)
 	
 	status = getaddrinfo(ip, charport, &host_info, &host_info_list);
 	
-	if (status != 0) return status; //std::cout << "getaddrinfo error" << gai_strerror(status) ;
+	if (status != 0) {
+		lastErrorMessage = "GetAddrInfo error! " + std::string(gai_strerror(status));
+		return status; //std::cout << "getaddrinfo error" << gai_strerror(status) ;
+	}
 	
 	int socketfd ; // The socket descripter
 	socketfd = socket(host_info_list->ai_family, host_info_list->ai_socktype, host_info_list->ai_protocol);
-	if (socketfd == -1)  return -1; //std::cout << "socket error " ;
+	if (socketfd == -1) {
+		lastErrorMessage = "Socket error! " + std::string(strerror(errno));
+		return -1; //std::cout << "socket error " ;
+	}
 	
 	status = connect(socketfd, host_info_list->ai_addr, host_info_list->ai_addrlen);
-	if (status == -1)  return -1; //std::cout << "connect error" ;
+	if (status == -1) {
+		lastErrorMessage = "Connect error! " + std::string(strerror(errno));
+		return -1; //std::cout << "connect error" ;
+	}
 	
 	// cleanup
 	freeaddrinfo(host_info_list);
@@ -111,14 +122,20 @@ int PlatformSpecificsLinux::CreateServerSocket(int port)
 	int socketfd ; // The socket descripter
     socketfd = socket(host_info_list->ai_family, host_info_list->ai_socktype,
                       host_info_list->ai_protocol);
-    if (socketfd == -1) return -1; // std::cout << "socket error " ;
+    if (socketfd == -1) {
+    	lastErrorMessage = "Socket error! " + std::string(strerror(errno));
+    	return -1; // std::cout << "socket error " ;
+    }
 	
 	// reuse socket address
 	int yes = 1;
 	status = setsockopt(socketfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int));
 	
 	status = bind(socketfd, host_info_list->ai_addr, host_info_list->ai_addrlen);
-	if (status == -1) return -1; //std::cout << "bind error" << std::endl ;
+	if (status == -1) {
+		lastErrorMessage = "Bind error! " + std::string(strerror(errno));
+		return -1; //std::cout << "bind error" << std::endl ;
+	}
 	
 	// cleanup
 	freeaddrinfo(host_info_list);

@@ -5,44 +5,33 @@
 #include "TakePictureMessage.h"
 #include "Logger.h"
 
-TakePictureMessage::TakePictureMessage(char *json)
+TakePictureMessage::TakePictureMessage() : JsonMessage(TakePicture), desiredTimestamp(0)
 {
-	typecode = TakePicture;
-	parse(json);
+	root[Types::Action::KEY] = Types::Action::COMMAND;
+	root[Types::Subject::KEY] = Types::Subject::TAKE_PICTURE;
 }
 
-TakePictureMessage::TakePictureMessage()
+TakePictureMessage::TakePictureMessage(Json::Value root) : JsonMessage(root, TakePicture), desiredTimestamp(0)
 {
-	typecode = TakePicture;
-	desiredtimestamp = 0;
-}
-
-
-bool TakePictureMessage::parse(char *json)
-{
-	// find desiredtimestamp
-	// TODO: use JsonMessage::readFieldInto
-	char *typePtr = strstr(json,"\"desiredtimestamp\":");
-	if (!typePtr) return NULL;
-	char *beginPtr = strstr(typePtr+18,"\"") + 1;
-	if (!beginPtr) return NULL;
-	char *endPtr = strstr(beginPtr,"\"");
-	if (!endPtr) return NULL;
-	char timestampString[100];
-	memset(timestampString,0,100);
-	strncpy(timestampString,beginPtr,endPtr-beginPtr);
-
-	desiredtimestamp = PlatformSpecifics::getInstance()->atoll(timestampString);
-		
-	return true;
-}
-
-void TakePictureMessage::writeJson(char *buffer)
-{
-	sprintf(buffer,"{ \"type\": \"takepicture\", \"desiredtimestamp\": \"%lld\" }#",desiredtimestamp);
+	unpack();
 }
 
 void TakePictureMessage::log()
 {
-	LogConfigTime::Logger::getInstance()->Log(LogConfigTime::Logger::LOGLEVEL_INFO,"Message","TakePictureMessage( desiredtimestamp=%lld )",desiredtimestamp);
+	LogConfigTime::Logger::getInstance()->Log(
+			LogConfigTime::Logger::LOGLEVEL_INFO,
+			"Message",
+			"TakePictureMessage( desiredtimestamp=%lld )",getDesiredTimestamp()
+	);
+}
+
+void TakePictureMessage::pack() {
+	JsonMessage::pack();
+	Json::Value& values = root[Types::Misc::KEY_VALUES];
+	values[DESIRED_TIMESTAMP_IDX] = desiredTimestamp;
+}
+
+void TakePictureMessage::unpack() {
+	Json::Value& values = root[Types::Misc::KEY_VALUES];
+	desiredTimestamp = values[DESIRED_TIMESTAMP_IDX].asInt64();
 }

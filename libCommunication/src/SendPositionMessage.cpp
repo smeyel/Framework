@@ -5,51 +5,45 @@
 #include "SendPositionMessage.h"
 #include "Logger.h"
 
-SendPositionMessage::SendPositionMessage(char *json)
-{
-	typecode = SendPosition;
-	desiredtimestamp = 0;
-	sendImage=0;
-	parse(json);
-}
+
+#include <iostream>
+using namespace std;
+
 
 SendPositionMessage::SendPositionMessage()
+		: JsonMessage(SendPosition), desiredTimestamp(0), sendImage(0)
 {
-	typecode = SendPosition;
-	desiredtimestamp = 0;
-	sendImage=0;
+	std::cout << sWriter.write(root) << std::endl;
 }
 
-bool SendPositionMessage::parse(char *json)
+SendPositionMessage::SendPositionMessage(Json::Value root)
+		: JsonMessage(root, SendPosition)
 {
-	// find desiredtimestamp
-	char *typePtr = strstr(json,"\"desiredtimestamp\":");
-	if (!typePtr) return NULL;
-	char *beginPtr = strstr(typePtr+18,"\"") + 1;
-	if (!beginPtr) return NULL;
-	char *endPtr = strstr(beginPtr,"\"");
-	if (!endPtr) return NULL;
-	char timestampString[100];
-	memset(timestampString,0,100);
-	strncpy(timestampString,beginPtr,endPtr-beginPtr);
-
-	desiredtimestamp = PlatformSpecifics::getInstance()->atoll(timestampString);
-
-	char buffer[11];
-	JsonMessage::readFieldInto(json,"sendimage",buffer);
-	sendImage = atoi(buffer);
-
-	return true;
+	unpack();
 }
 
-void SendPositionMessage::writeJson(char *buffer)
-{
-	sprintf(buffer,"{ \"type\": \"requestposition\", \"desiredtimestamp\": \"%lld\", \"sendimage\": \"%d\" }#",
-		desiredtimestamp,sendImage);
-}
 
 void SendPositionMessage::log()
 {
-	LogConfigTime::Logger::getInstance()->Log(LogConfigTime::Logger::LOGLEVEL_INFO,"Message","SendPositionMessage( desiredtimestamp=%lld sendimage=%d )",
-		desiredtimestamp,sendImage);
+	LogConfigTime::Logger::getInstance()->Log(
+			LogConfigTime::Logger::LOGLEVEL_INFO,
+			"Message",
+			"SendPositionMessage( desiredtimestamp=%lld sendimage=%d )",
+			getDesiredTimestamp(), getSendImage()
+	);
+}
+
+void SendPositionMessage::pack() {
+	cout<< "SendPositionMessage::pack()" << endl;
+	JsonMessage::pack();
+	Json::Value& values = root[Types::Misc::KEY_VALUES];
+	values[DESIRED_TIMESTAMP_IDX] = desiredTimestamp;
+	values[SENDIMAGE_IDX] = sendImage;
+}
+
+void SendPositionMessage::unpack() {
+	cout<< "SendPositionMessage::unpack()" << endl;
+	Json::Value& values = root[Types::Misc::KEY_VALUES];
+	desiredTimestamp = values[DESIRED_TIMESTAMP_IDX].asInt64();
+	sendImage = values[SENDIMAGE_IDX].asInt();
 }

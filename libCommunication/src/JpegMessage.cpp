@@ -6,46 +6,24 @@
 
 #include <sstream>
 #include <stdio.h>
-//#include "picojson.h"
 #include "JpegMessage.h"
 #include "Logger.h"
 
 using namespace std;
 
-JpegMessage::JpegMessage(char *json) : JsonWithAuxMessage()
+JpegMessage::JpegMessage() : JsonWithAuxMessage(Jpeg)
 {
-	typecode = Jpeg;
-	timestamp = 0;
-	parse(json);
+	root[Types::Action::KEY] = Types::Action::INFO;
+	root[Types::Subject::KEY] = Types::Subject::CAMERA_IMAGE;
 }
 
-JpegMessage::JpegMessage() : JsonWithAuxMessage()
+JpegMessage::JpegMessage(Json::Value root) : JsonWithAuxMessage(root, Jpeg)
 {
-	typecode = Jpeg;
-	timestamp = 0;
-}
-
-bool JpegMessage::parse(char *json)
-{
-	char timestampString[128];
-	JsonMessage::readFieldInto(json,"timestamp",timestampString);
-	timestamp = PlatformSpecifics::getInstance()->atoll(timestampString);
-		
-	char jpegsizeString[128];
-	JsonMessage::readFieldInto(json,"size",jpegsizeString);
-	size = atoi(jpegsizeString);
-		
-	return true;
-}
-
-void JpegMessage::writeJson(char *buffer)
-{
-	sprintf(buffer,"{ \"type\": \"JPEG\", \"timestamp\": \"%lld\", \"size\": \"%d\" }#",timestamp,size);
 }
 
 void JpegMessage::Decode(cv::Mat *targetMat)
 {
-	if (size==0)
+	if (getAuxSize()==0)
 	{
 		cout << "JpegMessage::Decode: Error, size==0" << endl;
 		return;
@@ -60,10 +38,13 @@ void JpegMessage::Encode(cv::Mat *srcMat)
 	param[1]=95;//default(95) 0-100
 
 	imencode(".jpg",*srcMat,data,param);
-	size = data.size();
 }
 
 void JpegMessage::log()
 {
-	LogConfigTime::Logger::getInstance()->Log(LogConfigTime::Logger::LOGLEVEL_INFO,"Message","JpegMessage( timestamp=%lld jpegsize=%d )",timestamp,size);
+	LogConfigTime::Logger::getInstance()->Log(
+			LogConfigTime::Logger::LOGLEVEL_INFO,
+			"Message",
+			"JpegMessage( timestamp=%lld jpegsize=%d )", getTimestamp(), getAuxSize()
+	);
 }

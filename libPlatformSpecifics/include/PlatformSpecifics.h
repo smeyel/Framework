@@ -1,6 +1,9 @@
 #ifndef __PLATFORMSPECIFICS_H
 #define __PLATFORMSPECIFICS_H
 
+
+#include <string>
+
 /** Platform specific functions collected in a single singleton class.
 	Use the static getInstance() to get the instance pointer
 	corresponding to the current platform.
@@ -9,14 +12,18 @@ class PlatformSpecifics
 {
 	static PlatformSpecifics *instance;
 
+
 protected:
-	PlatformSpecifics()
-	{
-	}
+	PlatformSpecifics()	{}
+	virtual ~PlatformSpecifics() {}
+
+	std::string lastErrorMessage;
 
 public:
 	/** Returns singleton instance corresponding to current platform */
 	static PlatformSpecifics *getInstance();
+
+	virtual std::string getLastErrorMessage() { return lastErrorMessage; }
 
 	/** Sleeps for given milliseconds */
 	virtual void SleepMs(long ms)=0;

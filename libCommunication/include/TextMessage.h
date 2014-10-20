@@ -3,23 +3,27 @@
 
 #include "JsonMessage.h"
 
-#define TEXT_MESSAGE_BUFFER_SIZE 100
+#include <string>
+
 
 /** String message
 	Used to transfer single-string messages which do not have own JsonMessage
 */
 class TextMessage : public JsonMessage
 {
+	std::string content;
 public:
-	char content[TEXT_MESSAGE_BUFFER_SIZE];
-	/** @warning Be careful not to use this constructor to set the content! */
-	TextMessage(char *json);
 	TextMessage();
-	bool parse(char *json);
-	virtual void writeJson(char *buffer);
+	TextMessage(Json::Value root);
+
 	virtual void log();
 
-	void copyToContent(const char *srcText);
+	virtual void pack();
+	virtual void unpack();
+
+	void setContent(const std::string& content);
+	std::string getContent() const { return content; }
+
 };
 
 #endif

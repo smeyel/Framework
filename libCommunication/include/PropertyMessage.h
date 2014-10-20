@@ -3,32 +3,35 @@
 
 #include "JsonMessage.h"
 
-#define PROPERTY_KEY_SIZE 100
-#define PROPERTY_VALUE_SIZE 100
+#include <string>
+
 
 /** Property message
 	Used to set or get property values (key - value pairs)
 */
 class PropertyMessage : public JsonMessage
 {
+	std::string key;
+	std::string value;
 public:
-	char key[PROPERTY_KEY_SIZE];
-	char value[PROPERTY_VALUE_SIZE];
 
-	/**	Constructor to parse a received JSON message.
-		Calles parse() internally.
-	@warning Be careful not to use this constructor to set the content! */
-	PropertyMessage(char *json);
-	/** Constructor to create a new message object.  */
 	PropertyMessage();
-	bool parse(char *json);
-	virtual void writeJson(char *buffer);
+	PropertyMessage(Json::Value root);
+
 	virtual void log();
 
-	void set(const char *srcKey, const char *srcValue);
-	void set(const char *srcKey, const int srcValue);
+	virtual void pack();
+	virtual void unpack();
+
+	void set(const std::string key, const std::string value);
+	void set(const std::string key, const int value);
+	void set(const std::string key, const double value);
+
+	std::string getKey() { return key; }
 
 	int getIntValue();
+	std::string getStringValue();
+	double getDoubleValue();
 };
 
 #endif

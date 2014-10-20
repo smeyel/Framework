@@ -8,14 +8,9 @@
 class PositionMessage : public JsonMessage
 {
 public:
-	long long timestamp;
-	int size;
 
 	PositionMessage();
-	PositionMessage(char *json);
-
-	bool parse(char *json);
-	virtual void writeJson(char *buffer);
+	PositionMessage(Json::Value root);
 
 	virtual void log();
 };

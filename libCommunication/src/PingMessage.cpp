@@ -9,9 +9,10 @@ PingMessage::PingMessage(char *json)
 	parse(json);
 }
 
-PingMessage::PingMessage()
+PingMessage::PingMessage() : JsonMessage(Ping)
 {
-	typecode = Ping;
+	root[Types::Subject::KEY] = Types::Subject::PING;
+	root[Types::Action::KEY] = Types::Action::QUERY;
 }
 
 bool PingMessage::parse(char *json)
@@ -19,11 +20,8 @@ bool PingMessage::parse(char *json)
 	return true;
 }
 
-void PingMessage::writeJson(char *buffer)
-{
-	sprintf(buffer,"{ \"type\": \"ping\", \"desiredtimestamp\": \"0\" }#");
+PingMessage::PingMessage(Json::Value root) : JsonMessage(root, Ping) {
 }
-
 
 void PingMessage::log()
 {

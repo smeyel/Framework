@@ -14,13 +14,9 @@
 class MeasurementLogMessage : public JsonWithAuxMessage
 {
 public:
-	long long timestamp;
 
-	MeasurementLogMessage(char *json);
 	MeasurementLogMessage();
-
-	bool parse(char *json);
-	virtual void writeJson(char *buffer);
+	MeasurementLogMessage(Json::Value root);
 
 	virtual void log();
 };

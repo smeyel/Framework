@@ -16,6 +16,7 @@ LIBCOMMUNICATION_OBJECTS =  \
 	src/MatImageMessage.o \
 	src/MeasurementLogMessage.o \
 	src/PingMessage.o \
+	src/PongMessage.o \
 	src/SendlogMessage.o \
 	src/SendPositionMessage.o \
 	src/TakePictureMessage.o \
@@ -23,6 +24,7 @@ LIBCOMMUNICATION_OBJECTS =  \
 	src/PositionMessage.o \
 	src/TextMessage.o \
 	src/PropertyMessage.o \
+	src/jsoncpp.o \
 	#src/PhoneServer.o
 
 

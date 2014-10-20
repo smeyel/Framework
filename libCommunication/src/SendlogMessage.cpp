@@ -3,27 +3,14 @@
 #include "SendlogMessage.h"
 #include "Logger.h"
 
-SendlogMessage::SendlogMessage(char *json)
-{
-	typecode = Sendlog;
-	parse(json);
-}
-
-SendlogMessage::SendlogMessage()
+SendlogMessage::SendlogMessage() :JsonMessage(Sendlog)
 {
 	typecode = Sendlog;
 }
 
-bool SendlogMessage::parse(char *json)
+SendlogMessage::SendlogMessage(Json::Value root) : JsonMessage(root, Sendlog)
 {
-	return true;
 }
-
-void SendlogMessage::writeJson(char *buffer)
-{
-	sprintf(buffer,"{ \"type\": \"sendlog\", \"desiredtimestamp\": \"0\" }#");
-}
-
 
 void SendlogMessage::log()
 {

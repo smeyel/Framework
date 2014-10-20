@@ -18,21 +18,37 @@ private:
 	is transformed into this Mat by the method Decode(). */
 	cv::Mat *mat;
 public:
-	/** Timestamp of the image. */
-	long long timestamp;
 
 	/** Height of the image. */
-	int height;
+	// TODO No "height" field in RAR protocol...
+	int getHeight() {
+		return root["height"].asInt();
+	}
+	void setHeight(int height) {
+		root["height"] = height;
+	}
 	/** Width of the image. */
-	int width;
+	// TODO No "width" field in RAR protocol...
+	int getWidth() {
+		return root["width"].asInt();
+	}
+	void setWidth(int width) {
+		root["width"] = width;
+	}
 	/** Type of the Mat, as defined by OpenCV. */
-	int mattype;
+	// TODO No "mattype" field in RAR protocol...
+	int getMatType() {
+		return root["mattype"].asInt();
+	}
+	void setMatType(int matType) {
+		root["mattype"] = matType;
+	}
 
-	MatImageMessage(char *json);
 	MatImageMessage();
+	MatImageMessage(Json::Value root);
 
-	bool parse(char *json);
-	virtual void writeJson(char *buffer);
+	virtual ~MatImageMessage();
+
 
 	/** After receiving a message, use this to create the Mat object
 		and than access it via getMat().

@@ -6,49 +6,77 @@
 #include "PropertyMessage.h"
 #include "Logger.h"
 
-PropertyMessage::PropertyMessage(char *json)
+#include <cstdio>
+#include <string>
+
+using namespace std;
+
+
+PropertyMessage::PropertyMessage() : JsonMessage(Property)
 {
-	typecode = Property;
-	memset(key,0,PROPERTY_KEY_SIZE);
-	memset(value,0,PROPERTY_VALUE_SIZE);
-	parse(json);
 }
 
-PropertyMessage::PropertyMessage()
+PropertyMessage::PropertyMessage(Json::Value root) : JsonMessage(root, Property)
 {
-	typecode = Property;
-}
-
-bool PropertyMessage::parse(char *json)
-{
-	JsonMessage::readFieldInto(json,"key",key);
-	JsonMessage::readFieldInto(json,"value",value);
-	return true;
-}
-
-void PropertyMessage::writeJson(char *buffer)
-{
-	sprintf(buffer,"{ \"type\": \"property\", \"key\": \"%s\", \"value\": \"%s\" }#",key,value);
+	unpack();
 }
 
 void PropertyMessage::log()
 {
-	LogConfigTime::Logger::getInstance()->Log(LogConfigTime::Logger::LOGLEVEL_INFO,"Message","PropertyMessage(%s,%s)\n",key,value);
+	LogConfigTime::Logger::getInstance()->Log(
+			LogConfigTime::Logger::LOGLEVEL_INFO,
+			"Message",
+			"PropertyMessage(%s,%s)\n",
+			key.c_str(), value.c_str()
+	);
 }
 
-void PropertyMessage::set(const char *srcKey, const char *srcValue)
-{
-	strcpy(this->key,srcKey);
-	strcpy(this->value,srcValue);
+void PropertyMessage::pack() {
+	JsonMessage::pack();
+	// TODO No 'key' and 'value' fields in RAR protocol...
+	root["key"] = key;
+	root["value"] = value;
 }
 
-void PropertyMessage::set(const char *srcKey, int srcValue)
-{
-	strcpy(this->key,srcKey);
-	sprintf(this->value,"%d",srcValue);
+void PropertyMessage::unpack() {
+	// TODO No 'key' and 'value' fields in RAR protocol...
+	key = root["key"].asString();
+	value = root["value"].asString();
 }
 
-int PropertyMessage::getIntValue()
-{
-	return atoi(this->value);
+void PropertyMessage::set(const std::string key, const std::string value) {
+	this->key = key;
+	this->value = value;
+}
+
+void PropertyMessage::set(const std::string key, const int value) {
+	this->key = key;
+	char tmp[20];
+	sprintf(tmp,"%d",value);
+	this->value = std::string(tmp);
+}
+
+void PropertyMessage::set(const std::string key, const double value) {
+	this->key = key;
+	char tmp[20];
+	sprintf(tmp,"%lf",value);
+	this->value = std::string(tmp);
+}
+
+int PropertyMessage::getIntValue() {
+	if (value.size() > 0) {
+		return atoi(value.c_str());
+	}
+	return 0;
+}
+
+std::string PropertyMessage::getStringValue() {
+	return value;
+}
+
+double PropertyMessage::getDoubleValue() {
+	if (value.size() > 0) {
+		return atof(value.c_str());
+	}
+	return 0.0;
 }

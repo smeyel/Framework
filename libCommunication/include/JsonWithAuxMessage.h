@@ -14,9 +14,6 @@
 class JsonWithAuxMessage : public JsonMessage
 {
 public:
-	/** Size of the aux binary data.
-	*/
-	int size;	// TODO: redundant, use data->size() instead if data!=NULL!
 
 	/** Vector containing the aux binary data
 	*/
@@ -25,6 +22,14 @@ public:
 	/** Constructor
 	*/
 	JsonWithAuxMessage();
+	JsonWithAuxMessage(Json::Value root);
+	JsonWithAuxMessage(JsonMessageTypeEnum typecode);
+	JsonWithAuxMessage(Json::Value root, JsonMessageTypeEnum typecode);
+
+	int getAuxSize() const {
+		return data.size();
+	}
+
 
 	/** Writes the aux binary data into a stream.
 		@param targetStream	The target stream the binary data is written to.
