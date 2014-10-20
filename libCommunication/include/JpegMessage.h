@@ -17,7 +17,6 @@ public:
 	/** Timestamp of the image w.r.t. the clock of the image source.
 	*/
 
-	JpegMessage(char *json);
 	JpegMessage();
 	JpegMessage(Json::Value root);
 
