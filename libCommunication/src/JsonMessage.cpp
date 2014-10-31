@@ -200,3 +200,12 @@ void JsonMessage::pack() {
 void JsonMessage::unpack() {
 	timestamp = root[Types::Misc::KEY_TIMESTAMP].asInt64();
 }
+
+std::string JsonMessage::toString(bool compact) {
+	pack();
+	if (compact) {
+		return fWriter.write(root) + '#';
+	} else {
+		return sWriter.write(root);
+	}
+}

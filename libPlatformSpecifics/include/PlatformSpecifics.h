@@ -1,6 +1,11 @@
 #ifndef __PLATFORMSPECIFICS_H
 #define __PLATFORMSPECIFICS_H
 
+#ifdef WIN32
+	#include <winsock2.h> // SOCKET
+#else
+	#define SOCKET int
+#endif
 
 #include <string>
 

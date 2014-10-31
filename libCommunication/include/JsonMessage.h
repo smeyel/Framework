@@ -2,6 +2,8 @@
 #define __JSONMESSAGE_H
 
 #include <iostream>
+#include <string>
+
 #include "PlatformSpecifics.h"	// Handles socket-related includes as well
 #include "json.h"
 
@@ -133,6 +135,8 @@ public:
 	void setTimestamp(long long int ts) {
 		timestamp = ts;
 	}
+
+	std::string toString(bool compact = false);
 
 	//const static int typePingMessage = 0;
 

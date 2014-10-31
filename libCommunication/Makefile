@@ -1,9 +1,11 @@
 CC = g++
 AR = ar
-CFLAGS = -c -Wall \
+CFLAGS = -c -Wall -Wno-unused-variable \
 	-I include/ \
 	-I ../libLogConfigTime/include/ \
-	-I ../libPlatformSpecifics/include/
+	-I ../libPlatformSpecifics/include/ \
+	-I /home/akos/Programs/OpenCV/opencv-2.4.9/include
+	
 LDFLAGS = 
 
 all: libCommunication.a
