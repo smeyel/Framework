@@ -18,6 +18,8 @@
 #include "MatImageMessage.h"
 #include "TextMessage.h"
 #include "PropertyMessage.h"
+#include "TimesyncRequestMessage.h"
+#include "TimesyncResponseMessage.h"
 
 #include "Logger.h"
 
@@ -135,6 +137,18 @@ JsonMessage *JsonMessage::parse(Json::Value& root)
 	else if (!strcmp(subject, Types::Subject::PROPERTY))
 	{
 		return new PropertyMessage(root);
+	}
+	else if (! strcmp(subject, Types::Subject::TIMESYNC))
+	{
+		const char* action = root[Types::Action::KEY].asCString();
+		if (!strcmp(action, Types::Action::COMMAND))
+		{
+			return new TimesyncRequestMessage(root);
+		}
+		else if (!strcmp(action, Types::Action::INFO))
+		{
+			return new TimesyncResponseMessage(root);
+		}
 	}
 
 	std::cout << "Unknown subject: " << subject << "! Creating a plain JsonMessage." << std::endl;

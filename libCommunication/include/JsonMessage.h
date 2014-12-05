@@ -4,6 +4,8 @@
 #include <iostream>
 #include <string>
 
+#include <memory> // shared_ptr
+
 #include "PlatformSpecifics.h"	// Handles socket-related includes as well
 #include "json.h"
 
@@ -40,7 +42,7 @@ namespace Types {
 		static const char* MAT_IMAGE = "matimage";
 		static const char* TEXT = "text";
 		static const char* PROPERTY = "property";
-
+		static const char* TIMESYNC = "timesync";
 	}
 
 	namespace Type {
@@ -79,7 +81,8 @@ typedef enum _messagetype
 	Position,
 	MatImage,
 	Text,
-	Property
+	Property,
+	Timesync
 } JsonMessageTypeEnum;
 
 /** Generic base class JSON based message class used for communication between phones.
@@ -203,5 +206,6 @@ public:
 };
 
 std::ostream& operator<<(std::ostream& o, JsonMessage* msg);
+
 
 #endif

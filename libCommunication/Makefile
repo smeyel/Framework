@@ -27,6 +27,8 @@ LIBCOMMUNICATION_OBJECTS =  \
 	src/TextMessage.o \
 	src/PropertyMessage.o \
 	src/jsoncpp.o \
+	src/TimesyncResponseMessage.o \
+	src/TimesyncRequestMessage.o \
 	#src/PhoneServer.o
 
 

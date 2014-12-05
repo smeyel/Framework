@@ -69,7 +69,7 @@ bool CameraRemoteProxy::CaptureImage(long long desiredTimestamp, Mat *target)
 		jpegMsg->Decode(target);
 
 		if (target==lastImageTaken)
-			lastImageTakenTimestamp = jpegMsg->timestamp;
+			lastImageTakenTimestamp = jpegMsg->getTimestamp();
 			
 		if(target->type()==CV_8UC4)	// Convert frames from CV_8UC4 to CV_8UC3
 			cvtColor(*target,*target,CV_BGRA2BGR);
@@ -80,13 +80,13 @@ bool CameraRemoteProxy::CaptureImage(long long desiredTimestamp, Mat *target)
 	{
 		MatImageMessage *matimgMsg = NULL;
 		matimgMsg = (MatImageMessage *)msg;
-		if (matimgMsg->size != 0)
+		if (matimgMsg->getAuxSize() != 0)
 		{
 			matimgMsg->Decode();
 			matimgMsg->getMat()->copyTo(*target);	// TODO: avoid this copy...
 
 			if (target==lastImageTaken)
-				lastImageTakenTimestamp = matimgMsg->timestamp;
+				lastImageTakenTimestamp = matimgMsg->getTimestamp();
 
 			isImgValid = true;
 		}
@@ -183,7 +183,7 @@ void CameraRemoteProxy::PerformCaptureSpeedMeasurement_A(int frameNumber, const 
 		{
 			MatImageMessage *matimgMsg = NULL;
 			matimgMsg = (MatImageMessage *)msg;
-			if (matimgMsg->size != 0)
+			if (matimgMsg->getAuxSize() != 0)
 			{
 				matimgMsg->Decode();
 				matimgMsg->getMat()->copyTo(img);	// TODO: avoid this copy...
@@ -249,8 +249,8 @@ TextMessage *CameraRemoteProxy::SingleTrackMarker(long long desiredtimestamp, bo
 {
 	// Request image from the phone
 	SendPositionMessage *sendPosMsg = new SendPositionMessage();
-	sendPosMsg->desiredtimestamp = desiredtimestamp;
-	sendPosMsg->sendImage = askImage ? 1 : 0;
+	sendPosMsg->setDesiredTimestamp(desiredtimestamp);
+	sendPosMsg->setSendImage(askImage ? 1 : 0);
 	phoneproxy->Send(sendPosMsg);
 
 	// Receiving TextMessage answer
@@ -280,7 +280,7 @@ TextMessage *CameraRemoteProxy::SingleTrackMarker(long long desiredtimestamp, bo
 			jpegMsg->Decode(imageTarget);
 
 			if (imageTarget==lastImageTaken)
-				lastImageTakenTimestamp = jpegMsg->timestamp;
+				lastImageTakenTimestamp = jpegMsg->getTimestamp();
 			
 			if(imageTarget->type()==CV_8UC4)	// Convert frames from CV_8UC4 to CV_8UC3
 				cvtColor(*imageTarget,*imageTarget,CV_BGRA2BGR);
@@ -291,13 +291,13 @@ TextMessage *CameraRemoteProxy::SingleTrackMarker(long long desiredtimestamp, bo
 		{
 			MatImageMessage *matimgMsg = NULL;
 			matimgMsg = (MatImageMessage *)msg;
-			if (matimgMsg->size != 0)
+			if (matimgMsg->getAuxSize() != 0)
 			{
 				matimgMsg->Decode();
 				matimgMsg->getMat()->copyTo(*imageTarget);	// TODO: avoid this copy...
 
 				if (imageTarget==lastImageTaken)
-					lastImageTakenTimestamp = matimgMsg->timestamp;
+					lastImageTakenTimestamp = matimgMsg->getTimestamp();
 
 				isImgValid = true;
 			}

@@ -1,4 +1,4 @@
-all: libLogConfigTime libPlatformSpecifics libCommunication
+all: libLogConfigTime libPlatformSpecifics libCommunication libVideoInput libCameraAbstraction
  
 libLogConfigTime:
 	make -C libLogConfigTime/
@@ -10,6 +10,9 @@ libCommunication:
 	make -C libCommunication/
 	
 	
+libCameraAbstraction:
+	make -C libCameraAbstraction/
+	
 libVideoInput:
 	make -C libVideoInput/
 	
@@ -18,5 +21,6 @@ clean:
 	make -C libLogConfigTime/ clean
 	make -C libVideoInput/ clean
 	make -C libPlatformSpecifics/ clean
+	make -C libCameraAbstraction/ clean
 	
-.PHONY: all libCommunication libPlatformSpecifics libLogConfigTime libVideoInput clean
+.PHONY: all libCommunication libPlatformSpecifics libLogConfigTime libVideoInput libCameraAbstraction clean
