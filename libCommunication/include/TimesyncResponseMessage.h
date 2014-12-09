@@ -12,6 +12,9 @@
 
 #include <vector>
 
+/**
+ * Simple class to store brightness values and corresponding timestamps.
+ */
 class FrameData {
 public:
 	int brightness;
@@ -22,6 +25,10 @@ public:
 	{}
 };
 
+/**
+ * Message containing time synchronization measurement results.
+ * Stores data in a list of FrameData objects.
+ */
 class TimesyncResponseMessage: public JsonMessage {
 
 	std::vector<FrameData> values;

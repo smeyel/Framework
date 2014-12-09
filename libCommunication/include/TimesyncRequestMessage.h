@@ -10,6 +10,9 @@
 
 #include "JsonMessage.h"
 
+/**
+ * Message to initiate a time synchronization measurement.
+ */
 class TimesyncRequestMessage: public JsonMessage {
 public:
 	TimesyncRequestMessage();
